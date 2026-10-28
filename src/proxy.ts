@@ -12,17 +12,9 @@ let clerkHandler: ProxyHandler | null = null;
 async function getClerkHandler(): Promise<ProxyHandler> {
   if (clerkHandler) return clerkHandler;
 
-  const { clerkMiddleware, createRouteMatcher } = await import(
-    "@clerk/nextjs/server"
-  );
-  const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
-
-  clerkHandler = clerkMiddleware(async (auth, req) => {
-    if (isAdminRoute(req)) {
-      await auth.protect();
-    }
-  }) as ProxyHandler;
-
+  const { clerkMiddleware } = await import("@clerk/nextjs/server");
+  // Bare middleware — route protection lives in layouts/pages/actions/APIs.
+  clerkHandler = clerkMiddleware() as ProxyHandler;
   return clerkHandler;
 }
 

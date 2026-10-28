@@ -19,12 +19,23 @@ export const HERO_VARIANTS = {
 
 export type HeroVariant = keyof typeof HERO_VARIANTS;
 
-/** Active homepage hero. Say “switch back to default” to restore. */
+/**
+ * Responsive heroes: lumen on small screens, default from `md` up.
+ * ACTIVE_HERO is kept for single-variant overrides / docs.
+ */
 export const ACTIVE_HERO: HeroVariant = "lumen";
 
 export function HomeHero() {
-  const Active = HERO_VARIANTS[ACTIVE_HERO];
-  return <Active />;
+  return (
+    <>
+      <div className="md:hidden">
+        <HomeHeroLumen />
+      </div>
+      <div className="hidden md:block">
+        <HomeHeroDefault />
+      </div>
+    </>
+  );
 }
 
 export { HomeHeroAtelier, HomeHeroDefault, HomeHeroInk, HomeHeroLumen };

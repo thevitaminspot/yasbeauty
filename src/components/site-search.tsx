@@ -9,14 +9,17 @@ export function SiteSearch({
   className = "",
   onNavigate,
   tone = "light",
+  autoFocus = false,
 }: {
   className?: string;
   onNavigate?: () => void;
   tone?: "light" | "dark";
+  autoFocus?: boolean;
 }) {
   const dark = tone === "dark";
   const router = useRouter();
   const listId = useId();
+  const inputId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -60,7 +63,7 @@ export function SiteSearch({
 
   return (
     <div ref={rootRef} className={`relative ${className}`}>
-      <label className="sr-only" htmlFor="site-search">
+      <label className="sr-only" htmlFor={inputId}>
         Search
       </label>
       <div
@@ -71,16 +74,17 @@ export function SiteSearch({
         }`}
       >
         <input
-          id="site-search"
+          id={inputId}
           type="search"
           value={query}
           placeholder="Search pigments, services…"
           autoComplete="off"
+          autoFocus={autoFocus}
           role="combobox"
           aria-expanded={open && (hits.length > 0 || query.length > 0)}
           aria-controls={listId}
           aria-autocomplete="list"
-          className={`w-full min-w-0 bg-transparent px-3 py-2 text-sm outline-none ${
+          className={`w-full min-w-0 bg-transparent px-3 py-3 text-base outline-none sm:py-2 sm:text-sm ${
             dark
               ? "text-white placeholder:text-neutral-500"
               : "placeholder:text-neutral-400"

@@ -332,9 +332,23 @@ input[type="datetime-local"] {
   }
 }
 
-.nav-mobile-panel,
+@keyframes nav-drawer-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .nav-search-panel {
   animation: nav-panel-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.nav-mobile-drawer {
+  animation: nav-drawer-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -353,7 +367,7 @@ input[type="datetime-local"] {
   .hero-copy > *,
   .animate-backdrop-in,
   .animate-modal-in,
-  .nav-mobile-panel,
+  .nav-mobile-drawer,
   .nav-search-panel {
     animation: none;
   }
@@ -452,18 +466,20 @@ input[type="search"]::-webkit-search-cancel-button {
   border-width: 0;
 }
 
-/* Icon hit-targets — padding only; set display via Tailwind on the element */
+/* Icon hit-targets — ≥44px touch area */
 .icon-hit {
   align-items: center;
   justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   padding: 0.625rem;
   line-height: 0;
 }
 
 .icon-hit svg {
   display: block;
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
 }
 
@@ -473,6 +489,8 @@ input[type="search"]::-webkit-search-cancel-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   padding: 0.625rem;
   line-height: 0;
 }
@@ -480,18 +498,12 @@ input[type="search"]::-webkit-search-cancel-button {
 .nav-menu-toggle svg,
 .nav-search-toggle svg {
   display: block;
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
 }
 
-/* Search icon: hide on phones; show sm–lg; hide again when xl search field appears */
-@media (max-width: 639px) {
-  .nav-search-toggle {
-    display: none !important;
-  }
-}
-
+/* Inline search field at xl — hide icon toggle + expandable panel */
 @media (min-width: 1280px) {
   .nav-search-toggle {
     display: none !important;
@@ -505,7 +517,7 @@ input[type="search"]::-webkit-search-cancel-button {
 /* Hamburger + mobile drawer: hide from lg up */
 @media (min-width: 1024px) {
   .nav-menu-toggle,
-  .nav-mobile-panel {
+  .nav-mobile-drawer {
     display: none !important;
   }
 }

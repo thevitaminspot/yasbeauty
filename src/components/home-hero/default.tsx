@@ -11,8 +11,8 @@ import { ui } from "@/lib/ui";
 export function HomeHeroDefault() {
   return (
     <section className="relative overflow-hidden border-b border-neutral-200 bg-neutral-100 text-black">
-      {/* Mobile: full screen. md–lg: capped fold. Ultra-wide: rem cap. */}
-      <div className="relative mx-auto h-[100dvh] md:h-[calc(100dvh-4.75rem)] md:min-h-[26rem] md:max-h-[42rem] min-[1728px]:h-[min(40rem,calc(100svh-4.75rem))] min-[1728px]:max-h-none">
+      {/* Below 2xl: full viewport under nav. 2xl+: capped fold. Ultra-wide: rem cap. */}
+      <div className="relative mx-auto h-[100dvh] md:h-[calc(100dvh-4.75rem)] 2xl:min-h-[26rem] 2xl:max-h-[42rem] min-[1728px]:h-[min(40rem,calc(100svh-4.75rem))] min-[1728px]:max-h-none">
         <div className="absolute inset-0" aria-hidden>
           <Image
             src={brandImages.collectionLips}
@@ -20,7 +20,7 @@ export function HomeHeroDefault() {
             fill
             priority
             className="hero-media object-cover object-center"
-            sizes="100vw"
+            sizes="(max-width: 767px) 1px, 100vw"
           />
 
           {/* Soft rose wash — beauty tint without crushing the photo */}
