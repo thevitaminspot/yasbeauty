@@ -32,9 +32,15 @@ function seedProducts(): Product[] {
 }
 
 function normalizeProduct(product: Product): Product {
+  const rawStock = product.stock;
+  // Missing stock (legacy JSON / old cart snapshots) ≠ sold out.
+  const stock =
+    rawStock === undefined || rawStock === null || rawStock === ("" as never)
+      ? DEFAULT_STOCK
+      : Math.max(0, Math.round(Number(rawStock)));
   return {
     ...product,
-    stock: Math.max(0, Math.round(Number(product.stock) || 0)),
+    stock: Number.isFinite(stock) ? stock : DEFAULT_STOCK,
     images: product.images?.length ? product.images : [product.image],
   };
 }

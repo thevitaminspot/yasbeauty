@@ -30,6 +30,7 @@ export default function CheckoutPage() {
   const [settings, setSettings] = useState<DeliverySettings | null>(null);
   const [zone, setZone] = useState<DeliveryZone>("abuja");
   const [areaId, setAreaId] = useState("");
+  const [areaQuery, setAreaQuery] = useState("");
   const submittingRef = useRef(false);
 
   const busy = phase !== "idle";
@@ -38,8 +39,16 @@ export default function CheckoutPage() {
     fetch("/api/delivery")
       .then((r) => r.json())
       .then((data: DeliverySettings) => {
-        setSettings(data);
-        if (data.abujaAreas[0]) setAreaId(data.abujaAreas[0].id);
+        const areas = [...(data.abujaAreas ?? [])].sort((a, b) =>
+          a.name.localeCompare(b.name, "en"),
+        );
+        const next = { ...data, abujaAreas: areas };
+        setSettings(next);
+        setAreaId((current) =>
+          current && areas.some((a) => a.id === current)
+            ? current
+            : (areas[0]?.id ?? ""),
+        );
       })
       .catch(() => undefined);
   }, []);
@@ -67,9 +76,22 @@ export default function CheckoutPage() {
   }, [settings, zone, areaId]);
 
   const total = subtotal + deliveryFee;
-  const stockBlocked = lines.some(
-    (l) => (l.product.stock ?? 0) <= 0 || l.quantity > (l.product.stock ?? 0),
-  );
+  const stockBlocked = lines.some((l) => {
+    const raw = l.product.stock;
+    if (typeof raw !== "number" || !Number.isFinite(raw)) return false;
+    return raw <= 0 || l.quantity > raw;
+  });
+
+  const filteredAreas = useMemo(() => {
+    if (!settings) return [];
+    const q = areaQuery.trim().toLowerCase();
+    if (!q) return settings.abujaAreas;
+    return settings.abujaAreas.filter((area) =>
+      area.name.toLowerCase().includes(q),
+    );
+  }, [settings, areaQuery]);
+
+  const selectedArea = settings?.abujaAreas.find((a) => a.id === areaId);
 
   if (!ready) {
     return (
@@ -338,22 +360,65 @@ export default function CheckoutPage() {
             </div>
 
             {zone === "abuja" && settings ? (
-              <label className={`${ui.fieldLabel} !mt-4`} htmlFor="abuja-area">
-                Abuja area
-                <select
-                  id="abuja-area"
+              <div className="!mt-4 space-y-3">
+                <p className={ui.fieldLabel}>Abuja area</p>
+                <input
+                  type="search"
+                  value={areaQuery}
+                  onChange={(e) => setAreaQuery(e.target.value)}
+                  placeholder="Search area — e.g. Jabi, Gwarinpa"
                   className={ui.fieldInput}
-                  value={areaId}
-                  onChange={(e) => setAreaId(e.target.value)}
-                  required
+                  aria-label="Search Abuja areas"
+                  autoComplete="off"
+                />
+                <input type="hidden" name="deliveryAreaId" value={areaId} />
+                <div
+                  className="max-h-56 space-y-1 overflow-y-auto border border-neutral-200 p-2"
+                  role="listbox"
+                  aria-label="Abuja areas"
                 >
-                  {settings.abujaAreas.map((area) => (
-                    <option key={area.id} value={area.id}>
-                      {area.name} — {formatNaira(area.price)}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                  {filteredAreas.length === 0 ? (
+                    <p className="px-2 py-3 text-sm text-neutral-500">
+                      No areas match “{areaQuery}”.
+                    </p>
+                  ) : (
+                    filteredAreas.map((area) => {
+                      const active = area.id === areaId;
+                      return (
+                        <button
+                          key={area.id}
+                          type="button"
+                          role="option"
+                          aria-selected={active}
+                          onClick={() => setAreaId(area.id)}
+                          className={`flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left text-sm transition ${
+                            active
+                              ? "bg-black text-white"
+                              : "hover:bg-neutral-50"
+                          }`}
+                        >
+                          <span className="font-medium">{area.name}</span>
+                          <span
+                            className={
+                              active ? "text-neutral-300" : "text-neutral-500"
+                            }
+                          >
+                            {formatNaira(area.price)}
+                          </span>
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+                {selectedArea ? (
+                  <p className="text-xs text-neutral-500">
+                    Selected: {selectedArea.name} ·{" "}
+                    {formatNaira(selectedArea.price)}
+                  </p>
+                ) : (
+                  <p className="text-xs text-red-600">Choose an Abuja area.</p>
+                )}
+              </div>
             ) : null}
           </div>
 
@@ -387,11 +452,15 @@ export default function CheckoutPage() {
                     onChange={(next) => setQuantity(product.id, next)}
                     label=""
                     disabled={busy}
-                    max={Math.max(1, product.stock ?? 1)}
+                    max={Math.max(
+                      1,
+                      typeof product.stock === "number" ? product.stock : 99,
+                    )}
                   />
-                  {(product.stock ?? 0) <= 0 ? (
+                  {typeof product.stock === "number" && product.stock <= 0 ? (
                     <p className="mb-3 text-xs text-red-600">Out of stock</p>
-                  ) : quantity > (product.stock ?? 0) ? (
+                  ) : typeof product.stock === "number" &&
+                    quantity > product.stock ? (
                     <p className="mb-3 text-xs text-amber-700">
                       Only {product.stock} left
                     </p>

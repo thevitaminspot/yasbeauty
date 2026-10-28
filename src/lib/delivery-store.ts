@@ -6,6 +6,7 @@ import { deliverySettings as deliveryTable } from "@/db/schema";
 import { deliveryFilePath } from "@/lib/data-paths";
 import {
   defaultDeliverySettings,
+  mergeMajorAbujaAreas,
   type DeliverySettings,
   type DeliveryZone,
   type OrderDelivery,
@@ -32,7 +33,10 @@ function normalizeSettings(raw: Partial<DeliverySettings> | null): DeliverySetti
     : defaultDeliverySettings.abujaAreas;
 
   return {
-    abujaAreas: areas.length ? areas : defaultDeliverySettings.abujaAreas,
+    // Keep any admin fees; fill in major FCT areas missing from older seeds.
+    abujaAreas: mergeMajorAbujaAreas(
+      areas.length ? areas : defaultDeliverySettings.abujaAreas,
+    ),
     outOfAbujaPrice: Math.max(
       0,
       Math.round(
@@ -74,11 +78,19 @@ export async function readDeliverySettings(): Promise<DeliverySettings> {
       .where(eq(deliveryTable.id, "default"))
       .limit(1);
     if (rows[0]) {
-      return normalizeSettings({
+      const storedCount = Array.isArray(rows[0].abujaAreas)
+        ? rows[0].abujaAreas.length
+        : 0;
+      const next = normalizeSettings({
         abujaAreas: rows[0].abujaAreas,
         outOfAbujaPrice: rows[0].outOfAbujaPrice,
         internationalPrice: rows[0].internationalPrice,
       });
+      // Persist newly merged major areas so checkout + admin stay in sync.
+      if (next.abujaAreas.length > storedCount) {
+        await writeDeliverySettings(next);
+      }
+      return next;
     }
     const seeded = defaultDeliverySettings;
     await db.insert(deliveryTable).values({

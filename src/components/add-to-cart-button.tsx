@@ -14,14 +14,16 @@ export function AddToCartButton({
   className?: string;
 }) {
   const { addItem, lines } = useCart();
-  const stock = Math.max(0, Math.floor(product.stock ?? 0));
+  const stockKnown =
+    typeof product.stock === "number" && Number.isFinite(product.stock);
+  const stock = Math.max(0, Math.floor(stockKnown ? product.stock : 24));
   const inBag =
     lines.find((l) => l.product.id === product.id)?.quantity ?? 0;
   const remaining = Math.max(0, stock - inBag);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
-  if (stock <= 0) {
+  if (stockKnown && stock <= 0) {
     return (
       <p
         className={`text-sm font-medium uppercase tracking-[0.16em] text-neutral-500 ${className}`}

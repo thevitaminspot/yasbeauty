@@ -103,7 +103,14 @@ function getServerSnapshot(): CartStore {
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = useCallback((product: Product, quantity = 1) => {
-    const stock = Math.max(0, Math.floor(product.stock ?? 0));
+    const stock = Math.max(
+      0,
+      Math.floor(
+        typeof product.stock === "number" && Number.isFinite(product.stock)
+          ? product.stock
+          : 24,
+      ),
+    );
     if (stock <= 0) return;
 
     setStoreLines((prev) => {
@@ -135,7 +142,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setStoreLines((prev) =>
       prev.map((l) => {
         if (l.product.id !== productId) return l;
-        const stock = Math.max(0, Math.floor(l.product.stock ?? 0));
+        const raw = l.product.stock;
+        const stock = Math.max(
+          0,
+          Math.floor(
+            typeof raw === "number" && Number.isFinite(raw) ? raw : 24,
+          ),
+        );
         const capped =
           stock > 0 ? Math.min(quantity, stock) : Math.max(quantity, 1);
         return { ...l, quantity: capped };
@@ -156,8 +169,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           changed = true;
           continue;
         }
-        const stock = Math.max(0, Math.floor(latest.stock ?? 0));
-        if (stock <= 0) {
+        const raw = latest.stock;
+        const stock = Math.max(
+          0,
+          Math.floor(
+            typeof raw === "number" && Number.isFinite(raw) ? raw : 24,
+          ),
+        );
+        if (typeof raw === "number" && stock <= 0) {
           changed = true;
           continue;
         }

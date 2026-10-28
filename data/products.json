@@ -23,7 +23,8 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ]
+    ],
+    "stock": 24
   },
   {
     "id": "lip-bloody-mary",
@@ -49,7 +50,8 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ]
+    ],
+    "stock": 24
   },
   {
     "id": "lip-sweet-lips",
@@ -74,7 +76,8 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ]
+    ],
+    "stock": 24
   },
   {
     "id": "lip-lapel",
@@ -98,7 +101,8 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ]
+    ],
+    "stock": 24
   },
   {
     "id": "lip-salamander",
@@ -122,7 +126,8 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ]
+    ],
+    "stock": 24
   },
   {
     "id": "brow-smoky-black",
@@ -148,7 +153,8 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ]
+    ],
+    "stock": 24
   },
   {
     "id": "brow-black-brown",
@@ -173,7 +179,8 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ]
+    ],
+    "stock": 24
   },
   {
     "id": "brow-melanin-brown",
@@ -198,7 +205,8 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ]
+    ],
+    "stock": 24
   },
   {
     "id": "aftercare-bright-serum",
@@ -221,6 +229,7 @@
       "External use only.",
       "Discontinue if irritation occurs.",
       "Keep out of reach of children."
-    ]
+    ],
+    "stock": 24
   }
 ]
