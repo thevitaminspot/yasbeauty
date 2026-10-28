@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+import { bookingDepositNaira } from "@/lib/booking-deposit";
 import { appendBooking } from "@/lib/bookings-store";
+import { nairaToKobo } from "@/lib/paystack";
 import { getServiceBySlug } from "@/lib/studio-services";
 
 type Body = {
@@ -32,16 +34,30 @@ export async function POST(request: Request) {
     );
   }
 
+  const email = body.email?.trim() ?? "";
+  if (!email || !email.includes("@")) {
+    return NextResponse.json(
+      { error: "Email is required to pay your deposit." },
+      { status: 400 },
+    );
+  }
+
   const booking = await appendBooking({
     serviceId: service.id,
     serviceName: service.name,
     name: body.name.trim(),
     phone: body.phone.trim(),
-    email: body.email?.trim() ?? "",
+    email,
     preferredDate: body.preferredDate,
     preferredTime: body.preferredTime?.trim() ?? "",
     notes: body.notes?.trim() ?? "",
+    depositAmount: nairaToKobo(bookingDepositNaira(service)),
+    depositReference: null,
   });
 
-  return NextResponse.json({ ok: true, booking });
+  return NextResponse.json({
+    ok: true,
+    booking,
+    depositNaira: bookingDepositNaira(service),
+  });
 }
