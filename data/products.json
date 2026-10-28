@@ -1,0 +1,226 @@
+[
+  {
+    "id": "lip-amore",
+    "slug": "amore-lip-pigment",
+    "name": "Amoré",
+    "category": "lip-pigments",
+    "price": 18500,
+    "volume": "10ml",
+    "tagline": "Soft romantic lip blush",
+    "description": "A balanced warm rose that heals true on melanin-rich lips. Built for natural lip blush and full lip procedures where softness matters.",
+    "image": "/products/lips/amore-v2.jpg",
+    "images": [
+      "/products/lips/amore-v2.jpg"
+    ],
+    "featured": true,
+    "bestseller": true,
+    "shade": "Warm rose",
+    "ingredients": "Aqua, Glycerin, Propylene Glycol, CI colorants. Sterilized gamma ray. Nano pigment formulation.",
+    "usage": "Shake well before use. For permanent makeup procedures by trained professionals only.",
+    "cautions": [
+      "For professional use only.",
+      "Patch test before full application.",
+      "Use within 12 months of opening.",
+      "Store in a cool, dry place away from direct sunlight.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "lip-bloody-mary",
+    "slug": "bloody-mary-lip-pigment",
+    "name": "Bloody Mary",
+    "category": "lip-pigments",
+    "price": 18500,
+    "volume": "10ml",
+    "tagline": "Bold statement red",
+    "description": "A saturated true red for clients who want unmistakable color. Works beautifully layered for ombre and full pigment saturation.",
+    "image": "/products/lips/bloody-mary-v2.jpg",
+    "images": [
+      "/products/lips/bloody-mary-v2.jpg"
+    ],
+    "featured": true,
+    "bestseller": true,
+    "shade": "Classic red",
+    "ingredients": "Aqua, Glycerin, Propylene Glycol, CI colorants. Sterilized gamma ray. Nano pigment formulation.",
+    "usage": "Shake well before use. For permanent makeup procedures by trained professionals only.",
+    "cautions": [
+      "For professional use only.",
+      "Patch test before full application.",
+      "Use within 12 months of opening.",
+      "Store in a cool, dry place away from direct sunlight.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "lip-sweet-lips",
+    "slug": "sweet-lips-pigment",
+    "name": "Sweet Lips",
+    "category": "lip-pigments",
+    "price": 18500,
+    "volume": "10ml",
+    "tagline": "Youthful coral flush",
+    "description": "A lively coral-pink that reads fresh on camera and in daylight. A studio favorite for everyday lip blush.",
+    "image": "/products/lips/sweet-lips-v2.jpg",
+    "images": [
+      "/products/lips/sweet-lips-v2.jpg"
+    ],
+    "bestseller": true,
+    "shade": "Bright coral pink",
+    "ingredients": "Aqua, Glycerin, Propylene Glycol, CI colorants. Sterilized gamma ray. Nano pigment formulation.",
+    "usage": "Shake well before use. For permanent makeup procedures by trained professionals only.",
+    "cautions": [
+      "For professional use only.",
+      "Patch test before full application.",
+      "Use within 12 months of opening.",
+      "Store in a cool, dry place away from direct sunlight.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "lip-lapel",
+    "slug": "lapel-lip-pigment",
+    "name": "La'pel",
+    "category": "lip-pigments",
+    "price": 18500,
+    "volume": "10ml",
+    "tagline": "Sun-kissed warmth",
+    "description": "Warm orange undertones for correcting cool lips and building custom blends. Excellent for dark lip neutralization workflows.",
+    "image": "/products/lips/lapel-v2.jpg",
+    "images": [
+      "/products/lips/lapel-v2.jpg"
+    ],
+    "shade": "Warm orange",
+    "ingredients": "Aqua, Glycerin, Propylene Glycol, CI colorants. Sterilized gamma ray. Nano pigment formulation.",
+    "usage": "Shake well before use. For permanent makeup procedures by trained professionals only.",
+    "cautions": [
+      "For professional use only.",
+      "Patch test before full application.",
+      "Use within 12 months of opening.",
+      "Store in a cool, dry place away from direct sunlight.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "lip-salamander",
+    "slug": "salamander-lip-pigment",
+    "name": "Salamander",
+    "category": "lip-pigments",
+    "price": 18500,
+    "volume": "10ml",
+    "tagline": "High-impact warmth",
+    "description": "A vivid orange-red for artists who push saturation. Mix with Amoré or Sweet Lips for bespoke healed results.",
+    "image": "/products/lips/salamander-v2.jpg",
+    "images": [
+      "/products/lips/salamander-v2.jpg"
+    ],
+    "shade": "Fiery orange-red",
+    "ingredients": "Aqua, Glycerin, Propylene Glycol, CI colorants. Sterilized gamma ray. Nano pigment formulation.",
+    "usage": "Shake well before use. For permanent makeup procedures by trained professionals only.",
+    "cautions": [
+      "For professional use only.",
+      "Patch test before full application.",
+      "Use within 12 months of opening.",
+      "Store in a cool, dry place away from direct sunlight.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "brow-smoky-black",
+    "slug": "smoky-black-brow-pigment",
+    "name": "Smoky Black",
+    "category": "brow-pigments",
+    "price": 19500,
+    "volume": "10ml",
+    "tagline": "Diffused depth for hair strokes",
+    "description": "A matte charcoal that avoids harsh blue shift on heal. Perfect for nano hair strokes and soft powder fill.",
+    "image": "/products/brows/smoky-black-v2.jpg",
+    "images": [
+      "/products/brows/smoky-black-v2.jpg"
+    ],
+    "featured": true,
+    "bestseller": true,
+    "shade": "Soft charcoal",
+    "ingredients": "Aqua, Glycerin, Propylene Glycol, CI colorants. Sterilized gamma ray. Nano pigment formulation.",
+    "usage": "Shake well before use. Ideal for nano brows, microblading, and permanent eyeliner.",
+    "cautions": [
+      "For professional use only.",
+      "Patch test before full application.",
+      "Use within 12 months of opening.",
+      "Store in a cool, dry place away from direct sunlight.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "brow-black-brown",
+    "slug": "black-brown-brow-pigment",
+    "name": "Black Brown",
+    "category": "brow-pigments",
+    "price": 19500,
+    "volume": "10ml",
+    "tagline": "Studio-neutral brown",
+    "description": "Cool ash brown with controlled depth. Heals evenly for clients who want definition without a heavy block brow.",
+    "image": "/products/brows/black-brown-v2.jpg",
+    "images": [
+      "/products/brows/black-brown-v2.jpg"
+    ],
+    "featured": true,
+    "shade": "Cool ash brown",
+    "ingredients": "Aqua, Glycerin, Propylene Glycol, CI colorants. Sterilized gamma ray. Nano pigment formulation.",
+    "usage": "Shake well before use. Ideal for nano brows, microblading, and permanent eyeliner.",
+    "cautions": [
+      "For professional use only.",
+      "Patch test before full application.",
+      "Use within 12 months of opening.",
+      "Store in a cool, dry place away from direct sunlight.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "brow-melanin-brown",
+    "slug": "melanin-brown-brow-pigment",
+    "name": "Melanin Brown",
+    "category": "brow-pigments",
+    "price": 19500,
+    "volume": "10ml",
+    "tagline": "Made for deeper skin tones",
+    "description": "Warm brown pigment that stays true on melanin-rich skin. Developed by Yas Beauty Allure for nano brow specialists.",
+    "image": "/products/brows/melanin-brown-v2.jpg",
+    "images": [
+      "/products/brows/melanin-brown-v2.jpg"
+    ],
+    "bestseller": true,
+    "shade": "Rich warm brown",
+    "ingredients": "Aqua, Glycerin, Propylene Glycol, CI colorants. Sterilized gamma ray. Nano pigment formulation.",
+    "usage": "Shake well before use. Ideal for nano brows, microblading, and permanent eyeliner.",
+    "cautions": [
+      "For professional use only.",
+      "Patch test before full application.",
+      "Use within 12 months of opening.",
+      "Store in a cool, dry place away from direct sunlight.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "aftercare-bright-serum",
+    "slug": "bright-serum-lip-shine",
+    "name": "Bright Serum",
+    "category": "aftercare",
+    "price": 24000,
+    "volume": "30ml",
+    "tagline": "Post-treatment lip brightening",
+    "description": "Lip-Shine-Shine brightening serum for post lip procedures. Enhances color vibrancy while keeping lips hydrated through healing.",
+    "image": "/products/aftercare/bright-serum-v2.jpg",
+    "images": [
+      "/products/aftercare/bright-serum-v2.jpg"
+    ],
+    "featured": true,
+    "shade": "Lip-Shine-Shine",
+    "ingredients": "Aqua, Glycerin, Nourishing botanical extracts, brightening actives.",
+    "usage": "Apply a thin layer to lips after approved healing window. For professional retail and client aftercare kits.",
+    "cautions": [
+      "External use only.",
+      "Discontinue if irritation occurs.",
+      "Keep out of reach of children."
+    ]
+  }
+]

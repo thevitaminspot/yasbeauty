@@ -1,0 +1,446 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --muted: #737373;
+  --border: #e5e5e5;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-cormorant);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+.font-display {
+  font-family: var(--font-display), "Syncopate", system-ui, sans-serif;
+}
+
+@keyframes hero-ken {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.85rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-media {
+  animation: hero-ken 18s ease-out forwards;
+}
+
+.hero-veil {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 246, 248, 0.22) 0%,
+      rgba(255, 236, 240, 0.08) 38%,
+      rgba(255, 248, 250, 0.28) 100%
+    );
+}
+
+.hero-bloom {
+  background: radial-gradient(
+    ellipse 58% 48% at 50% 46%,
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(255, 245, 247, 0.38) 42%,
+    rgba(255, 255, 255, 0) 72%
+  );
+}
+
+.hero-vignette {
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 45%,
+    rgba(0, 0, 0, 0) 55%,
+    rgba(28, 12, 16, 0.14) 100%
+  );
+}
+
+.hero-sheen {
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.18) 48%,
+    transparent 62%
+  );
+  background-size: 220% 100%;
+  animation: hero-sheen 14s ease-in-out infinite;
+}
+
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* Hero variant: ink — pairs with black navbar */
+.hero-ink-top {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.45) 18%,
+    rgba(0, 0, 0, 0.08) 42%,
+    transparent 58%
+  );
+}
+
+.hero-ink-grade {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.35) 42%,
+      rgba(0, 0, 0, 0.15) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.78) 0%,
+      rgba(0, 0, 0, 0.2) 38%,
+      transparent 62%
+    );
+}
+
+.hero-ink-sheen {
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    rgba(255, 255, 255, 0.07) 48%,
+    transparent 64%
+  );
+  background-size: 220% 100%;
+  animation: hero-sheen 16s ease-in-out infinite;
+}
+
+/* Hero variant: atelier — studio editorial under black nav */
+.hero-atelier-top {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.55) 14%,
+    rgba(0, 0, 0, 0.12) 36%,
+    transparent 52%
+  );
+}
+
+.hero-atelier-grade {
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.45) 28%,
+    rgba(0, 0, 0, 0.08) 58%,
+    transparent 78%
+  );
+}
+
+.hero-atelier-sheen {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 52%,
+    transparent 66%
+  );
+  background-size: 240% 100%;
+  animation: hero-sheen 18s ease-in-out infinite;
+}
+
+@keyframes hero-rule {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.hero-atelier-rule {
+  transform-origin: left center;
+  animation: hero-rule 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+
+@keyframes hero-sheen {
+  0%,
+  100% {
+    background-position: 120% 0;
+    opacity: 0.35;
+  }
+  50% {
+    background-position: -20% 0;
+    opacity: 0.7;
+  }
+}
+
+.hero-copy > * {
+  animation: hero-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-copy > *:nth-child(1) {
+  animation-delay: 0.06s;
+}
+
+.hero-copy > *:nth-child(2) {
+  animation-delay: 0.14s;
+}
+
+.hero-copy > *:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.hero-copy > *:nth-child(4) {
+  animation-delay: 0.34s;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(0.85rem);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-backdrop-in {
+  animation: fade-in 0.22s ease-out both;
+}
+
+.animate-modal-in {
+  animation: modal-rise 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes nav-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-mobile-panel,
+.nav-search-panel {
+  animation: nav-panel-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-media,
+  .hero-sheen,
+  .hero-ink-sheen,
+  .hero-atelier-sheen,
+  .hero-atelier-rule,
+  .hero-copy > *,
+  .animate-backdrop-in,
+  .animate-modal-in,
+  .nav-mobile-panel,
+  .nav-search-panel {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+::selection {
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+/* Interactive polish */
+a,
+button,
+[role="button"],
+[role="option"],
+[role="link"],
+summary,
+label[for],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="password"],
+input[type="number"],
+textarea {
+  cursor: text;
+}
+
+:focus-visible {
+  outline: 2px solid #0a0a0a;
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-offset: 0;
+}
+
+/* Native selects — room between value, chevron, and right edge */
+select:not([multiple]) {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230a0a0a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.75rem;
+  /* Beat utility px-* so the chevron isn’t flush to the edge */
+  padding-right: 2.25rem !important;
+}
+
+select:not([multiple])::-ms-expand {
+  display: none;
+}
+
+/* Hide default search clear quirks on WebKit a bit cleaner */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Icon hit-targets — padding only; set display via Tailwind on the element */
+.icon-hit {
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem;
+  line-height: 0;
+}
+
+.icon-hit svg {
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+/* Nav toggles — explicit breakpoints so Tailwind display utilities can't fight */
+.nav-menu-toggle,
+.nav-search-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem;
+  line-height: 0;
+}
+
+.nav-menu-toggle svg,
+.nav-search-toggle svg {
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+/* Search icon: hide on phones; show sm–lg; hide again when xl search field appears */
+@media (max-width: 639px) {
+  .nav-search-toggle {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .nav-search-toggle {
+    display: none !important;
+  }
+
+  .nav-search-panel {
+    display: none !important;
+  }
+}
+
+/* Hamburger + mobile drawer: hide from lg up */
+@media (min-width: 1024px) {
+  .nav-menu-toggle,
+  .nav-mobile-panel {
+    display: none !important;
+  }
+}
