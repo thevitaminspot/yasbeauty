@@ -63,6 +63,15 @@ function IconClock(props: IconProps) {
   );
 }
 
+function IconCohort(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+      <path d="M4 19.5V8.2L12 4l8 4.2v11.3" strokeLinejoin="round" />
+      <path d="M12 12v7.5M8 15.5h8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function IconMail(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
@@ -124,6 +133,7 @@ const navGroups: { label: string; links: NavLink[] }[] = [
     links: [
       { href: "/admin/bookings", label: "Bookings", icon: IconCalendar },
       { href: "/admin/services", label: "Services", icon: IconSpark },
+      { href: "/admin/training", label: "Training", icon: IconCohort },
       { href: "/admin/availability", label: "Hours", icon: IconClock },
     ],
   },

@@ -62,10 +62,22 @@ export function formatAccountDate(iso: string, withTime = false) {
 }
 
 export function formatPreferredSlot(date: string, time: string) {
+  const datePart = date?.trim() ?? "";
+  const timePart = time?.trim() ?? "";
+  // Training cohorts / TBA — not a calendar day
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(datePart)) {
+    if (!timePart || /^cohort$/i.test(timePart)) return datePart;
+    if (!datePart) return timePart;
+    return `${datePart} · ${timePart}`;
+  }
   try {
-    const parsed = new Date(`${date}T${time}:00`);
+    const timeLooksClock = /^\d{1,2}:\d{2}/.test(timePart);
+    if (!timeLooksClock) {
+      return timePart ? `${datePart} · ${timePart}` : datePart;
+    }
+    const parsed = new Date(`${datePart}T${timePart}:00`);
     if (Number.isNaN(parsed.getTime())) {
-      return `${date} · ${time}`;
+      return timePart ? `${datePart} · ${timePart}` : datePart;
     }
     return new Intl.DateTimeFormat("en-GB", {
       weekday: "short",
@@ -76,7 +88,7 @@ export function formatPreferredSlot(date: string, time: string) {
       minute: "2-digit",
     }).format(parsed);
   } catch {
-    return `${date} · ${time}`;
+    return timePart ? `${datePart} · ${timePart}` : datePart;
   }
 }
 

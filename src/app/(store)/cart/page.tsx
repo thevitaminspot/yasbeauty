@@ -38,11 +38,11 @@ export default function CartPage() {
   return (
     <div className={`${ui.pageShell}`}>
       <PageHeader title="Bag" />
-      <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_360px]">
-        <ul className="divide-y divide-neutral-200 border-y border-neutral-200">
+      <div className="mt-8 grid min-w-0 gap-8 sm:mt-12 sm:gap-12 lg:grid-cols-[1fr_360px]">
+        <ul className="min-w-0 divide-y divide-neutral-200 border-y border-neutral-200">
           {lines.map(({ product, quantity }) => (
-            <li key={product.id} className="flex gap-6 py-8">
-              <div className="relative h-28 w-24 shrink-0 bg-neutral-100">
+            <li key={product.id} className="flex min-w-0 gap-3 py-6 sm:gap-6 sm:py-8">
+              <div className="relative h-24 w-20 shrink-0 bg-neutral-100 sm:h-28 sm:w-24">
                 <Image
                   src={product.image}
                   alt={product.name}
@@ -50,12 +50,12 @@ export default function CartPage() {
                   className="object-cover"
                 />
               </div>
-              <div className="flex flex-1 flex-col">
-                <div className="flex justify-between gap-4">
-                  <div>
+              <div className="flex min-w-0 flex-1 flex-col">
+                <div className="flex justify-between gap-3">
+                  <div className="min-w-0">
                     <Link
                       href={`/products/${product.slug}`}
-                      className="font-serif text-2xl font-medium italic hover:underline"
+                      className="font-serif text-xl font-medium italic hover:underline sm:text-2xl"
                     >
                       {product.name}
                     </Link>
@@ -63,7 +63,7 @@ export default function CartPage() {
                       {product.volume}
                     </p>
                   </div>
-                  <p className="text-sm font-medium">
+                  <p className="shrink-0 text-sm font-medium">
                     {formatNaira(product.price * quantity)}
                   </p>
                 </div>

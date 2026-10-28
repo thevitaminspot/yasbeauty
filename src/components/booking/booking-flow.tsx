@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createBookingRequest, listPreferredSlots } from "@/actions/booking";
@@ -12,11 +11,27 @@ import {
 import { openPaystackCheckout } from "@/lib/paystack-popup";
 import { formatNairaLabel } from "@/lib/site";
 import type { StudioService } from "@/lib/services";
+import {
+  cohortLabel,
+  type TrainingSettings,
+} from "@/lib/training-types";
 import { ui } from "@/lib/ui";
 
 type Slot = { id: string; label: string };
 
-const steps = ["Choose a service", "Date & time", "Your details", "Review"] as const;
+const procedureSteps = [
+  "Choose a service",
+  "Date & time",
+  "Your details",
+  "Review",
+] as const;
+
+const trainingSteps = [
+  "Choose a service",
+  "Next cohort",
+  "Your details",
+  "Review",
+] as const;
 
 const field = ui.fieldInput;
 const labelCls = ui.fieldLabel;
@@ -29,8 +44,14 @@ function todayIso() {
   return `${y}-${m}-${day}`;
 }
 
-function ProgressBar({ step }: { step: number }) {
-  const pct = ((step + 1) / steps.length) * 100;
+function ProgressBar({
+  step,
+  total,
+}: {
+  step: number;
+  total: number;
+}) {
+  const pct = ((step + 1) / total) * 100;
   return (
     <div className="h-px w-full bg-neutral-200">
       <div
@@ -39,7 +60,7 @@ function ProgressBar({ step }: { step: number }) {
         role="progressbar"
         aria-valuenow={step + 1}
         aria-valuemin={1}
-        aria-valuemax={steps.length}
+        aria-valuemax={total}
       />
     </div>
   );
@@ -48,9 +69,11 @@ function ProgressBar({ step }: { step: number }) {
 export function BookingFlow({
   services,
   initialServiceSlug,
+  trainingSettings,
 }: {
   services: StudioService[];
   initialServiceSlug?: string;
+  trainingSettings: TrainingSettings;
 }) {
   const preselected =
     Boolean(initialServiceSlug) &&
@@ -63,6 +86,7 @@ export function BookingFlow({
   const [dateError, setDateError] = useState("");
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [slot, setSlot] = useState<Slot | null>(null);
+  const [cohortId, setCohortId] = useState("");
   const [details, setDetails] = useState({
     name: "",
     email: "",
@@ -84,10 +108,33 @@ export function BookingFlow({
     [services, slug],
   );
 
+  const training = Boolean(service && isTrainingService(service));
+  const steps = training ? trainingSteps : procedureSteps;
   const depositNaira = service ? bookingDepositNaira(service) : 0;
 
-  // Soft nav / Suspense can mount before ?service= is ready — apply once
-  // so we open on Date & time. Do not re-force after the user taps Back.
+  const selectedCohort = useMemo(
+    () => trainingSettings.cohorts.find((c) => c.id === cohortId),
+    [trainingSettings.cohorts, cohortId],
+  );
+
+  const cohortReady =
+    training &&
+    (trainingSettings.mode === "tba" || Boolean(selectedCohort));
+
+  const scheduleReady = training
+    ? cohortReady
+    : Boolean(date && slot);
+
+  const whenLabel = training
+    ? trainingSettings.mode === "tba"
+      ? "Will be announced"
+      : selectedCohort
+        ? cohortLabel(selectedCohort)
+        : ""
+    : date && slot
+      ? `${date} · ${slot.label}`
+      : "";
+
   useEffect(() => {
     if (!initialServiceSlug) return;
     if (appliedService.current === initialServiceSlug) return;
@@ -104,6 +151,20 @@ export function BookingFlow({
     }
     topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [step]);
+
+  useEffect(() => {
+    if (!training) return;
+    if (trainingSettings.mode === "tba") {
+      setCohortId("");
+      return;
+    }
+    if (
+      trainingSettings.cohorts.length === 1 &&
+      !trainingSettings.cohorts.some((c) => c.id === cohortId)
+    ) {
+      setCohortId(trainingSettings.cohorts[0]!.id);
+    }
+  }, [training, trainingSettings, cohortId]);
 
   async function loadSlots(nextDate: string) {
     setDate(nextDate);
@@ -127,9 +188,16 @@ export function BookingFlow({
       setError("Choose a service to continue.");
       return;
     }
-    if (step === 1 && (!date || !slot)) {
-      setError("Select a date and time to continue.");
-      return;
+    if (step === 1) {
+      if (training) {
+        if (trainingSettings.mode === "cohorts" && !selectedCohort) {
+          setError("Choose a cohort to continue.");
+          return;
+        }
+      } else if (!date || !slot) {
+        setError("Select a date and time to continue.");
+        return;
+      }
     }
     if (step === 2) {
       if (details.name.trim().length < 2) {
@@ -149,7 +217,7 @@ export function BookingFlow({
   }
 
   async function confirm() {
-    if (!service || !slot || !date) return;
+    if (!service || !scheduleReady) return;
     setPending(true);
     setError("");
     const result = await createBookingRequest({
@@ -157,8 +225,9 @@ export function BookingFlow({
       name: details.name,
       email: details.email,
       phone: details.phone,
-      preferredDate: date,
-      preferredTime: slot.label,
+      preferredDate: training ? undefined : date,
+      preferredTime: training ? undefined : slot?.label,
+      cohortId: training ? cohortId || undefined : undefined,
       notes: details.notes,
     });
     if (result.error || !result.booking) {
@@ -224,34 +293,35 @@ export function BookingFlow({
   }
 
   return (
-    <div ref={topRef} className={`${ui.panel} scroll-mt-24`}>
+    <div ref={topRef} className={`${ui.panel} max-w-full scroll-mt-24`}>
       <form
+        className="min-w-0 max-w-full"
         onSubmit={(e) => {
           e.preventDefault();
           if (step < steps.length - 1) next();
           else void confirm();
         }}
       >
-        <header className="mb-6">
+        <header className="mb-5 sm:mb-6">
           {step > 0 ? (
             <button
               type="button"
               onClick={back}
-              className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-neutral-500 hover:text-black"
+              className="mb-4 min-h-11 text-xs font-medium uppercase tracking-[0.2em] text-neutral-500 hover:text-black"
             >
               ← Back
             </button>
           ) : null}
-          <ProgressBar step={step} />
-          <h2 className="mt-5 font-serif text-[clamp(1.75rem,3vw,2.25rem)] font-medium tracking-[-0.02em]">
+          <ProgressBar step={step} total={steps.length} />
+          <h2 className="mt-5 font-serif text-[clamp(1.6rem,6vw,2.25rem)] font-medium tracking-[-0.02em]">
             {steps[step]}
           </h2>
           {service && step > 0 ? (
-            <p className="mt-2 text-sm text-neutral-600">
+            <p className="mt-2 break-words text-sm text-neutral-600">
               <span className="font-medium text-black">{service.name}</span>
               {" · "}
               {service.duration} · from {formatNairaLabel(service.fromPrice)}
-              {slot ? ` · ${slot.label}` : ""}
+              {whenLabel ? ` · ${whenLabel}` : ""}
             </p>
           ) : null}
         </header>
@@ -269,17 +339,21 @@ export function BookingFlow({
                     onClick={() => {
                       setSlug(item.slug);
                       setSlot(null);
+                      setDate("");
+                      setCohortId("");
                       setError("");
                     }}
-                    className={`w-full border p-4 text-left transition ${
+                    className={`w-full min-w-0 border p-4 text-left transition ${
                       active
                         ? "border-black bg-black text-white"
                         : "border-neutral-200 hover:border-black"
                     }`}
                   >
                     <span className="flex flex-wrap items-baseline justify-between gap-2">
-                      <span className="font-serif text-xl italic">{item.name}</span>
-                      <span className="text-xs tracking-wide">
+                      <span className="min-w-0 font-serif text-xl italic">
+                        {item.name}
+                      </span>
+                      <span className="shrink-0 text-xs tracking-wide">
                         from {formatNairaLabel(item.fromPrice)}
                       </span>
                     </span>
@@ -305,16 +379,73 @@ export function BookingFlow({
           </ul>
         ) : null}
 
-        {step === 1 && service ? (
-          <div className="space-y-6">
-            <label className={labelCls}>
+        {step === 1 && service && training ? (
+          <div className="min-w-0 space-y-5">
+            {trainingSettings.mode === "tba" ? (
+              <div className="border border-neutral-200 bg-neutral-50 p-4 sm:p-5">
+                <p className="font-serif text-xl italic text-black">
+                  Next cohort — dates will be announced
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-neutral-600">
+                  Pay your training deposit to hold a place. We’ll email you
+                  when the next intake month is confirmed.
+                </p>
+              </div>
+            ) : (
+              <>
+                <p className="text-sm leading-relaxed text-neutral-600">
+                  Choose the cohort month that works for you. Exact training
+                  days are confirmed by the studio after your deposit.
+                </p>
+                <ul className="space-y-2" role="listbox" aria-label="Cohorts">
+                  {trainingSettings.cohorts.map((cohort) => {
+                    const active = cohort.id === cohortId;
+                    return (
+                      <li key={cohort.id}>
+                        <button
+                          type="button"
+                          role="option"
+                          aria-selected={active}
+                          onClick={() => {
+                            setCohortId(cohort.id);
+                            setError("");
+                          }}
+                          className={`w-full border px-4 py-4 text-left transition ${
+                            active
+                              ? "border-black bg-black text-white"
+                              : "border-neutral-200 hover:border-black"
+                          }`}
+                        >
+                          <span className="font-serif text-xl italic">
+                            {cohortLabel(cohort)}
+                          </span>
+                          <span
+                            className={`mt-1 block text-[10px] uppercase tracking-[0.2em] ${
+                              active ? "text-neutral-400" : "text-neutral-500"
+                            }`}
+                          >
+                            Next cohort
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </>
+            )}
+          </div>
+        ) : null}
+
+        {step === 1 && service && !training ? (
+          <div className="min-w-0 space-y-6">
+            <label className={`${labelCls} min-w-0`}>
               Date
               <input
                 type="date"
                 value={date}
                 min={todayIso()}
                 onChange={(e) => void loadSlots(e.target.value)}
-                className={field}
+                className={`${field} block`}
                 required
               />
             </label>
@@ -339,7 +470,7 @@ export function BookingFlow({
                       key={item.id}
                       type="button"
                       onClick={() => setSlot(item)}
-                      className={`border px-3 py-3 text-sm transition ${
+                      className={`min-h-12 border px-3 py-3 text-sm transition ${
                         slot?.id === item.id
                           ? "border-black bg-black text-white"
                           : "border-neutral-200 hover:border-black"
@@ -378,6 +509,7 @@ export function BookingFlow({
                 required
                 type="tel"
                 autoComplete="tel"
+                inputMode="tel"
                 value={details.phone}
                 onChange={(e) =>
                   setDetails((c) => ({ ...c, phone: e.target.value }))
@@ -391,6 +523,7 @@ export function BookingFlow({
                 required
                 type="email"
                 autoComplete="email"
+                inputMode="email"
                 value={details.email}
                 onChange={(e) =>
                   setDetails((c) => ({ ...c, email: e.target.value }))
@@ -406,49 +539,53 @@ export function BookingFlow({
                 onChange={(e) =>
                   setDetails((c) => ({ ...c, notes: e.target.value }))
                 }
-                placeholder="First visit, patch test, skin concerns…"
+                placeholder={
+                  training
+                    ? "Experience level, goals, questions…"
+                    : "First visit, patch test, skin concerns…"
+                }
                 className={`${field} resize-y`}
               />
             </label>
           </div>
         ) : null}
 
-        {step === 3 && service && slot ? (
-          <dl className="space-y-4 border border-neutral-200 bg-neutral-50 p-5 text-sm">
+        {step === 3 && service && scheduleReady ? (
+          <dl className="space-y-4 border border-neutral-200 bg-neutral-50 p-4 text-sm sm:p-5">
             <div className="flex justify-between gap-4 border-b border-neutral-200 pb-3">
-              <dt className="text-neutral-500">Service</dt>
-              <dd className="text-right font-medium">{service.name}</dd>
+              <dt className="shrink-0 text-neutral-500">Service</dt>
+              <dd className="min-w-0 text-right font-medium">{service.name}</dd>
             </div>
             <div className="flex justify-between gap-4 border-b border-neutral-200 pb-3">
-              <dt className="text-neutral-500">When</dt>
-              <dd className="text-right">
-                {date} · {slot.label}
-              </dd>
+              <dt className="shrink-0 text-neutral-500">
+                {training ? "Cohort" : "When"}
+              </dt>
+              <dd className="min-w-0 text-right">{whenLabel}</dd>
             </div>
             <div className="flex justify-between gap-4 border-b border-neutral-200 pb-3">
-              <dt className="text-neutral-500">From</dt>
+              <dt className="shrink-0 text-neutral-500">From</dt>
               <dd className="text-right">{formatNairaLabel(service.fromPrice)}</dd>
             </div>
             <div className="flex justify-between gap-4 border-b border-neutral-200 pb-3">
-              <dt className="text-neutral-500">
+              <dt className="shrink-0 text-neutral-500">
                 Deposit due
-                {isTrainingService(service) ? " (training)" : ""}
+                {training ? " (training)" : ""}
               </dt>
               <dd className="text-right font-medium">
                 {formatNairaLabel(depositNaira)}
               </dd>
             </div>
             <div className="flex justify-between gap-4">
-              <dt className="text-neutral-500">Contact</dt>
-              <dd className="text-right">
+              <dt className="shrink-0 text-neutral-500">Contact</dt>
+              <dd className="min-w-0 text-right">
                 {details.name}
                 <br />
                 {details.phone}
               </dd>
             </div>
             <p className="pt-2 text-xs leading-relaxed text-neutral-500">
-              {isTrainingService(service)
-                ? "Training requires a ₦250,000 deposit to hold your place."
+              {training
+                ? "Training requires a ₦250,000 deposit to hold your place. Exact dates follow after we confirm your cohort."
                 : "Procedures require a ₦15,000 deposit. Balance is due at the studio after we confirm."}{" "}
               You’ll pay securely with Paystack next.
             </p>

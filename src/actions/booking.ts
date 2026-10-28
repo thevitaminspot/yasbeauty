@@ -4,18 +4,22 @@ import {
   isDateBookable,
   readAvailability,
 } from "@/lib/availability-store";
-import { bookingDepositNaira } from "@/lib/booking-deposit";
+import { bookingDepositNaira, isTrainingService } from "@/lib/booking-deposit";
 import { appendBooking } from "@/lib/bookings-store";
 import { nairaToKobo } from "@/lib/paystack";
 import { getServiceBySlug } from "@/lib/studio-services";
+import { readTrainingSettings } from "@/lib/training-store";
+import { cohortLabel } from "@/lib/training-types";
 
 export async function createBookingRequest(input: {
   serviceSlug: string;
   name: string;
   email: string;
   phone: string;
-  preferredDate: string;
-  preferredTime: string;
+  preferredDate?: string;
+  preferredTime?: string;
+  /** Training only — cohort id, or omit when mode is TBA */
+  cohortId?: string;
   notes?: string;
 }) {
   const service = await getServiceBySlug(input.serviceSlug);
@@ -26,27 +30,52 @@ export async function createBookingRequest(input: {
   const name = input.name?.trim() ?? "";
   const phone = input.phone?.trim() ?? "";
   const email = input.email?.trim() ?? "";
-  const preferredDate = input.preferredDate?.trim() ?? "";
-  const preferredTime = input.preferredTime?.trim() ?? "";
 
   if (name.length < 2) return { error: "Enter your full name." };
   if (phone.length < 7) return { error: "Enter a valid phone number." };
   if (!email || !email.includes("@")) {
     return { error: "Email is required to pay your deposit." };
   }
-  if (!preferredDate) return { error: "Choose a preferred date." };
-  if (!preferredTime) return { error: "Choose a preferred time." };
 
-  const bookable = await isDateBookable(preferredDate);
-  if (!bookable.ok) return { error: bookable.error };
+  let preferredDate = "";
+  let preferredTime = "";
 
-  const availability = await readAvailability();
-  if (
-    !availability.slots.some(
-      (slot) => slot.id === preferredTime || slot.label === preferredTime,
-    )
-  ) {
-    return { error: "Choose a preferred time from the list." };
+  if (isTrainingService(service)) {
+    const training = await readTrainingSettings();
+    if (training.mode === "tba") {
+      preferredDate = "Will be announced";
+      preferredTime = "Next cohort";
+    } else {
+      const cohortId = input.cohortId?.trim() ?? "";
+      const cohort = training.cohorts.find((c) => c.id === cohortId);
+      if (!cohort) {
+        return { error: "Choose a training cohort." };
+      }
+      preferredDate = cohortLabel(cohort);
+      preferredTime = "Cohort";
+    }
+  } else {
+    preferredDate = input.preferredDate?.trim() ?? "";
+    preferredTime = input.preferredTime?.trim() ?? "";
+
+    if (!preferredDate) return { error: "Choose a preferred date." };
+    if (!preferredTime) return { error: "Choose a preferred time." };
+
+    const bookable = await isDateBookable(preferredDate);
+    if (!bookable.ok) return { error: bookable.error };
+
+    const availability = await readAvailability();
+    if (
+      !availability.slots.some(
+        (slot) => slot.id === preferredTime || slot.label === preferredTime,
+      )
+    ) {
+      return { error: "Choose a preferred time from the list." };
+    }
+
+    preferredTime =
+      availability.slots.find((slot) => slot.id === preferredTime)?.label ??
+      preferredTime;
   }
 
   const depositNaira = bookingDepositNaira(service);
@@ -58,9 +87,7 @@ export async function createBookingRequest(input: {
     phone,
     email,
     preferredDate,
-    preferredTime:
-      availability.slots.find((slot) => slot.id === preferredTime)?.label ??
-      preferredTime,
+    preferredTime,
     notes: input.notes?.trim() ?? "",
     depositAmount: nairaToKobo(depositNaira),
     depositReference: null,

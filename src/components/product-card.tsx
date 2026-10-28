@@ -31,24 +31,24 @@ export function ProductCard({
             </span>
           ) : null}
         </Link>
-        <div className="mt-4 flex flex-1 flex-col border-t border-neutral-200 pt-4">
-          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
-            {product.volume} · Nano pigment
+        <div className="mt-3 flex flex-1 flex-col border-t border-neutral-200 pt-3 sm:mt-4 sm:pt-4">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500 sm:text-[11px]">
+            {product.volume}
           </p>
           <Link href={`/products/${product.slug}`}>
-            <h3 className="mt-1 font-serif text-xl font-medium italic tracking-tight text-black">
+            <h3 className="mt-1 font-serif text-lg font-medium italic tracking-tight text-black sm:text-xl">
               {product.name}
             </h3>
           </Link>
           {product.shade ? (
-            <p className="mt-1 text-[11px] uppercase tracking-[0.15em] text-neutral-500">
+            <p className="mt-1 text-[10px] uppercase tracking-[0.15em] text-neutral-500 sm:text-[11px]">
               {product.shade}
             </p>
           ) : null}
-          <p className="mt-1 line-clamp-2 text-sm text-neutral-600">
+          <p className="mt-1 hidden line-clamp-2 text-sm text-neutral-600 sm:block">
             {product.tagline}
           </p>
-          <p className="mt-auto pt-4 text-sm font-medium tracking-wide">
+          <p className="mt-auto pt-3 text-sm font-medium tracking-wide sm:pt-4">
             {formatNaira(product.price)}
           </p>
         </div>

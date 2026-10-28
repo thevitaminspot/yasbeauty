@@ -37,3 +37,8 @@ export const deliveryFilePath = path.join(
   "data",
   "delivery.json",
 );
+export const trainingFilePath = path.join(
+  process.cwd(),
+  "data",
+  "training.json",
+);

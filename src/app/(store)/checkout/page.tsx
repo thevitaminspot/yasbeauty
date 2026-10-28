@@ -265,7 +265,7 @@ export default function CheckoutPage() {
 
       <form
         id="checkout-form"
-        className="mt-12 grid gap-12 lg:grid-cols-2"
+        className="mt-8 grid min-w-0 gap-8 sm:mt-12 sm:gap-12 lg:grid-cols-2"
         aria-busy={busy}
         onSubmit={(e) => {
           e.preventDefault();
@@ -274,7 +274,7 @@ export default function CheckoutPage() {
       >
         <fieldset
           disabled={busy}
-          className="space-y-5 border-0 p-0 disabled:opacity-60"
+          className="order-2 min-w-0 space-y-5 border-0 p-0 disabled:opacity-60 lg:order-1"
         >
           <label className={`${ui.fieldLabel}`} htmlFor="name">
             Full name
@@ -337,13 +337,13 @@ export default function CheckoutPage() {
               {zoneOptions.map((option) => (
                 <label
                   key={option.value}
-                  className={`flex cursor-pointer items-center justify-between gap-4 border px-4 py-3 text-sm transition ${
+                  className={`flex min-h-12 cursor-pointer items-center justify-between gap-3 border px-3 py-3 text-sm transition sm:gap-4 sm:px-4 ${
                     zone === option.value
                       ? "border-black bg-neutral-50"
                       : "border-neutral-200 hover:border-neutral-400"
                   }`}
                 >
-                  <span className="flex items-center gap-3">
+                  <span className="flex min-w-0 items-center gap-3">
                     <input
                       type="radio"
                       name="deliveryZone"
@@ -354,7 +354,7 @@ export default function CheckoutPage() {
                     />
                     <span className="font-medium">{option.label}</span>
                   </span>
-                  <span className="text-neutral-500">{option.hint}</span>
+                  <span className="shrink-0 text-neutral-500">{option.hint}</span>
                 </label>
               ))}
             </div>
@@ -437,14 +437,18 @@ export default function CheckoutPage() {
           </label>
         </fieldset>
 
-        <aside className={`${ui.panel} h-fit`}>
+        <aside className={`${ui.panel} order-1 h-fit lg:order-2 lg:sticky lg:top-24`}>
           <h2 className={`${ui.eyebrow} text-black`}>Your order</h2>
-          <ul className="mt-6 space-y-5 text-sm">
+          <ul className="mt-5 space-y-5 text-sm sm:mt-6">
             {lines.map(({ product, quantity }) => (
-              <li key={product.id} className="space-y-3">
-                <div className="flex justify-between gap-4">
-                  <span className="font-medium">{product.name}</span>
-                  <span>{formatNaira(product.price * quantity)}</span>
+              <li key={product.id} className="min-w-0 space-y-3">
+                <div className="flex justify-between gap-3">
+                  <span className="min-w-0 break-words font-medium">
+                    {product.name}
+                  </span>
+                  <span className="shrink-0">
+                    {formatNaira(product.price * quantity)}
+                  </span>
                 </div>
                 <div className="flex flex-wrap items-end gap-3">
                   <QuantityStepper

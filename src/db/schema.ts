@@ -140,3 +140,14 @@ export const availability = pgTable("availability", {
     .notNull()
     .defaultNow(),
 });
+
+export const trainingSettings = pgTable("training_settings", {
+  id: text("id").primaryKey().default("default"),
+  mode: text("mode").$type<"cohorts" | "tba">().notNull().default("cohorts"),
+  cohorts: jsonb("cohorts")
+    .$type<{ id: string; month: number; year: number }[]>()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});

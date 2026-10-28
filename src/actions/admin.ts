@@ -38,6 +38,12 @@ import type {
 import { fulfillmentStatuses } from "@/lib/delivery-types";
 import { updateOrderFulfillment } from "@/lib/orders-store";
 import { isStoreAdmin } from "@/lib/store-admin";
+import {
+  readTrainingSettings,
+  writeTrainingSettings,
+} from "@/lib/training-store";
+import type { TrainingSettings } from "@/lib/training-types";
+import { normalizeTrainingSettings } from "@/lib/training-types";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -282,6 +288,32 @@ export async function getDeliverySettingsAction() {
   const denied = await requireAdmin();
   if (denied) return denied;
   return { ok: true as const, settings: await readDeliverySettings() };
+}
+
+export async function saveTrainingSettingsAction(
+  settings: TrainingSettings,
+): Promise<ActionResult> {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
+  const next = normalizeTrainingSettings(settings);
+  if (next.mode === "cohorts" && next.cohorts.length === 0) {
+    return {
+      ok: false,
+      error: "Add at least one cohort, or switch to “Will be announced”.",
+    };
+  }
+
+  await writeTrainingSettings(next);
+  revalidatePath("/admin/training");
+  revalidatePath("/book");
+  return { ok: true };
+}
+
+export async function getTrainingSettingsAction() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+  return { ok: true as const, settings: await readTrainingSettings() };
 }
 
 export async function uploadAdminImage(formData: FormData) {

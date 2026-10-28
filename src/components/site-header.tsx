@@ -29,7 +29,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white">
-      <div className="mx-auto flex max-w-7xl items-center gap-3 px-5 py-3.5 md:gap-6 md:px-8 md:py-4">
+      <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-3 sm:gap-3 sm:px-5 sm:py-3.5 md:gap-6 md:px-8 md:py-4">
         <Logo className="min-w-0 flex-1" variant="inverse" />
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
@@ -88,7 +88,7 @@ export function SiteHeader() {
 
           <button
             type="button"
-            className="nav-menu-toggle text-white transition hover:opacity-60"
+            className="nav-menu-toggle text-white transition hover:opacity-60 lg:hidden"
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => {
@@ -102,7 +102,7 @@ export function SiteHeader() {
       </div>
 
       {searchOpen && (
-        <div className="nav-search-panel border-t border-white/10 bg-black px-5 py-3 md:px-8">
+        <div className="nav-search-panel border-t border-white/10 bg-black px-4 py-3 sm:px-5 md:px-8">
           <SiteSearch
             tone="dark"
             onNavigate={() => setSearchOpen(false)}
@@ -113,10 +113,10 @@ export function SiteHeader() {
 
       {open && (
         <nav
-          className="nav-mobile-panel border-t border-white/10 bg-black"
+          className="nav-mobile-panel border-t border-white/10 bg-black lg:hidden"
           aria-label="Mobile"
         >
-          <ul className="mx-auto flex max-w-7xl flex-col px-5 py-2 md:px-8">
+          <ul className="mx-auto flex max-w-7xl flex-col px-4 py-1 sm:px-5 md:px-8">
             {links.map((link) => {
               const active =
                 pathname === link.href ||
@@ -125,7 +125,7 @@ export function SiteHeader() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className={`block border-b border-white/10 py-4 text-sm uppercase tracking-[0.2em] ${
+                    className={`block border-b border-white/10 py-3.5 text-sm uppercase tracking-[0.2em] ${
                       active ? "text-white" : "text-neutral-400"
                     }`}
                     onClick={() => setOpen(false)}
@@ -138,7 +138,7 @@ export function SiteHeader() {
             <li>
               <Link
                 href="/search"
-                className="block border-b border-white/10 py-4 text-sm uppercase tracking-[0.2em] text-neutral-400 sm:hidden"
+                className="block border-b border-white/10 py-3.5 text-sm uppercase tracking-[0.2em] text-neutral-400 sm:hidden"
                 onClick={() => setOpen(false)}
               >
                 Search
@@ -147,7 +147,7 @@ export function SiteHeader() {
             <li>
               <Link
                 href="/sign-in"
-                className="block py-4 text-sm uppercase tracking-[0.2em] text-neutral-400 sm:hidden"
+                className="block py-3.5 text-sm uppercase tracking-[0.2em] text-neutral-400 sm:hidden"
                 onClick={() => setOpen(false)}
               >
                 Account
