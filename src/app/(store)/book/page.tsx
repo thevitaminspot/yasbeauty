@@ -7,7 +7,7 @@ import { ui } from "@/lib/ui";
 export const metadata = {
   title: "Book Appointment",
   description:
-    "Book nano brows, lip blush, consultation, or training at Yas Beauty Allure Abuja.",
+    "Book nano brows, lip blush, permanent eyeliner, consultation, or training at Yas Beauty Allure Abuja.",
 };
 
 type Props = {

@@ -53,7 +53,7 @@ async function ProductDetail({ params }: Props) {
         </Link>
       </nav>
 
-      <div className="mt-8 grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div className="mt-6 grid gap-8 sm:mt-8 lg:grid-cols-2 lg:gap-14">
         <div className="relative aspect-[4/5] bg-neutral-100">
           <Image
             src={product.image}
@@ -65,24 +65,25 @@ async function ProductDetail({ params }: Props) {
           />
         </div>
 
-        <div>
-          <p className={`${ui.eyebrow}`}>
-            {product.volume} · For professional use only
+        <div className="min-w-0 lg:flex lg:flex-col lg:justify-center">
+          <p className={ui.eyebrow}>
+            {product.volume}
+            {product.shade ? ` · ${product.shade}` : null}
           </p>
-          <h1 className="mt-3 font-serif text-[clamp(2.5rem,5vw,3.5rem)] font-medium italic leading-[1.05] tracking-[-0.02em]">
+          <h1 className="mt-2 font-serif text-[clamp(2rem,8vw,3.25rem)] font-medium italic leading-[1.05] tracking-[-0.02em]">
             {product.name}
           </h1>
-          {product.shade ? (
-            <p className="mt-2 text-sm text-neutral-600">Shade: {product.shade}</p>
-          ) : null}
-          <p className="mt-4 text-sm leading-relaxed text-neutral-700">
+          <p className="mt-3 text-sm leading-relaxed text-neutral-600">
             {product.tagline}
           </p>
-          <p className="mt-6 text-2xl font-medium">
+          <p className="mt-5 text-xl font-medium tabular-nums sm:text-2xl">
             {formatNaira(product.price)}
           </p>
+          <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-neutral-400">
+            Professional use only
+          </p>
 
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             <AddToCartButton product={product} />
           </div>
 
@@ -90,17 +91,17 @@ async function ProductDetail({ params }: Props) {
             {product.description}
           </p>
 
-          <dl className="mt-10 space-y-6 border-t border-neutral-200 pt-10 text-sm">
+          <dl className="mt-8 space-y-5 border-t border-neutral-200 pt-8 text-sm sm:mt-10 sm:space-y-6 sm:pt-10">
             <div>
-              <dt className={`${ui.eyebrow}`}>Ingredients</dt>
+              <dt className={ui.eyebrow}>Ingredients</dt>
               <dd className="mt-2 text-neutral-700">{product.ingredients}</dd>
             </div>
             <div>
-              <dt className={`${ui.eyebrow}`}>Usage</dt>
+              <dt className={ui.eyebrow}>Usage</dt>
               <dd className="mt-2 text-neutral-700">{product.usage}</dd>
             </div>
             <div>
-              <dt className={`${ui.eyebrow}`}>Cautions</dt>
+              <dt className={ui.eyebrow}>Cautions</dt>
               <dd className="mt-2">
                 <ul className="list-inside list-disc space-y-1 text-neutral-700">
                   {product.cautions.map((c) => (
@@ -114,9 +115,9 @@ async function ProductDetail({ params }: Props) {
       </div>
 
       {related.length > 0 ? (
-        <section className="mt-24 border-t border-neutral-200 pt-16">
-          <h2 className={`${ui.sectionTitle}`}>You may also need</h2>
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <section className="mt-16 border-t border-neutral-200 pt-12 sm:mt-20 sm:pt-16">
+          <h2 className={ui.sectionTitle}>You may also need</h2>
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-6 lg:grid-cols-3">
             {related.map((p, index) => (
               <ProductCard key={p.id} product={p} delay={index * 70} />
             ))}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FooterAccountLinks } from "@/components/footer-account-links";
 import { Logo } from "@/components/logo";
 import { Reveal } from "@/components/ui/reveal";
 import { site } from "@/lib/site";
@@ -53,6 +54,7 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              <FooterAccountLinks />
             </ul>
           </div>
 

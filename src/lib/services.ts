@@ -39,6 +39,30 @@ export const defaultStudioServices: StudioService[] = [
     featured: true,
   },
   {
+    id: "svc-eyeliner",
+    slug: "eyeliner",
+    name: "Permanent Eyeliner",
+    duration: "1.5–2.5 hrs",
+    fromPrice: 80000,
+    summary: "Lash-line or winged eyeliner that stays put through heat and humidity.",
+    description:
+      "Permanent eyeliner at our Abuja studio — tightline, soft lash enhancement, or a defined wing. Mapping, pigment choice, and aftercare included.",
+    image: productImageManifest["brow-smoky-black"].primary,
+    featured: true,
+  },
+  {
+    id: "svc-brow-lamination",
+    slug: "brow-lamination",
+    name: "Brow Lamination",
+    duration: "45–60 min",
+    fromPrice: 25000,
+    summary: "Lifted, brushed-up brows with a soft set that lasts weeks.",
+    description:
+      "Brow lamination at our Abuja studio — cleanse, lift, set, and tint options for a fuller, groomed look without PMU.",
+    image: productImageManifest["brow-black-brown"].primary,
+    featured: true,
+  },
+  {
     id: "svc-consultation",
     slug: "consultation",
     name: "PMU Consultation",
@@ -62,6 +86,13 @@ export const defaultStudioServices: StudioService[] = [
     image: brandImages.browsGroup,
   },
 ];
+
+/** Homepage “Book a chair” trio — core PMU procedures. */
+export const homeStudioSlugs = [
+  "nano-brows",
+  "lip-blush",
+  "eyeliner",
+] as const;
 
 /** @deprecated Prefer readServices() / getServiceBySlug from services-store */
 export const studioServices = defaultStudioServices;

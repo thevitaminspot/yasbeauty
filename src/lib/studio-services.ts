@@ -10,7 +10,7 @@ export type { StudioService } from "@/lib/services";
 
 export const getServices = unstable_cache(
   () => readServices(),
-  ["yasbeauty-studio-services-v1"],
+  ["yasbeauty-studio-services-v6"],
   { tags: ["catalog-services"] },
 );
 

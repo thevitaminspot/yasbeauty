@@ -14,32 +14,34 @@ export function HomeCollections({ products }: { products: Product[] }) {
   function scrollBy(dir: -1 | 1) {
     const el = scroller.current;
     if (!el) return;
-    el.scrollBy({ left: dir * Math.min(340, el.clientWidth * 0.8), behavior: "smooth" });
+    el.scrollBy({
+      left: dir * Math.min(280, el.clientWidth * 0.78),
+      behavior: "smooth",
+    });
   }
 
   return (
-    <section className="border-b border-neutral-200 bg-white py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-5 md:px-8">
-        <Reveal className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <p className={`${ui.eyebrow}`}>Shop</p>
-            <h2 className={`${ui.sectionTitle} mt-3`}>Lip, brow &amp; aftercare</h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-neutral-600">
+    <section className="border-b border-neutral-200 bg-white py-14 sm:py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8">
+        <Reveal className="flex flex-col gap-5 sm:gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-2xl min-w-0">
+            <p className={ui.eyebrow}>Shop</p>
+            <h2 className={`${ui.sectionTitle} mt-3`}>
+              Lip, brow &amp; aftercare
+            </h2>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-600 sm:mt-4">
               The same nano pigments we use in-chair, ready for your kit.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Link
-              href="/shop"
-              className={`${ui.btnGhost}`}
-            >
-              View all
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/shop" className={`${ui.btnGhost} w-fit`}>
+              View all →
             </Link>
             <div className="flex gap-2">
               <button
                 type="button"
-                aria-label="Previous"
+                aria-label="Previous products"
                 onClick={() => scrollBy(-1)}
                 className="icon-hit inline-flex border border-neutral-300 text-black transition hover:border-black"
               >
@@ -47,7 +49,7 @@ export function HomeCollections({ products }: { products: Product[] }) {
               </button>
               <button
                 type="button"
-                aria-label="Next"
+                aria-label="Next products"
                 onClick={() => scrollBy(1)}
                 className="icon-hit inline-flex border border-neutral-300 text-black transition hover:border-black"
               >
@@ -56,20 +58,19 @@ export function HomeCollections({ products }: { products: Product[] }) {
             </div>
           </div>
         </Reveal>
+      </div>
 
-        <div
-          ref={scroller}
-          className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:gap-5 [&::-webkit-scrollbar]:hidden"
-        >
-          {products.map((product, index) => (
-            <Reveal
-              key={product.id}
-              delay={Math.min(index, 5) * 60}
-              className="w-[min(78vw,17rem)] shrink-0 snap-start md:w-[19rem]"
-            >
+      <div
+        ref={scroller}
+        className="mt-10 flex gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-12 sm:gap-4 sm:px-5 md:gap-5 md:px-8 [&::-webkit-scrollbar]:hidden"
+        style={{ WebkitOverflowScrolling: "touch" }}
+      >
+        <div className="mx-auto flex w-full max-w-7xl gap-3 sm:gap-4 md:gap-5">
+          {products.map((product) => (
             <Link
+              key={product.id}
               href={`/products/${product.slug}`}
-              className="group relative block bg-neutral-50"
+              className="group relative w-[min(68vw,15.5rem)] shrink-0 bg-neutral-50 sm:w-[17rem] md:w-[18.5rem]"
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
                 {product.bestseller ? (
@@ -82,24 +83,23 @@ export function HomeCollections({ products }: { products: Product[] }) {
                   alt={product.name}
                   fill
                   className="object-cover transition duration-700 group-hover:scale-[1.03]"
-                  sizes="304px"
+                  sizes="280px"
                 />
               </div>
-              <div className="flex items-end justify-between gap-3 border-t border-neutral-200 bg-white px-4 py-4">
-                <div className="min-w-0">
-                  <p className="truncate font-serif text-lg italic text-black">
-                    {product.name}
-                  </p>
-                  <p className="mt-0.5 text-sm text-neutral-500">
+              <div className="border-t border-neutral-200 bg-white px-3 py-3 sm:px-4 sm:py-3.5">
+                <p className="truncate font-serif text-base italic text-black sm:text-lg">
+                  {product.name}
+                </p>
+                <div className="mt-1 flex items-center justify-between gap-2">
+                  <p className="text-sm font-medium tabular-nums text-neutral-800">
                     {formatNaira(product.price)}
                   </p>
+                  <span className="text-xs text-neutral-400 transition group-hover:text-black">
+                    →
+                  </span>
                 </div>
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center bg-black text-white transition group-hover:bg-neutral-800">
-                  →
-                </span>
               </div>
             </Link>
-            </Reveal>
           ))}
         </div>
       </div>

@@ -65,12 +65,12 @@ export function ShopCatalog({ products, category }: Props) {
       </div>
 
       <nav
-        className="-mx-4 mt-5 flex gap-2 overflow-x-auto border-b border-neutral-200 px-4 pb-5 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-6 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-6 [&::-webkit-scrollbar]:hidden"
+        className="mt-5 flex flex-wrap gap-2 border-b border-neutral-200 pb-5 sm:mt-6 sm:pb-6"
         aria-label="Filter by category"
       >
         <Link
           href="/shop"
-          className={`${ui.chip} shrink-0 ${!category ? ui.chipActive : ui.chipIdle}`}
+          className={`${ui.chip} ${!category ? ui.chipActive : ui.chipIdle}`}
         >
           All
         </Link>
@@ -78,7 +78,7 @@ export function ShopCatalog({ products, category }: Props) {
           <Link
             key={cat.slug}
             href={`/shop?category=${cat.slug}`}
-            className={`${ui.chip} shrink-0 ${
+            className={`${ui.chip} ${
               category === cat.slug ? ui.chipActive : ui.chipIdle
             }`}
           >

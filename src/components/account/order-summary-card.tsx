@@ -25,36 +25,38 @@ export function OrderSummaryCard({
 
   return (
     <article className="border border-neutral-200 bg-white">
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-neutral-200 bg-neutral-50 px-5 py-4 md:px-6">
+      <div className="flex items-start justify-between gap-4 border-b border-neutral-200 px-4 py-4 sm:px-5">
         <div className="min-w-0 space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <StatusPill
-              label={fulfillmentLabel(order.fulfillmentStatus)}
-              tone={fulfillmentTone(order.fulfillmentStatus)}
-            />
-            <p className="text-sm text-neutral-500">
-              {formatAccountDate(order.createdAt)}
-            </p>
-          </div>
-          <p className="font-mono text-xs text-neutral-500">{order.reference}</p>
+          <StatusPill
+            label={fulfillmentLabel(order.fulfillmentStatus)}
+            tone={fulfillmentTone(order.fulfillmentStatus)}
+          />
+          <p className="text-sm text-neutral-500">
+            {formatAccountDate(order.createdAt)}
+          </p>
+          <p className="font-mono text-xs text-neutral-400">{order.reference}</p>
         </div>
-        <div className="text-right">
-          <p className="text-lg font-medium">
+        <div className="shrink-0 text-right">
+          <p className="text-base font-medium tabular-nums sm:text-lg">
             {formatNaira(order.amount / 100)}
           </p>
-          <p className="mt-1 text-sm text-neutral-500">
+          <p className="mt-1 text-xs text-neutral-500 sm:text-sm">
             {itemCount} {itemCount === 1 ? "item" : "items"}
-            {order.delivery ? ` · ${order.delivery.areaName}` : ""}
           </p>
+          {order.delivery ? (
+            <p className="mt-0.5 max-w-[9rem] truncate text-xs text-neutral-400 sm:max-w-none">
+              {order.delivery.areaName}
+            </p>
+          ) : null}
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-4 px-5 py-5 md:px-6">
-        <div className="flex items-center">
+      <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-5">
+        <div className="flex min-w-0 items-center">
           {shown.map((item, index) => (
             <span
               key={`${order.reference}-preview-${index}`}
-              className="relative -ml-2 h-14 w-12 overflow-hidden border border-white bg-neutral-100 first:ml-0"
+              className="relative -ml-2 h-12 w-10 overflow-hidden border border-white bg-neutral-100 first:ml-0 sm:h-14 sm:w-12"
               style={{ zIndex: shown.length - index }}
             >
               {item.image ? (
@@ -73,15 +75,17 @@ export function OrderSummaryCard({
             </span>
           ))}
           {extra > 0 ? (
-            <span className="ml-3 text-sm text-neutral-500">+{extra} more</span>
+            <span className="ml-3 shrink-0 text-xs text-neutral-500 sm:text-sm">
+              +{extra}
+            </span>
           ) : null}
         </div>
 
         <Link
           href={`/account/orders/${encodeURIComponent(order.reference)}`}
-          className={ui.btnSecondary}
+          className={`${ui.btnSecondary} !min-h-10 shrink-0 !px-4 !py-2.5`}
         >
-          View order
+          View
         </Link>
       </div>
     </article>

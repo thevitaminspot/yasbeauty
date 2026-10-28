@@ -13,7 +13,7 @@ export function ProductCard({
 }) {
   return (
     <Reveal delay={delay} className="h-full">
-      <article className="group flex h-full flex-col">
+      <article className="group flex h-full min-w-0 flex-col">
         <Link
           href={`/products/${product.slug}`}
           className="relative aspect-[4/5] overflow-hidden bg-neutral-100"
@@ -26,31 +26,31 @@ export function ProductCard({
             sizes="(max-width:768px) 50vw, 25vw"
           />
           {product.bestseller ? (
-            <span className="absolute left-3 top-3 bg-black px-2 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white">
+            <span className="absolute left-2 top-2 bg-black px-2 py-1 text-[9px] font-medium uppercase tracking-[0.16em] text-white sm:left-3 sm:top-3 sm:text-[10px]">
               Bestseller
             </span>
           ) : null}
         </Link>
-        <div className="mt-3 flex flex-1 flex-col border-t border-neutral-200 pt-3 sm:mt-4 sm:pt-4">
-          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500 sm:text-[11px]">
+        <div className="mt-3 flex flex-1 flex-col border-t border-neutral-200 pt-3">
+          <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-neutral-500">
             {product.volume}
           </p>
-          <Link href={`/products/${product.slug}`}>
-            <h3 className="mt-1 font-serif text-lg font-medium italic tracking-tight text-black sm:text-xl">
-              {product.name}
-            </h3>
+          <Link
+            href={`/products/${product.slug}`}
+            className="mt-1 font-serif text-base italic leading-snug tracking-tight text-black sm:text-lg"
+          >
+            {product.name}
           </Link>
-          {product.shade ? (
-            <p className="mt-1 text-[10px] uppercase tracking-[0.15em] text-neutral-500 sm:text-[11px]">
-              {product.shade}
+          <div className="mt-auto flex items-baseline justify-between gap-2 pt-2">
+            <p className="text-sm font-medium tabular-nums tracking-wide">
+              {formatNaira(product.price)}
             </p>
-          ) : null}
-          <p className="mt-1 hidden line-clamp-2 text-sm text-neutral-600 sm:block">
-            {product.tagline}
-          </p>
-          <p className="mt-auto pt-3 text-sm font-medium tracking-wide sm:pt-4">
-            {formatNaira(product.price)}
-          </p>
+            {product.shade ? (
+              <p className="truncate text-[10px] uppercase tracking-[0.12em] text-neutral-400">
+                {product.shade}
+              </p>
+            ) : null}
+          </div>
         </div>
       </article>
     </Reveal>

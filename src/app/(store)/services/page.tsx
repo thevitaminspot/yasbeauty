@@ -1,3 +1,4 @@
+import { ClientWorkStrip } from "@/components/client-work-strip";
 import { PageHeader } from "@/components/page-header";
 import { ServiceCard } from "@/components/service-card";
 import { getServices } from "@/lib/studio-services";
@@ -6,7 +7,7 @@ import { ui } from "@/lib/ui";
 export const metadata = {
   title: "Studio Services",
   description:
-    "Book nano brows, lip blush, consultations, and PMU training at Yas Beauty Allure Abuja.",
+    "Book nano brows, lip blush, permanent eyeliner, consultations, and PMU training at Yas Beauty Allure Abuja.",
 };
 
 export default async function ServicesPage() {
@@ -28,6 +29,7 @@ export default async function ServicesPage() {
           />
         ))}
       </div>
+      <ClientWorkStrip />
     </div>
   );
 }

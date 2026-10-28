@@ -17,7 +17,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       >
         <SiteHeader />
       </Suspense>
-      <main className="min-w-0 flex-1 overflow-x-hidden">{children}</main>
+      <main className="min-w-0 flex-1">{children}</main>
       <SiteFooter />
     </CartProvider>
   );

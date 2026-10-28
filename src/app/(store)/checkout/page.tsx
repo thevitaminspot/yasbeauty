@@ -439,45 +439,56 @@ export default function CheckoutPage() {
 
         <aside className={`${ui.panel} order-1 h-fit lg:order-2 lg:sticky lg:top-24`}>
           <h2 className={`${ui.eyebrow} text-black`}>Your order</h2>
-          <ul className="mt-5 space-y-5 text-sm sm:mt-6">
+          <ul className="mt-5 divide-y divide-neutral-200 text-sm sm:mt-6">
             {lines.map(({ product, quantity }) => (
-              <li key={product.id} className="min-w-0 space-y-3">
+              <li key={product.id} className="min-w-0 py-4 first:pt-0 last:pb-0">
                 <div className="flex justify-between gap-3">
-                  <span className="min-w-0 break-words font-medium">
-                    {product.name}
-                  </span>
-                  <span className="shrink-0">
+                  <div className="min-w-0">
+                    <p className="font-serif text-base italic leading-snug">
+                      {product.name}
+                    </p>
+                    <p className="mt-0.5 text-xs text-neutral-500">
+                      {product.volume}
+                      {quantity > 1
+                        ? ` · ${formatNaira(product.price)} each`
+                        : null}
+                    </p>
+                  </div>
+                  <span className="shrink-0 pt-0.5 font-medium tabular-nums">
                     {formatNaira(product.price * quantity)}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-end gap-3">
+                <div className="mt-3">
                   <QuantityStepper
                     value={quantity}
                     onChange={(next) => setQuantity(product.id, next)}
                     label=""
+                    compact
                     disabled={busy}
                     max={Math.max(
                       1,
                       typeof product.stock === "number" ? product.stock : 99,
                     )}
+                    endSlot={
+                      <button
+                        type="button"
+                        disabled={busy}
+                        onClick={() => removeItem(product.id)}
+                        className="flex h-full items-center px-3.5 text-[10px] font-medium uppercase tracking-[0.16em] text-neutral-600 transition hover:bg-neutral-50 hover:text-black disabled:opacity-50"
+                      >
+                        Remove
+                      </button>
+                    }
                   />
-                  {typeof product.stock === "number" && product.stock <= 0 ? (
-                    <p className="mb-3 text-xs text-red-600">Out of stock</p>
-                  ) : typeof product.stock === "number" &&
-                    quantity > product.stock ? (
-                    <p className="mb-3 text-xs text-amber-700">
-                      Only {product.stock} left
-                    </p>
-                  ) : null}
-                  <button
-                    type="button"
-                    disabled={busy}
-                    onClick={() => removeItem(product.id)}
-                    className={`${ui.btnGhost} mb-3`}
-                  >
-                    Remove
-                  </button>
                 </div>
+                {typeof product.stock === "number" && product.stock <= 0 ? (
+                  <p className="mt-2 text-xs text-red-600">Out of stock</p>
+                ) : typeof product.stock === "number" &&
+                  quantity > product.stock ? (
+                  <p className="mt-2 text-xs text-amber-700">
+                    Only {product.stock} left
+                  </p>
+                ) : null}
               </li>
             ))}
           </ul>

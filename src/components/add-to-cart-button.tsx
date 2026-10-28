@@ -36,19 +36,20 @@ export function AddToCartButton({
   const maxAdd = Math.max(1, remaining || stock);
 
   return (
-    <div
-      className={`flex flex-col items-start gap-4 sm:flex-row sm:items-end ${className}`}
-    >
+    <div className={`flex items-stretch gap-2 ${className}`}>
       <QuantityStepper
         value={Math.min(quantity, maxAdd)}
         onChange={setQuantity}
         max={maxAdd}
+        label=""
+        compact
         disabled={remaining <= 0}
+        className="shrink-0"
       />
       <button
         type="button"
         disabled={remaining <= 0}
-        className={`${ui.btnPrimary} w-full sm:min-h-[2.75rem] sm:w-auto sm:flex-1`}
+        className={`${ui.btnPrimary} h-10 min-h-10 flex-1 px-4 sm:px-7`}
         onClick={() => {
           const qty = Math.min(quantity, remaining);
           if (qty < 1) return;
@@ -61,7 +62,7 @@ export function AddToCartButton({
           ? "Bag limit reached"
           : added
             ? quantity > 1
-              ? `Added ${Math.min(quantity, remaining)} to bag`
+              ? `Added ${Math.min(quantity, remaining)}`
               : "Added to bag"
             : "Add to bag"}
       </button>

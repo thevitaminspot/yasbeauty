@@ -1,5 +1,6 @@
 "use client";
-import { ui } from "@/lib/ui";
+
+import type { ReactNode } from "react";
 
 type QuantityStepperProps = {
   value: number;
@@ -9,6 +10,10 @@ type QuantityStepperProps = {
   label?: string;
   className?: string;
   disabled?: boolean;
+  /** Tighter control for cart / checkout rows */
+  compact?: boolean;
+  /** Sibling control sharing the same border (e.g. Remove) */
+  endSlot?: ReactNode;
 };
 
 export function QuantityStepper({
@@ -19,15 +24,23 @@ export function QuantityStepper({
   label = "Quantity",
   className = "",
   disabled = false,
+  compact = false,
+  endSlot,
 }: QuantityStepperProps) {
   const canDecrease = !disabled && value > min;
   const canIncrease = !disabled && value < max;
+  const btn = compact ? "w-9" : "w-11";
+  const height = compact ? "h-10" : "h-11";
 
   return (
-    <div className={`flex w-fit flex-col gap-2 ${className}`}>
-      {label ? <span className={`${ui.eyebrow}`}>{label}</span> : null}
+    <div className={`flex w-fit flex-col gap-1.5 ${className}`}>
+      {label ? (
+        <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500">
+          {label}
+        </span>
+      ) : null}
       <div
-        className="flex h-11 w-fit shrink-0 items-stretch border border-neutral-300 bg-white"
+        className={`flex ${height} w-fit shrink-0 items-stretch border border-neutral-300 bg-white`}
         role="group"
         aria-label={label || "Quantity"}
         aria-disabled={disabled || undefined}
@@ -37,12 +50,12 @@ export function QuantityStepper({
           aria-label="Decrease quantity"
           disabled={!canDecrease}
           onClick={() => canDecrease && onChange(value - 1)}
-          className="flex w-11 shrink-0 items-center justify-center text-black transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:text-neutral-300 disabled:hover:bg-transparent"
+          className={`flex ${btn} shrink-0 items-center justify-center text-black transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:text-neutral-300 disabled:hover:bg-transparent`}
         >
           <MinusIcon />
         </button>
         <span
-          className="flex min-w-[3rem] shrink-0 items-center justify-center border-x border-neutral-300 px-3 text-sm font-medium tabular-nums leading-none"
+          className="flex min-w-[2.5rem] shrink-0 items-center justify-center border-x border-neutral-300 px-2 text-sm font-medium tabular-nums leading-none"
           aria-live="polite"
         >
           {value}
@@ -52,10 +65,15 @@ export function QuantityStepper({
           aria-label="Increase quantity"
           disabled={!canIncrease}
           onClick={() => canIncrease && onChange(value + 1)}
-          className="flex w-11 shrink-0 items-center justify-center text-black transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:text-neutral-300 disabled:hover:bg-transparent"
+          className={`flex ${btn} shrink-0 items-center justify-center text-black transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:text-neutral-300 disabled:hover:bg-transparent`}
         >
           <PlusIcon />
         </button>
+        {endSlot ? (
+          <div className="flex items-stretch border-l border-neutral-300">
+            {endSlot}
+          </div>
+        ) : null}
       </div>
     </div>
   );
