@@ -12,6 +12,7 @@ import {
   paystackRequest,
   type PaystackInitializeResponse,
 } from "@/lib/paystack";
+import { enforceRateLimit } from "@/lib/rate-limit";
 
 type LineInput = { id: string; quantity: number };
 
@@ -28,6 +29,9 @@ type InitializeBody = {
 };
 
 export async function POST(request: Request) {
+  const limited = enforceRateLimit(request, "checkout");
+  if (limited) return limited;
+
   if (!isPaystackConfigured()) {
     return NextResponse.json(
       {

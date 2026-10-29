@@ -9,8 +9,12 @@ import {
   paystackRequest,
   type PaystackInitializeResponse,
 } from "@/lib/paystack";
+import { enforceRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const limited = enforceRateLimit(request, "checkout");
+  if (limited) return limited;
+
   if (!isPaystackConfigured()) {
     return NextResponse.json(
       {

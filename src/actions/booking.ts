@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import {
   isDateBookable,
   readAvailability,
@@ -7,6 +8,7 @@ import {
 import { bookingDepositNaira, isTrainingService } from "@/lib/booking-deposit";
 import { appendBooking } from "@/lib/bookings-store";
 import { nairaToKobo } from "@/lib/paystack";
+import { enforceRateLimitFromHeaders } from "@/lib/rate-limit";
 import { getServiceBySlug } from "@/lib/studio-services";
 import { readTrainingSettings } from "@/lib/training-store";
 import { cohortLabel } from "@/lib/training-types";
@@ -22,6 +24,9 @@ export async function createBookingRequest(input: {
   cohortId?: string;
   notes?: string;
 }) {
+  const rate = enforceRateLimitFromHeaders(await headers(), "booking");
+  if (!rate.ok) return { error: rate.error };
+
   const service = await getServiceBySlug(input.serviceSlug);
   if (!service) {
     return { error: "That service isn’t available." };

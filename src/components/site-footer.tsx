@@ -13,7 +13,7 @@ const explore = [
 
 const legal = [
   { href: "/shipping", label: "Shipping & returns" },
-  { href: "/privacy", label: "Privacy" },
+  { href: "/privacy", label: "Privacy & cookies" },
   { href: "/terms", label: "Terms" },
 ] as const;
 

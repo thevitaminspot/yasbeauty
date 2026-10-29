@@ -81,6 +81,17 @@ function IconMail(props: IconProps) {
   );
 }
 
+function IconPeople(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+      <circle cx="9" cy="8" r="3" />
+      <path d="M3.5 18.5c.8-2.6 2.8-4 5.5-4s4.7 1.4 5.5 4" strokeLinecap="round" />
+      <circle cx="17" cy="9" r="2.4" />
+      <path d="M14.5 18.5c.5-1.8 1.7-2.9 3.5-2.9 1.2 0 2.2.5 2.9 1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function IconTruck(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
@@ -108,48 +119,92 @@ function IconClose(props: IconProps) {
   );
 }
 
+function IconChevron(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+      <path d="m8 10 4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 type NavLink = {
   href: string;
   label: string;
   exact?: boolean;
   icon: ComponentType<{ className?: string }>;
+  group: string;
 };
 
-const navGroups: { label: string; links: NavLink[] }[] = [
-  {
-    label: "Overview",
-    links: [{ href: "/admin", label: "Today", exact: true, icon: IconDashboard }],
-  },
-  {
-    label: "Shop",
-    links: [
-      { href: "/admin/orders", label: "Orders", icon: IconBag },
-      { href: "/admin/products", label: "Products", icon: IconPackage },
-      { href: "/admin/delivery", label: "Delivery", icon: IconTruck },
-    ],
-  },
-  {
-    label: "Studio",
-    links: [
-      { href: "/admin/bookings", label: "Bookings", icon: IconCalendar },
-      { href: "/admin/services", label: "Services", icon: IconSpark },
-      { href: "/admin/training", label: "Training", icon: IconCohort },
-      { href: "/admin/availability", label: "Hours", icon: IconClock },
-    ],
-  },
-  {
-    label: "Inbox",
-    links: [{ href: "/admin/messages", label: "Messages", icon: IconMail }],
-  },
+/** Daily work — always visible. */
+const primaryLinks: NavLink[] = [
+  { href: "/admin", label: "Today", exact: true, icon: IconDashboard, group: "Overview" },
+  { href: "/admin/orders", label: "Orders", icon: IconBag, group: "Shop" },
+  { href: "/admin/bookings", label: "Bookings", icon: IconCalendar, group: "Studio" },
+  { href: "/admin/customers", label: "Customers", icon: IconPeople, group: "Shop" },
+  { href: "/admin/products", label: "Products", icon: IconPackage, group: "Shop" },
+  { href: "/admin/messages", label: "Messages", icon: IconMail, group: "Inbox" },
 ];
 
-export const adminNavLinks = navGroups.flatMap((group) =>
-  group.links.map((link) => ({ ...link, group: group.label })),
-);
+/** Infrequent setup — tucked behind a disclosure. */
+const settingsLinks: NavLink[] = [
+  { href: "/admin/services", label: "Services", icon: IconSpark, group: "Settings" },
+  { href: "/admin/training", label: "Training", icon: IconCohort, group: "Settings" },
+  { href: "/admin/availability", label: "Hours", icon: IconClock, group: "Settings" },
+  { href: "/admin/delivery", label: "Delivery", icon: IconTruck, group: "Settings" },
+];
+
+export const adminNavLinks = [...primaryLinks, ...settingsLinks];
+
+const SETTINGS_OPEN_KEY = "yas-admin-settings-open";
 
 function isActive(pathname: string, href: string, exact?: boolean) {
   if (exact) return pathname === href;
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function settingsRouteActive(pathname: string) {
+  return settingsLinks.some((link) => isActive(pathname, link.href, link.exact));
+}
+
+function NavItem({
+  link,
+  pathname,
+  onNavigate,
+}: {
+  link: NavLink;
+  pathname: string;
+  onNavigate?: () => void;
+}) {
+  const active = isActive(pathname, link.href, link.exact);
+  const Icon = link.icon;
+  return (
+    <li>
+      <Link
+        href={link.href}
+        onClick={onNavigate}
+        className={`group flex items-center gap-3 px-3 py-2.5 text-sm transition ${
+          active
+            ? "bg-white/10 font-medium text-white"
+            : "text-neutral-400 hover:bg-white/5 hover:text-white"
+        }`}
+      >
+        <Icon
+          className={`size-4 shrink-0 ${
+            active
+              ? "text-white"
+              : "text-neutral-500 group-hover:text-neutral-300"
+          }`}
+        />
+        <span>{link.label}</span>
+        {active ? (
+          <span
+            className="ml-auto size-1.5 rounded-full bg-white"
+            aria-hidden
+          />
+        ) : null}
+      </Link>
+    </li>
+  );
 }
 
 function SidebarNav({
@@ -159,49 +214,74 @@ function SidebarNav({
   pathname: string;
   onNavigate?: () => void;
 }) {
+  const onSettings = settingsRouteActive(pathname);
+  const [settingsOpen, setSettingsOpen] = useState(onSettings);
+
+  useEffect(() => {
+    if (onSettings) {
+      setSettingsOpen(true);
+      return;
+    }
+    try {
+      const stored = window.localStorage.getItem(SETTINGS_OPEN_KEY);
+      if (stored === "1") setSettingsOpen(true);
+      if (stored === "0") setSettingsOpen(false);
+    } catch {
+      /* ignore */
+    }
+  }, [onSettings]);
+
+  function toggleSettings() {
+    setSettingsOpen((prev) => {
+      const next = !prev;
+      try {
+        window.localStorage.setItem(SETTINGS_OPEN_KEY, next ? "1" : "0");
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }
+
   return (
-    <nav className="min-h-0 flex-1 space-y-6 overflow-y-auto px-3 py-2">
-      {navGroups.map((group) => (
-        <div key={group.label}>
-          <p className="mb-2 px-3 text-[10px] uppercase tracking-[0.22em] text-neutral-500">
-            {group.label}
-          </p>
-          <ul className="space-y-0.5">
-            {group.links.map((link) => {
-              const active = isActive(pathname, link.href, link.exact);
-              const Icon = link.icon;
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={onNavigate}
-                    className={`group flex items-center gap-3 px-3 py-2.5 text-sm transition ${
-                      active
-                        ? "bg-white/10 font-medium text-white"
-                        : "text-neutral-400 hover:bg-white/5 hover:text-white"
-                    }`}
-                  >
-                    <Icon
-                      className={`size-4 shrink-0 ${
-                        active
-                          ? "text-white"
-                          : "text-neutral-500 group-hover:text-neutral-300"
-                      }`}
-                    />
-                    <span>{link.label}</span>
-                    {active ? (
-                      <span
-                        className="ml-auto size-1.5 rounded-full bg-white"
-                        aria-hidden
-                      />
-                    ) : null}
-                  </Link>
-                </li>
-              );
-            })}
+    <nav className="min-h-0 flex-1 space-y-5 overflow-y-auto px-3 py-2">
+      <ul className="space-y-0.5">
+        {primaryLinks.map((link) => (
+          <NavItem
+            key={link.href}
+            link={link}
+            pathname={pathname}
+            onNavigate={onNavigate}
+          />
+        ))}
+      </ul>
+
+      <div>
+        <button
+          type="button"
+          onClick={toggleSettings}
+          aria-expanded={settingsOpen}
+          className="flex w-full items-center justify-between px-3 py-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500 transition hover:text-neutral-300"
+        >
+          Settings
+          <IconChevron
+            className={`size-3.5 transition ${settingsOpen ? "rotate-0" : "-rotate-90"}`}
+            aria-hidden
+          />
+        </button>
+        {settingsOpen ? (
+          <ul className="mt-0.5 space-y-0.5">
+            {settingsLinks.map((link) => (
+              <NavItem
+                key={link.href}
+                link={link}
+                pathname={pathname}
+                onNavigate={onNavigate}
+              />
+            ))}
           </ul>
-        </div>
-      ))}
+        ) : null}
+      </div>
     </nav>
   );
 }
@@ -215,12 +295,6 @@ function SidebarFooter() {
       >
         View shop
         <span aria-hidden>→</span>
-      </Link>
-      <Link
-        href="/"
-        className="mt-2 block px-1 py-2 text-xs uppercase tracking-[0.16em] text-neutral-500 transition hover:text-neutral-300"
-      >
-        Storefront
       </Link>
     </div>
   );

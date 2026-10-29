@@ -3,7 +3,7 @@ export const site = {
   phone: "+234 814 224 6407",
   phoneHref: "+2348142246407",
   whatsapp: "2348142246407",
-  email: "hello@yasbeautyallure.com",
+  email: "yasbeautyallure6@gmail.com",
   instagramHandle: "@yasbeautyallure",
   instagram: "https://instagram.com/yasbeautyallure",
   address: {

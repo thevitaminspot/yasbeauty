@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { bookingDepositNaira } from "@/lib/booking-deposit";
 import { appendBooking } from "@/lib/bookings-store";
 import { nairaToKobo } from "@/lib/paystack";
+import { enforceRateLimit } from "@/lib/rate-limit";
 import { getServiceBySlug } from "@/lib/studio-services";
 
 type Body = {
@@ -15,6 +16,9 @@ type Body = {
 };
 
 export async function POST(request: Request) {
+  const limited = enforceRateLimit(request, "booking");
+  if (limited) return limited;
+
   let body: Body;
   try {
     body = (await request.json()) as Body;

@@ -6,8 +6,12 @@ import {
   paystackRequest,
   type PaystackVerifyResponse,
 } from "@/lib/paystack";
+import { enforceRateLimit } from "@/lib/rate-limit";
 
 export async function GET(request: Request) {
+  const limited = enforceRateLimit(request, "verify");
+  if (limited) return limited;
+
   if (!isPaystackConfigured()) {
     return NextResponse.json(
       { error: "Payment verification isn't available right now." },

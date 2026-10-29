@@ -1,5 +1,6 @@
 import "server-only";
 import type { OrderDelivery } from "@/lib/delivery-types";
+import { sendOrderEmails } from "@/lib/mail";
 import { appendOrder } from "@/lib/orders-store";
 import { decrementStock } from "@/lib/products-store";
 
@@ -57,6 +58,32 @@ export async function fulfillPaidPaystackOrder(input: {
     await decrementStock(
       items.map((item) => ({ id: item.id, quantity: item.quantity })),
     );
+  }
+
+  if (created) {
+    try {
+      await sendOrderEmails({
+        reference: input.reference,
+        status: input.status,
+        fulfillmentStatus: "confirmed",
+        amount: input.amount,
+        currency: input.currency,
+        email: input.email,
+        customer: {
+          name: String(meta.customer_name ?? ""),
+          phone: String(meta.customer_phone ?? ""),
+          city: String(meta.customer_city ?? ""),
+          address: String(meta.customer_address ?? ""),
+        },
+        items,
+        delivery,
+        notes,
+        createdAt: new Date().toISOString(),
+        channel: "paystack",
+      });
+    } catch (err) {
+      console.error("[mail] order notify failed:", err);
+    }
   }
 
   return { created };
