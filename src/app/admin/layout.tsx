@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { redirect } from "next/navigation";
 import { AdminShell } from "@/components/admin/shell";
+import { AdminUnauthorized } from "@/app/admin/unauthorized";
 import { isAuthEnabled } from "@/lib/auth-config";
 import { isStoreAdmin } from "@/lib/store-admin";
 
@@ -11,8 +11,6 @@ export const metadata = {
 
 export const instant = false;
 
-const adminSignIn = "/sign-in?redirect_url=/admin";
-
 async function AdminGate({ children }: { children: React.ReactNode }) {
   if (!isAuthEnabled()) {
     return <AdminShell>{children}</AdminShell>;
@@ -22,24 +20,18 @@ async function AdminGate({ children }: { children: React.ReactNode }) {
     return <AdminShell>{children}</AdminShell>;
   }
 
-  const { auth, clerkClient } = await import("@clerk/nextjs/server");
-  const { userId, sessionId, redirectToSignIn } = await auth();
+  const { auth, currentUser } = await import("@clerk/nextjs/server");
+  const { userId, redirectToSignIn } = await auth();
 
   if (!userId) {
     return redirectToSignIn({ returnBackUrl: "/admin" });
   }
 
-  // Wrong account — clear the session so sign-in can collect the admin login.
-  if (sessionId) {
-    try {
-      const client = await clerkClient();
-      await client.sessions.revokeSession(sessionId);
-    } catch {
-      // Still send them to sign-in even if revoke fails.
-    }
-  }
-
-  redirect(adminSignIn);
+  // Do not revoke sessions here — killing the session on every denied /admin
+  // hit can look abusive to Clerk and block further sign-ins.
+  const user = await currentUser();
+  const email = user?.primaryEmailAddress?.emailAddress ?? null;
+  return <AdminUnauthorized email={email} />;
 }
 
 export default function AdminLayout({
