@@ -20,13 +20,11 @@ export function SiteHeader() {
   const { itemCount, ready: cartReady } = useCart();
   const bagCount = cartReady ? itemCount : 0;
   const [open, setOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const menuId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setOpen(false);
-    setSearchOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -76,22 +74,7 @@ export function SiteHeader() {
         <div className="flex shrink-0 items-center">
           <SiteSearch tone="dark" className="hidden w-48 xl:block xl:w-56" />
 
-          <button
-            type="button"
-            className="nav-search-toggle text-white transition hover:opacity-60 xl:hidden"
-            aria-label={searchOpen ? "Close search" : "Open search"}
-            aria-expanded={searchOpen}
-            onClick={() => {
-              setSearchOpen((v) => !v);
-              setOpen(false);
-            }}
-          >
-            <SearchIcon />
-          </button>
-
-          <div className="hidden sm:block">
-            <AccountMenu inverse />
-          </div>
+          <AccountMenu inverse />
 
           <Link
             href="/cart"
@@ -114,26 +97,12 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls={menuId}
             aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => {
-              setOpen((v) => !v);
-              setSearchOpen(false);
-            }}
+            onClick={() => setOpen((v) => !v)}
           >
             {open ? <CloseIcon /> : <MenuIcon />}
           </button>
         </div>
       </div>
-
-      {searchOpen ? (
-        <div className="nav-search-panel border-t border-white/10 bg-black px-3 py-3 sm:px-5 md:px-8 xl:hidden">
-          <SiteSearch
-            tone="dark"
-            onNavigate={() => setSearchOpen(false)}
-            className="w-full"
-            autoFocus
-          />
-        </div>
-      ) : null}
 
       {open ? (
         <div
@@ -193,15 +162,6 @@ export function SiteHeader() {
               </li>
               <li>
                 <Link
-                  href="/account/orders"
-                  className="flex min-h-12 items-center text-sm uppercase tracking-[0.2em] text-neutral-400 transition hover:text-white sm:hidden"
-                  onClick={closeMenu}
-                >
-                  Account
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/cart"
                   className="flex min-h-12 items-center text-sm uppercase tracking-[0.2em] text-neutral-400 transition hover:text-white"
                   onClick={closeMenu}
@@ -227,21 +187,6 @@ export function SiteHeader() {
         </div>
       ) : null}
     </header>
-  );
-}
-
-function SearchIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      aria-hidden
-    >
-      <circle cx="11" cy="11" r="6.5" />
-      <path d="M16.5 16.5 20 20" strokeLinecap="round" />
-    </svg>
   );
 }
 
