@@ -49,7 +49,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white">
-      <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-3 sm:h-[3.75rem] sm:gap-4 sm:px-5 md:h-16 md:gap-6 md:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-3.5 sm:h-[4.25rem] sm:gap-4 sm:px-5 md:h-[4.5rem] md:gap-6 md:px-8">
         <Logo className="min-w-0 flex-1 pr-1" variant="inverse" />
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
@@ -112,7 +112,7 @@ export function SiteHeader() {
           aria-modal="true"
           aria-label="Menu"
         >
-          <div className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-white/10 px-3 sm:h-[3.75rem] sm:px-5">
+          <div className="flex h-16 shrink-0 items-center justify-between gap-3 border-b border-white/10 px-3.5 sm:h-[4.25rem] sm:px-5">
             <Logo className="min-w-0 flex-1 pr-2" variant="inverse" />
             <button
               ref={closeRef}

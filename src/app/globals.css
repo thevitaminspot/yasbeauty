@@ -472,8 +472,8 @@ input[type="search"]::-webkit-search-cancel-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.65rem;
+  height: 2.65rem;
   padding: 0;
   line-height: 0;
   flex-shrink: 0;
@@ -482,23 +482,23 @@ input[type="search"]::-webkit-search-cancel-button {
 .nav-icon svg,
 .nav-menu-toggle svg {
   display: block;
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
 }
 
 .nav-bag-badge {
   position: absolute;
-  top: 0.2rem;
-  right: 0.15rem;
+  top: 0.25rem;
+  right: 0.2rem;
   display: flex;
-  min-width: 0.95rem;
-  height: 0.95rem;
+  min-width: 1rem;
+  height: 1rem;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
   background: #fff;
-  padding: 0 0.2rem;
+  padding: 0 0.22rem;
   font-size: 0.5625rem;
   font-weight: 600;
   line-height: 1;
@@ -508,14 +508,14 @@ input[type="search"]::-webkit-search-cancel-button {
 @media (min-width: 640px) {
   .nav-icon,
   .nav-menu-toggle {
-    width: 2.6rem;
-    height: 2.6rem;
+    width: 2.75rem;
+    height: 2.75rem;
   }
 
   .nav-icon svg,
   .nav-menu-toggle svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.3rem;
+    height: 1.3rem;
   }
 }
 

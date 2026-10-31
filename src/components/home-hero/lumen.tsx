@@ -8,7 +8,7 @@ import { brandImages } from "@/lib/product-images";
  */
 export function HomeHeroLumen() {
   return (
-    <section className="hero-lumen relative -mt-14 h-[100dvh] min-h-[100dvh] overflow-hidden bg-black text-white sm:-mt-[3.75rem]">
+    <section className="hero-lumen relative -mt-16 h-[100dvh] min-h-[100dvh] overflow-hidden bg-black text-white sm:-mt-[4.25rem] md:-mt-[4.5rem]">
       <div className="absolute inset-0" aria-hidden>
         <Image
           src={brandImages.collectionLips}

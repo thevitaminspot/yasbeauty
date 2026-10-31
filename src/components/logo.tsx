@@ -34,7 +34,7 @@ export function Logo({
         className={`shrink-0 rounded-full bg-white transition duration-300 group-hover:scale-[1.03] ${
           isLarge
             ? "h-12 w-12 md:h-14 md:w-14"
-            : "h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10"
+            : "h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11"
         }`}
         priority={size === "nav"}
         quality={100}
@@ -43,7 +43,7 @@ export function Logo({
         className={`min-w-0 truncate font-serif tracking-tight transition group-hover:opacity-80 ${mark} ${
           isLarge
             ? "text-3xl md:text-4xl"
-            : "text-[0.95rem] leading-none sm:text-lg md:text-[1.45rem]"
+            : "text-base leading-none sm:text-lg md:text-[1.5rem]"
         }`}
       >
         {site.name}
