@@ -5,7 +5,6 @@ import {
   fulfillmentLabel,
   type FulfillmentStatus,
 } from "@/lib/delivery-types";
-import { getSiteUrl } from "@/lib/paystack";
 import { site } from "@/lib/site";
 import type { BookingRequest } from "@/lib/bookings-store";
 import type { StoredOrder } from "@/lib/orders-store";
@@ -183,32 +182,77 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
+/** Public site URL for email links/images — never localhost (clients can't load it). */
+function emailSiteUrl() {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/$/, "");
+  if (
+    configured &&
+    /^https:\/\//i.test(configured) &&
+    !/localhost|127\.0\.0\.1/i.test(configured)
+  ) {
+    return configured;
+  }
+  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL?.replace(/\/$/, "");
+  if (vercel) return `https://${vercel.replace(/^https?:\/\//, "")}`;
+  return "https://www.yasbeautyallure.com";
+}
+
 function logoUrl() {
-  return `${getSiteUrl()}/brand/yba-logo.png`;
+  // Absolute production asset — email clients block localhost and often skip redirects.
+  return "https://www.yasbeautyallure.com/brand/yba-logo.png";
 }
 
 function layout(title: string, bodyHtml: string) {
   const logo = logoUrl();
+  const siteUrl = emailSiteUrl();
+  const sans =
+    "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
   return `<!doctype html>
-<html>
-<body style="margin:0;background:#fafafa;font-family:Georgia,'Times New Roman',serif;color:#111">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fafafa;padding:32px 16px">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>${escapeHtml(title)}</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:Georgia,'Times New Roman',serif;color:#111111">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:40px 16px">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" style="max-width:560px;background:#fff;border:1px solid #e5e5e5;padding:28px 24px">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid #e4e4e7">
           <tr>
-            <td style="padding-bottom:20px;border-bottom:1px solid #f0f0f0">
-              <a href="${escapeHtml(getSiteUrl())}" style="text-decoration:none;color:#111">
-                <img src="${escapeHtml(logo)}" width="56" height="56" alt="${escapeHtml(site.name)}" style="display:block;border:0;border-radius:999px;background:#fff" />
-                <span style="display:inline-block;margin-top:10px;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#737373">${escapeHtml(site.name)}</span>
+            <td style="background:#0a0a0a;padding:22px 28px">
+              <a href="${escapeHtml(siteUrl)}" style="text-decoration:none;color:#ffffff">
+                <table role="presentation" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="vertical-align:middle;padding-right:14px">
+                      <img src="${escapeHtml(logo)}" width="48" height="48" alt="${escapeHtml(site.name)}" style="display:block;border:0;border-radius:999px;background:#ffffff;width:48px;height:48px" />
+                    </td>
+                    <td style="vertical-align:middle">
+                      <span style="display:block;font-family:Georgia,'Times New Roman',serif;font-size:18px;line-height:1.2;color:#ffffff">${escapeHtml(site.name)}</span>
+                      <span style="display:block;margin-top:4px;font-family:${sans};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#a3a3a3">Abuja · Nigeria</span>
+                    </td>
+                  </tr>
+                </table>
               </a>
             </td>
           </tr>
-          <tr><td style="padding-top:20px;font-size:28px;font-style:italic;line-height:1.2">${escapeHtml(title)}</td></tr>
-          <tr><td style="padding-top:20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.6;color:#404040">${bodyHtml}</td></tr>
-          <tr><td style="padding-top:28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;line-height:1.5;color:#737373">
-            ${escapeHtml(site.address.full)} · <a href="mailto:${escapeHtml(site.email)}" style="color:#111">${escapeHtml(site.email)}</a> · ${escapeHtml(site.phone)}
-          </td></tr>
+          <tr>
+            <td style="padding:32px 28px 8px;font-size:30px;font-style:italic;line-height:1.25;color:#111111">${escapeHtml(title)}</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 28px 8px;font-family:${sans};font-size:15px;line-height:1.65;color:#404040">${bodyHtml}</td>
+          </tr>
+          <tr>
+            <td style="padding:28px 28px 32px;font-family:${sans};font-size:12px;line-height:1.6;color:#737373;border-top:1px solid #f4f4f5">
+              <strong style="color:#111111;font-weight:600">${escapeHtml(site.name)}</strong><br/>
+              ${escapeHtml(site.address.full)}<br/>
+              <a href="mailto:${escapeHtml(site.email)}" style="color:#111111;text-decoration:underline">${escapeHtml(site.email)}</a>
+              &nbsp;·&nbsp;
+              <a href="tel:${escapeHtml(site.phoneHref)}" style="color:#111111;text-decoration:none">${escapeHtml(site.phone)}</a><br/>
+              <a href="${escapeHtml(siteUrl)}" style="color:#737373;text-decoration:underline">${escapeHtml(siteUrl.replace(/^https?:\/\//, ""))}</a>
+            </td>
+          </tr>
         </table>
       </td>
     </tr>
@@ -266,7 +310,7 @@ export async function sendOrderEmails(order: StoredOrder) {
     return { customer: false, admin: false };
   }
 
-  const siteUrl = getSiteUrl();
+  const siteUrl = emailSiteUrl();
   const total = formatNaira(order.amount / 100);
   const { items, delivery } = orderLines(order);
   const name = order.customer.name || "there";
@@ -330,7 +374,7 @@ export async function sendOrderFulfillmentEmails(
   }
 
   const copy = fulfillmentCopy[status];
-  const siteUrl = getSiteUrl();
+  const siteUrl = emailSiteUrl();
   const total = formatNaira(order.amount / 100);
   const { items, delivery } = orderLines(order);
   const name = order.customer.name || "there";
@@ -381,7 +425,7 @@ export async function sendBookingEmails(booking: BookingRequest) {
     return { customer: false, admin: false };
   }
 
-  const siteUrl = getSiteUrl();
+  const siteUrl = emailSiteUrl();
   const deposit = formatNaira(booking.depositAmount / 100);
   const when = `${booking.preferredDate}${booking.preferredTime ? ` · ${booking.preferredTime}` : ""}`;
 
@@ -431,7 +475,7 @@ export async function sendBookingConfirmedEmails(booking: BookingRequest) {
     return { customer: false, admin: false };
   }
 
-  const siteUrl = getSiteUrl();
+  const siteUrl = emailSiteUrl();
   const when = `${booking.preferredDate}${booking.preferredTime ? ` · ${booking.preferredTime}` : ""}`;
 
   const customerBody = `
@@ -475,7 +519,7 @@ export async function sendBookingCompletedEmails(booking: BookingRequest) {
     return { customer: false, admin: false };
   }
 
-  const siteUrl = getSiteUrl();
+  const siteUrl = emailSiteUrl();
   const when = `${booking.preferredDate}${booking.preferredTime ? ` · ${booking.preferredTime}` : ""}`;
 
   const customerBody = `
@@ -519,7 +563,7 @@ export async function sendBookingCancelledEmails(booking: BookingRequest) {
     return { customer: false, admin: false };
   }
 
-  const siteUrl = getSiteUrl();
+  const siteUrl = emailSiteUrl();
   const when = `${booking.preferredDate}${booking.preferredTime ? ` · ${booking.preferredTime}` : ""}`;
 
   const customerBody = `

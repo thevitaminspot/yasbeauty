@@ -58,13 +58,13 @@ const replyTo = "yasbeautyallure6@gmail.com";
 const configuredSite = (
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
 ).replace(/\/$/, "");
-// Email clients cannot load localhost images — prefer production when local.
+// Email clients cannot load localhost images — always use the public production asset host.
 const siteUrl =
-  /localhost|127\.0\.0\.1/.test(configuredSite)
+  /localhost|127\.0\.0\.1/.test(configuredSite) || !/^https:\/\//i.test(configuredSite)
     ? "https://www.yasbeautyallure.com"
     : configuredSite;
 const brandName = "Yas Beauty Allure";
-const logo = `${siteUrl}/brand/yba-logo.png`;
+const logo = "https://www.yasbeautyallure.com/brand/yba-logo.png";
 
 function naira(amount: number) {
   return new Intl.NumberFormat("en-NG", {

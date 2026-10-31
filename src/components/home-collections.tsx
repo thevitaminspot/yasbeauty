@@ -62,10 +62,14 @@ export function HomeCollections({ products }: { products: Product[] }) {
 
       <div
         ref={scroller}
-        className="mt-10 flex gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-12 sm:gap-4 sm:px-5 md:gap-5 md:px-8 [&::-webkit-scrollbar]:hidden"
+        className="mt-10 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-12 [&::-webkit-scrollbar]:hidden"
         style={{ WebkitOverflowScrolling: "touch" }}
       >
-        <div className="mx-auto flex w-full max-w-7xl gap-3 sm:gap-4 md:gap-5">
+        {/*
+          Padding lives on the scroll *content* (not the overflow box) so the
+          last card keeps the same inset as the first when scrolled to the end.
+        */}
+        <div className="flex w-max min-w-full gap-3 px-4 sm:gap-4 sm:px-5 md:gap-5 md:px-8">
           {products.map((product) => (
             <Link
               key={product.id}
