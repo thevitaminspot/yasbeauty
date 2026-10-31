@@ -2,12 +2,57 @@
 
 import { useAuth, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ButtonHTMLAttributes,
+} from "react";
 import { AccountIcon } from "@/components/account-icon";
+
+function AccountIconButton({
+  inverse,
+  ...props
+}: {
+  inverse: boolean;
+} & ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      type="button"
+      className={`nav-icon transition hover:opacity-60 ${
+        inverse ? "text-white" : "text-black"
+      }`}
+      {...props}
+    >
+      <AccountIcon />
+    </button>
+  );
+}
+
+function AccountIconLink({
+  inverse,
+  href = "/sign-in",
+}: {
+  inverse: boolean;
+  href?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`nav-icon transition hover:opacity-60 ${
+        inverse ? "text-white" : "text-black"
+      }`}
+      aria-label="Account"
+    >
+      <AccountIcon />
+    </Link>
+  );
+}
 
 export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
   const { isSignedIn, isLoaded } = useAuth();
-  const { signOut, openUserProfile } = useClerk();
+  const clerk = useClerk();
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -35,7 +80,6 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
     };
   }, [open]);
 
-  const tone = inverse ? "text-white" : "text-black";
   const panel = inverse
     ? "border-white/15 bg-neutral-950 text-white"
     : "border-neutral-200 bg-white text-black";
@@ -43,42 +87,25 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
     ? "text-neutral-300 hover:bg-white/5 hover:text-white"
     : "text-neutral-700 hover:bg-neutral-50 hover:text-black";
 
+  // Keep the outline icon stable while Clerk boots / refreshes user data.
   if (!isLoaded) {
-    return (
-      <span
-        className={`nav-icon inline-flex animate-pulse ${
-          inverse ? "bg-white/10" : "bg-neutral-200"
-        }`}
-        aria-hidden
-      />
-    );
+    return <AccountIconLink inverse={inverse} />;
   }
 
   if (!isSignedIn) {
-    return (
-      <Link
-        href="/sign-in"
-        className={`nav-icon transition hover:opacity-60 ${tone}`}
-        aria-label="Account"
-      >
-        <AccountIcon />
-      </Link>
-    );
+    return <AccountIconLink inverse={inverse} />;
   }
 
   return (
     <div ref={rootRef} className="relative">
-      <button
-        type="button"
-        className={`nav-icon transition hover:opacity-60 ${tone}`}
+      <AccountIconButton
+        inverse={inverse}
         aria-label="Account menu"
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((v) => !v)}
-      >
-        <AccountIcon />
-      </button>
+      />
 
       {open ? (
         <div
@@ -108,7 +135,11 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
             className={`block w-full px-4 py-2.5 text-left text-sm ${item}`}
             onClick={() => {
               setOpen(false);
-              openUserProfile();
+              try {
+                clerk.openUserProfile();
+              } catch {
+                // Profile UI can 404 if Clerk resources are still warming up.
+              }
             }}
           >
             Manage account
@@ -119,7 +150,7 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
             className={`block w-full px-4 py-2.5 text-left text-sm ${item}`}
             onClick={() => {
               setOpen(false);
-              void signOut({ redirectUrl: "/" });
+              void clerk.signOut({ redirectUrl: "/" });
             }}
           >
             Sign out
