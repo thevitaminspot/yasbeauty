@@ -71,7 +71,7 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="flex shrink-0 items-center">
+        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
           <SiteSearch tone="dark" className="hidden w-48 xl:block xl:w-56" />
 
           <AccountMenu inverse />
@@ -85,7 +85,7 @@ export function SiteHeader() {
           >
             <BagIcon />
             {bagCount > 0 ? (
-              <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-white px-1 text-[9px] font-medium leading-none text-black">
+              <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-white px-1 text-[9px] font-medium leading-none text-black">
                 {bagCount > 99 ? "99+" : bagCount}
               </span>
             ) : null}
