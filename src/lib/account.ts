@@ -1,14 +1,17 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { isAuthEnabled } from "@/lib/auth-config";
 import type { BookingRequest } from "@/lib/bookings-store";
 import type { FulfillmentStatus } from "@/lib/delivery-types";
 
-/** Require a signed-in Clerk user; redirect to sign-in with return path. */
+/** Require a signed-in Clerk user (Clerk-standard auth.protect). */
 export async function requireAccountUser(redirectPath: string) {
   if (!isAuthEnabled()) {
-    redirect("/sign-in");
+    redirect(`/sign-in?redirect_url=${encodeURIComponent(redirectPath)}`);
   }
+
+  await auth.protect();
+
   const user = await currentUser();
   if (!user) {
     redirect(`/sign-in?redirect_url=${encodeURIComponent(redirectPath)}`);

@@ -18,7 +18,13 @@ export function SignInPanel() {
           />
         }
       >
-        <SignIn appearance={clerkAppearance} routing="path" path="/sign-in" />
+        <SignIn
+          appearance={clerkAppearance}
+          routing="path"
+          path="/sign-in"
+          signUpUrl="/sign-up"
+          fallbackRedirectUrl="/"
+        />
       </ClerkAuthMount>
     </div>
   );
