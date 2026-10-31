@@ -22,7 +22,10 @@ import {
   sendBookingConfirmedEmails,
   sendOrderFulfillmentEmails,
 } from "@/lib/mail";
-import { getOrderByReference } from "@/lib/orders-store";
+import {
+  getOrderByReference,
+  updateOrderFulfillment,
+} from "@/lib/orders-store";
 import type { Product, ProductCategory } from "@/lib/product-types";
 import {
   deleteProduct as removeProduct,
@@ -44,7 +47,6 @@ import type {
   FulfillmentStatus,
 } from "@/lib/delivery-types";
 import { fulfillmentStatuses } from "@/lib/delivery-types";
-import { updateOrderFulfillment } from "@/lib/orders-store";
 import { isStoreAdmin } from "@/lib/store-admin";
 import {
   readTrainingSettings,
