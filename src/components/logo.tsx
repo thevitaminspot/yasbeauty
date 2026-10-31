@@ -43,7 +43,7 @@ export function Logo({
         className={`min-w-0 truncate font-serif tracking-tight transition group-hover:opacity-80 ${mark} ${
           isLarge
             ? "text-3xl md:text-4xl"
-            : "text-base leading-none sm:text-lg md:text-[1.5rem]"
+            : "text-lg leading-none sm:text-xl md:text-[1.55rem]"
         }`}
       >
         {site.name}
