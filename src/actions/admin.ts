@@ -18,8 +18,11 @@ import {
 } from "@/lib/bookings-store";
 import {
   sendBookingCancelledEmails,
+  sendBookingCompletedEmails,
   sendBookingConfirmedEmails,
+  sendOrderFulfillmentEmails,
 } from "@/lib/mail";
+import { getOrderByReference } from "@/lib/orders-store";
 import type { Product, ProductCategory } from "@/lib/product-types";
 import {
   deleteProduct as removeProduct,
@@ -258,6 +261,8 @@ export async function setBookingStatus(
         await sendBookingCancelledEmails(updated);
       } else if (updated.status === "confirmed") {
         await sendBookingConfirmedEmails(updated);
+      } else if (updated.status === "completed") {
+        await sendBookingCompletedEmails(updated);
       }
     } catch (err) {
       console.error("[mail] booking status notify failed:", err);
@@ -280,8 +285,21 @@ export async function setOrderFulfillment(
     return { ok: false, error: "Choose a valid order status." };
   }
 
+  const previous = await getOrderByReference(reference);
   const updated = await updateOrderFulfillment(reference, fulfillmentStatus);
   if (!updated) return { ok: false, error: "Order not found." };
+
+  if (
+    previous &&
+    previous.fulfillmentStatus !== updated.fulfillmentStatus
+  ) {
+    try {
+      await sendOrderFulfillmentEmails(updated, fulfillmentStatus);
+    } catch (err) {
+      console.error("[mail] order fulfillment notify failed:", err);
+    }
+  }
+
   revalidatePath("/admin");
   revalidatePath("/admin/orders");
   revalidatePath("/account/orders");

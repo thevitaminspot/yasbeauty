@@ -1,6 +1,10 @@
 import "server-only";
 import { Resend } from "resend";
 import { formatNaira } from "@/lib/format";
+import {
+  fulfillmentLabel,
+  type FulfillmentStatus,
+} from "@/lib/delivery-types";
 import { getSiteUrl } from "@/lib/paystack";
 import { site } from "@/lib/site";
 import type { BookingRequest } from "@/lib/bookings-store";
@@ -179,7 +183,12 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
+function logoUrl() {
+  return `${getSiteUrl()}/brand/yba-logo.png`;
+}
+
 function layout(title: string, bodyHtml: string) {
+  const logo = logoUrl();
   return `<!doctype html>
 <html>
 <body style="margin:0;background:#fafafa;font-family:Georgia,'Times New Roman',serif;color:#111">
@@ -187,8 +196,15 @@ function layout(title: string, bodyHtml: string) {
     <tr>
       <td align="center">
         <table role="presentation" width="100%" style="max-width:560px;background:#fff;border:1px solid #e5e5e5;padding:28px 24px">
-          <tr><td style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#737373">${escapeHtml(site.name)}</td></tr>
-          <tr><td style="padding-top:12px;font-size:28px;font-style:italic;line-height:1.2">${escapeHtml(title)}</td></tr>
+          <tr>
+            <td style="padding-bottom:20px;border-bottom:1px solid #f0f0f0">
+              <a href="${escapeHtml(getSiteUrl())}" style="text-decoration:none;color:#111">
+                <img src="${escapeHtml(logo)}" width="56" height="56" alt="${escapeHtml(site.name)}" style="display:block;border:0;border-radius:999px;background:#fff" />
+                <span style="display:inline-block;margin-top:10px;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#737373">${escapeHtml(site.name)}</span>
+              </a>
+            </td>
+          </tr>
+          <tr><td style="padding-top:20px;font-size:28px;font-style:italic;line-height:1.2">${escapeHtml(title)}</td></tr>
           <tr><td style="padding-top:20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.6;color:#404040">${bodyHtml}</td></tr>
           <tr><td style="padding-top:28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;line-height:1.5;color:#737373">
             ${escapeHtml(site.address.full)} · <a href="mailto:${escapeHtml(site.email)}" style="color:#111">${escapeHtml(site.email)}</a> · ${escapeHtml(site.phone)}
@@ -200,6 +216,36 @@ function layout(title: string, bodyHtml: string) {
 </body>
 </html>`;
 }
+
+const fulfillmentCopy: Record<
+  FulfillmentStatus,
+  { title: string; customerLead: string; adminLead: string }
+> = {
+  confirmed: {
+    title: "Order confirmed",
+    customerLead:
+      "We’ve received payment and will prepare your package.",
+    adminLead: "Order marked confirmed.",
+  },
+  packed: {
+    title: "Order packed",
+    customerLead:
+      "Your order is packed and ready for dispatch.",
+    adminLead: "Order marked packed.",
+  },
+  sent: {
+    title: "Out for delivery",
+    customerLead:
+      "Your package has been sent for delivery. Please keep your phone nearby.",
+    adminLead: "Order marked sent for delivery.",
+  },
+  delivered: {
+    title: "Order delivered",
+    customerLead:
+      "Your order has been marked as delivered. We hope you love it.",
+    adminLead: "Order marked delivered.",
+  },
+};
 
 function orderLines(order: StoredOrder) {
   const items = order.items
@@ -262,6 +308,67 @@ export async function sendOrderEmails(order: StoredOrder) {
       html: layout("New order", adminBody),
       text: `New order ${order.reference} · ${total}\n${order.email}\n${items}`,
       idempotencyKey: `order-admin/${order.reference}`,
+    }),
+  ]);
+
+  return { customer: customer.ok, admin: admin.ok };
+}
+
+/** Packed / sent / delivered (and re-confirm) updates from admin. */
+export async function sendOrderFulfillmentEmails(
+  order: StoredOrder,
+  status: FulfillmentStatus,
+) {
+  if (!isMailConfigured()) {
+    console.warn("[mail] fulfillment emails skipped — RESEND_API_KEY not set");
+    return { customer: false, admin: false };
+  }
+
+  // Initial purchase already sends sendOrderEmails — skip duplicate "confirmed".
+  if (status === "confirmed") {
+    return { customer: false, admin: false };
+  }
+
+  const copy = fulfillmentCopy[status];
+  const siteUrl = getSiteUrl();
+  const total = formatNaira(order.amount / 100);
+  const { items, delivery } = orderLines(order);
+  const name = order.customer.name || "there";
+  const label = fulfillmentLabel(status);
+
+  const customerBody = `
+    <p>Hi ${escapeHtml(name)},</p>
+    <p>${escapeHtml(copy.customerLead)}</p>
+    <p><strong>Status:</strong> ${escapeHtml(label)}<br/>
+    <strong>Reference:</strong> ${escapeHtml(order.reference)}<br/>
+    <strong>Total:</strong> ${escapeHtml(total)}</p>
+    <p style="white-space:pre-line">${escapeHtml(items)}${delivery ? `\n${escapeHtml(delivery)}` : ""}</p>
+    <p><a href="${escapeHtml(`${siteUrl}/account/orders/${order.reference}`)}" style="color:#111">Track order</a></p>
+  `;
+
+  const adminBody = `
+    <p>${escapeHtml(copy.adminLead)}</p>
+    <p><strong>${escapeHtml(order.customer.name || "Customer")}</strong><br/>
+    ${escapeHtml(order.email)} · ${escapeHtml(order.customer.phone || "—")}</p>
+    <p><strong>Status:</strong> ${escapeHtml(label)}<br/>
+    <strong>Reference:</strong> ${escapeHtml(order.reference)}</p>
+    <p><a href="${escapeHtml(`${siteUrl}/admin/orders`)}" style="color:#111">Open admin orders</a></p>
+  `;
+
+  const [customer, admin] = await Promise.all([
+    sendMail({
+      to: order.email,
+      subject: `${copy.title} · ${order.reference}`,
+      html: layout(copy.title, customerBody),
+      text: `Hi ${name},\n\n${copy.customerLead}\nStatus: ${label}\nReference: ${order.reference}\n\n${items}`,
+      idempotencyKey: `order-${status}/${order.reference}`,
+    }),
+    sendMail({
+      to: adminRecipients(),
+      subject: `${label} · ${order.reference}`,
+      html: layout(copy.title, adminBody),
+      text: `${copy.adminLead}\n${order.reference} · ${order.email}`,
+      idempotencyKey: `order-${status}-admin/${order.reference}`,
     }),
   ]);
 
@@ -356,6 +463,50 @@ export async function sendBookingConfirmedEmails(booking: BookingRequest) {
       html: layout("Booking confirmed", adminBody),
       text: `Confirmed ${booking.id} · ${booking.serviceName} · ${booking.email}`,
       idempotencyKey: `booking-confirmed-admin/${booking.id}`,
+    }),
+  ]);
+
+  return { customer: customer.ok, admin: admin.ok };
+}
+
+export async function sendBookingCompletedEmails(booking: BookingRequest) {
+  if (!isMailConfigured()) {
+    console.warn("[mail] booking completed skipped — RESEND_API_KEY not set");
+    return { customer: false, admin: false };
+  }
+
+  const siteUrl = getSiteUrl();
+  const when = `${booking.preferredDate}${booking.preferredTime ? ` · ${booking.preferredTime}` : ""}`;
+
+  const customerBody = `
+    <p>Hi ${escapeHtml(booking.name)},</p>
+    <p>Thank you for visiting us for <strong>${escapeHtml(booking.serviceName)}</strong>.</p>
+    <p><strong>Session:</strong> ${escapeHtml(when)}</p>
+    <p>We’d love to see you again — <a href="${escapeHtml(`${siteUrl}/book`)}" style="color:#111">book another chair</a> or shop pigments anytime.</p>
+  `;
+
+  const adminBody = `
+    <p>Booking marked completed.</p>
+    <p><strong>${escapeHtml(booking.name)}</strong><br/>
+    ${escapeHtml(booking.email)} · ${escapeHtml(booking.phone)}</p>
+    <p><strong>Service:</strong> ${escapeHtml(booking.serviceName)}<br/>
+    <strong>Session:</strong> ${escapeHtml(when)}</p>
+  `;
+
+  const [customer, admin] = await Promise.all([
+    sendMail({
+      to: booking.email,
+      subject: `Thanks for visiting · ${booking.serviceName}`,
+      html: layout("Session complete", customerBody),
+      text: `Hi ${booking.name},\n\nThank you for your ${booking.serviceName} session (${when}).`,
+      idempotencyKey: `booking-completed/${booking.id}`,
+    }),
+    sendMail({
+      to: adminRecipients(),
+      subject: `Completed · ${booking.serviceName} · ${booking.name}`,
+      html: layout("Session complete", adminBody),
+      text: `Completed ${booking.id} · ${booking.serviceName} · ${booking.email}`,
+      idempotencyKey: `booking-completed-admin/${booking.id}`,
     }),
   ]);
 
