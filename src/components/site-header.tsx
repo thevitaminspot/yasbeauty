@@ -74,7 +74,9 @@ export function SiteHeader() {
         <div className="nav-actions shrink-0">
           <SiteSearch tone="dark" className="hidden w-48 xl:block xl:w-56" />
 
-          {/* Bag, then account — bag stays in the bar on all breakpoints */}
+          {/* Account, then bag (standard retail: bag rightmost before menu) */}
+          <AccountMenu inverse />
+
           <Link
             href="/cart"
             className="nav-icon relative text-white transition hover:opacity-60"
@@ -89,8 +91,6 @@ export function SiteHeader() {
               </span>
             ) : null}
           </Link>
-
-          <AccountMenu inverse />
 
           <button
             type="button"
