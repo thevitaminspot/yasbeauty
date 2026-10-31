@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth, useClerk } from "@clerk/nextjs";
+import { useAuth, useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import {
   useEffect,
@@ -11,11 +11,45 @@ import {
 } from "react";
 import { AccountIcon } from "@/components/account-icon";
 
+function AccountAvatar({
+  imageUrl,
+  inverse,
+}: {
+  imageUrl?: string | null;
+  inverse: boolean;
+}) {
+  const [failed, setFailed] = useState(false);
+  const showPhoto = Boolean(imageUrl) && !failed;
+
+  if (showPhoto) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- Clerk CDN avatars; avoid next/image remote config churn
+      <img
+        src={imageUrl!}
+        alt=""
+        width={22}
+        height={22}
+        className="nav-avatar"
+        referrerPolicy="no-referrer"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+
+  return (
+    <span className={inverse ? "text-white" : "text-black"}>
+      <AccountIcon />
+    </span>
+  );
+}
+
 function AccountIconButton({
   inverse,
+  imageUrl,
   ...props
 }: {
   inverse: boolean;
+  imageUrl?: string | null;
 } & ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
@@ -25,7 +59,7 @@ function AccountIconButton({
       }`}
       {...props}
     >
-      <AccountIcon />
+      <AccountAvatar imageUrl={imageUrl} inverse={inverse} />
     </button>
   );
 }
@@ -52,6 +86,7 @@ function AccountIconLink({
 
 export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
   const { isSignedIn, isLoaded } = useAuth();
+  const { user, isLoaded: userLoaded } = useUser();
   const clerk = useClerk();
   const [open, setOpen] = useState(false);
   const menuId = useId();
@@ -87,8 +122,8 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
     ? "text-neutral-300 hover:bg-white/5 hover:text-white"
     : "text-neutral-700 hover:bg-neutral-50 hover:text-black";
 
-  // Keep the outline icon stable while Clerk boots / refreshes user data.
-  if (!isLoaded) {
+  // Outline icon while Clerk / user profile is still loading.
+  if (!isLoaded || !userLoaded) {
     return <AccountIconLink inverse={inverse} />;
   }
 
@@ -96,10 +131,13 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
     return <AccountIconLink inverse={inverse} />;
   }
 
+  const imageUrl = user?.imageUrl ?? null;
+
   return (
     <div ref={rootRef} className="relative">
       <AccountIconButton
         inverse={inverse}
+        imageUrl={imageUrl}
         aria-label="Account menu"
         aria-haspopup="menu"
         aria-expanded={open}
