@@ -11,7 +11,7 @@ const AccountMenuClerk = dynamic(
   {
     ssr: false,
     loading: () => (
-      <span className="icon-hit inline-flex animate-pulse" aria-hidden />
+      <span className="nav-icon inline-flex animate-pulse" aria-hidden />
     ),
   },
 );
@@ -20,12 +20,12 @@ function AccountLink({ inverse = false }: { inverse?: boolean }) {
   return (
     <Link
       href="/sign-in"
-      className={`icon-hit inline-flex transition hover:opacity-60 ${
+      className={`nav-icon transition hover:opacity-60 ${
         inverse ? "text-white" : "text-black"
       }`}
       aria-label="Account"
     >
-      <AccountIcon className="" />
+      <AccountIcon />
     </Link>
   );
 }

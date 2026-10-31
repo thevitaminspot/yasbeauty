@@ -49,8 +49,8 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white">
-      <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-3 sm:h-[3.75rem] sm:gap-3 sm:px-5 md:h-16 md:gap-6 md:px-8">
-        <Logo className="min-w-0 flex-1" variant="inverse" />
+      <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-3 sm:h-[3.75rem] sm:gap-4 sm:px-5 md:h-16 md:gap-6 md:px-8">
+        <Logo className="min-w-0 flex-1 pr-1" variant="inverse" />
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
           {links.map((link) => {
@@ -71,21 +71,21 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
+        <div className="nav-actions shrink-0">
           <SiteSearch tone="dark" className="hidden w-48 xl:block xl:w-56" />
 
           <AccountMenu inverse />
 
           <Link
             href="/cart"
-            className="icon-hit relative inline-flex text-white transition hover:opacity-60"
+            className="nav-icon relative text-white transition hover:opacity-60"
             aria-label={
               bagCount > 0 ? `Bag, ${bagCount} items` : "Bag"
             }
           >
             <BagIcon />
             {bagCount > 0 ? (
-              <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-white px-1 text-[9px] font-medium leading-none text-black">
+              <span className="nav-bag-badge">
                 {bagCount > 99 ? "99+" : bagCount}
               </span>
             ) : null}
@@ -112,12 +112,12 @@ export function SiteHeader() {
           aria-modal="true"
           aria-label="Menu"
         >
-          <div className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-white/10 px-3 sm:h-[3.75rem] sm:px-5">
-            <Logo className="min-w-0" variant="inverse" />
+          <div className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-white/10 px-3 sm:h-[3.75rem] sm:px-5">
+            <Logo className="min-w-0 flex-1 pr-2" variant="inverse" />
             <button
               ref={closeRef}
               type="button"
-              className="icon-hit inline-flex text-white transition hover:opacity-60"
+              className="nav-icon text-white transition hover:opacity-60"
               aria-label="Close menu"
               onClick={closeMenu}
             >
@@ -154,7 +154,7 @@ export function SiteHeader() {
               <li>
                 <Link
                   href="/search"
-                  className="flex min-h-12 items-center text-sm uppercase tracking-[0.2em] text-neutral-400 transition hover:text-white"
+                  className="flex min-h-11 items-center text-sm uppercase tracking-[0.2em] text-neutral-400 transition hover:text-white"
                   onClick={closeMenu}
                 >
                   Search
@@ -162,8 +162,17 @@ export function SiteHeader() {
               </li>
               <li>
                 <Link
+                  href="/account/orders"
+                  className="flex min-h-11 items-center text-sm uppercase tracking-[0.2em] text-neutral-400 transition hover:text-white"
+                  onClick={closeMenu}
+                >
+                  Account
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/cart"
-                  className="flex min-h-12 items-center text-sm uppercase tracking-[0.2em] text-neutral-400 transition hover:text-white"
+                  className="flex min-h-11 items-center text-sm uppercase tracking-[0.2em] text-neutral-400 transition hover:text-white"
                   onClick={closeMenu}
                 >
                   Bag
@@ -175,11 +184,11 @@ export function SiteHeader() {
             </ul>
           </nav>
 
-          <div className="shrink-0 border-t border-white/10 px-5 py-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:px-8">
+          <div className="shrink-0 border-t border-white/10 px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-8">
             <Link
               href="/book"
               onClick={closeMenu}
-              className="flex min-h-12 w-full items-center justify-center border border-white bg-white px-6 text-[11px] font-medium uppercase tracking-[0.2em] text-black transition hover:bg-neutral-200"
+              className="flex min-h-11 w-full items-center justify-center border border-white bg-white px-6 text-[11px] font-medium uppercase tracking-[0.2em] text-black transition hover:bg-neutral-200"
             >
               Book studio
             </Link>

@@ -46,7 +46,7 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
   if (!isLoaded) {
     return (
       <span
-        className={`icon-hit inline-flex animate-pulse ${
+        className={`nav-icon inline-flex animate-pulse ${
           inverse ? "bg-white/10" : "bg-neutral-200"
         }`}
         aria-hidden
@@ -58,7 +58,7 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
     return (
       <Link
         href="/sign-in"
-        className={`icon-hit inline-flex transition hover:opacity-60 ${tone}`}
+        className={`nav-icon transition hover:opacity-60 ${tone}`}
         aria-label="Account"
       >
         <AccountIcon />
@@ -70,7 +70,7 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
     <div ref={rootRef} className="relative">
       <button
         type="button"
-        className={`icon-hit inline-flex transition hover:opacity-60 ${tone}`}
+        className={`nav-icon transition hover:opacity-60 ${tone}`}
         aria-label="Account menu"
         aria-haspopup="menu"
         aria-expanded={open}
@@ -84,7 +84,7 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
         <div
           id={menuId}
           role="menu"
-          className={`absolute right-0 top-full z-[70] mt-1 w-48 border py-1 shadow-lg ${panel}`}
+          className={`absolute right-0 top-[calc(100%+0.25rem)] z-[70] w-44 border py-1 shadow-lg ${panel}`}
         >
           <Link
             role="menuitem"

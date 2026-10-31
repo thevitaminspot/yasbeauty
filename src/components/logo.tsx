@@ -9,7 +9,7 @@ type LogoProps = {
   size?: "nav" | "lg";
 };
 
-/** Circular YBA mark + serif wordmark */
+/** Circular YBA mark + serif wordmark — wordmark stays visible at every breakpoint. */
 export function Logo({
   className = "",
   variant = "default",
@@ -21,8 +21,8 @@ export function Logo({
   return (
     <Link
       href="/"
-      className={`group inline-flex min-w-0 items-center ${
-        isLarge ? "gap-4" : "gap-2.5 sm:gap-3"
+      className={`group inline-flex min-w-0 max-w-full items-center ${
+        isLarge ? "gap-4" : "gap-2 sm:gap-2.5"
       } ${className}`}
       aria-label={`${site.name} home`}
     >
@@ -34,7 +34,7 @@ export function Logo({
         className={`shrink-0 rounded-full bg-white transition duration-300 group-hover:scale-[1.03] ${
           isLarge
             ? "h-12 w-12 md:h-14 md:w-14"
-            : "h-9 w-9 sm:h-10 sm:w-10"
+            : "h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10"
         }`}
         priority={size === "nav"}
         quality={100}
@@ -43,7 +43,7 @@ export function Logo({
         className={`min-w-0 truncate font-serif tracking-tight transition group-hover:opacity-80 ${mark} ${
           isLarge
             ? "text-3xl md:text-4xl"
-            : "hidden text-lg sm:inline sm:text-xl md:text-[1.65rem] md:leading-none"
+            : "text-[0.95rem] leading-none sm:text-lg md:text-[1.45rem]"
         }`}
       >
         {site.name}
