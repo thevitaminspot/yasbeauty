@@ -60,51 +60,51 @@ export function HomeCollections({ products }: { products: Product[] }) {
         </Reveal>
       </div>
 
-      <div
-        ref={scroller}
-        className="mt-10 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-12 [&::-webkit-scrollbar]:hidden"
-        style={{ WebkitOverflowScrolling: "touch" }}
-      >
-        {/*
-          Padding lives on the scroll *content* (not the overflow box) so the
-          last card keeps the same inset as the first when scrolled to the end.
-        */}
-        <div className="flex w-max min-w-full gap-3 px-4 sm:gap-4 sm:px-5 md:gap-5 md:px-8">
-          {products.map((product) => (
-            <Link
-              key={product.id}
-              href={`/products/${product.slug}`}
-              className="group relative w-[min(68vw,15.5rem)] shrink-0 bg-neutral-50 sm:w-[17rem] md:w-[18.5rem]"
-            >
-              <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
-                {product.bestseller ? (
-                  <span className="absolute left-3 top-3 z-[1] bg-black px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white">
-                    Bestseller
-                  </span>
-                ) : null}
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-[1.03]"
-                  sizes="280px"
-                />
-              </div>
-              <div className="border-t border-neutral-200 bg-white px-3 py-3 sm:px-4 sm:py-3.5">
-                <p className="truncate font-serif text-base italic text-black sm:text-lg">
-                  {product.name}
-                </p>
-                <div className="mt-1 flex items-center justify-between gap-2">
-                  <p className="text-sm font-medium tabular-nums text-neutral-800">
-                    {formatNaira(product.price)}
-                  </p>
-                  <span className="text-xs text-neutral-400 transition group-hover:text-black">
-                    →
-                  </span>
+      <div className="mx-auto mt-10 max-w-7xl sm:mt-12">
+        <div
+          ref={scroller}
+          className="overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {/* Same inset as section headers (px-4 / sm:px-5 / md:px-8); on the
+              scroll content so the last card matches the first. */}
+          <div className="flex w-max gap-3 px-4 sm:gap-4 sm:px-5 md:gap-5 md:px-8">
+            {products.map((product) => (
+              <Link
+                key={product.id}
+                href={`/products/${product.slug}`}
+                className="group relative w-[min(68vw,15.5rem)] shrink-0 bg-neutral-50 sm:w-[17rem] md:w-[18.5rem]"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
+                  {product.bestseller ? (
+                    <span className="absolute left-3 top-3 z-[1] bg-black px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white">
+                      Bestseller
+                    </span>
+                  ) : null}
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover transition duration-700 group-hover:scale-[1.03]"
+                    sizes="280px"
+                  />
                 </div>
-              </div>
-            </Link>
-          ))}
+                <div className="border-t border-neutral-200 bg-white px-3 py-3 sm:px-4 sm:py-3.5">
+                  <p className="truncate font-serif text-base italic text-black sm:text-lg">
+                    {product.name}
+                  </p>
+                  <div className="mt-1 flex items-center justify-between gap-2">
+                    <p className="text-sm font-medium tabular-nums text-neutral-800">
+                      {formatNaira(product.price)}
+                    </p>
+                    <span className="text-xs text-neutral-400 transition group-hover:text-black">
+                      →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </section>
