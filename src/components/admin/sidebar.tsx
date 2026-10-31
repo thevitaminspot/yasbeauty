@@ -103,6 +103,16 @@ function IconTruck(props: IconProps) {
   );
 }
 
+function IconHelp(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M9.8 9.4a2.4 2.4 0 0 1 4.5.9c0 1.4-1.4 2-2.3 2.5" strokeLinecap="round" />
+      <path d="M12 16.4h.01" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function IconMenu(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
@@ -286,11 +296,31 @@ function SidebarNav({
   );
 }
 
-function SidebarFooter() {
+function SidebarFooter({
+  pathname,
+  onNavigate,
+}: {
+  pathname: string;
+  onNavigate?: () => void;
+}) {
+  const helpActive = isActive(pathname, "/admin/help");
   return (
-    <div className="mt-auto shrink-0 border-t border-white/10 px-4 py-4">
+    <div className="mt-auto shrink-0 space-y-2 border-t border-white/10 px-4 py-4">
+      <Link
+        href="/admin/help"
+        onClick={onNavigate}
+        className={`flex items-center gap-3 px-3 py-2.5 text-sm transition ${
+          helpActive
+            ? "bg-white/10 font-medium text-white"
+            : "border border-white/20 text-neutral-200 hover:border-white hover:text-white"
+        }`}
+      >
+        <IconHelp className="size-4 shrink-0" aria-hidden />
+        Help & guide
+      </Link>
       <Link
         href="/shop"
+        onClick={onNavigate}
         className="flex items-center justify-between border border-white/20 px-3 py-2.5 text-sm text-neutral-200 transition hover:border-white hover:text-white"
       >
         View shop
@@ -341,7 +371,7 @@ export function AdminSidebar({
             <SidebarBrand />
           </div>
           <SidebarNav pathname={pathname} />
-          <SidebarFooter />
+          <SidebarFooter pathname={pathname} />
         </div>
       </aside>
 
@@ -366,7 +396,7 @@ export function AdminSidebar({
               </button>
             </div>
             <SidebarNav pathname={pathname} onNavigate={onMobileClose} />
-            <SidebarFooter />
+            <SidebarFooter pathname={pathname} onNavigate={onMobileClose} />
           </aside>
         </div>
       ) : null}
@@ -384,7 +414,7 @@ export function AdminMobileBar({
   groupLabel?: string;
 }) {
   return (
-    <div className="sticky top-0 z-40 flex items-center justify-between border-b border-neutral-200 bg-white/95 px-4 py-3 backdrop-blur-md md:hidden">
+    <div className="sticky top-0 z-40 flex items-center gap-2 border-b border-neutral-200 bg-white/95 px-4 py-3 backdrop-blur-md md:hidden">
       <button
         type="button"
         aria-label="Open admin menu"
@@ -394,12 +424,20 @@ export function AdminMobileBar({
         <IconMenu className="size-4" aria-hidden />
         Menu
       </button>
-      {pageLabel ? (
-        <p className="truncate text-right text-[11px] uppercase tracking-[0.12em] text-neutral-500">
-          {groupLabel ? `${groupLabel} · ` : null}
-          {pageLabel}
-        </p>
-      ) : null}
+      <div className="min-w-0 flex-1 truncate text-right text-[11px] uppercase tracking-[0.12em] text-neutral-500">
+        {pageLabel ? (
+          <>
+            {groupLabel ? `${groupLabel} · ` : null}
+            {pageLabel}
+          </>
+        ) : null}
+      </div>
+      <Link
+        href="/admin/help"
+        className="shrink-0 border border-neutral-300 bg-white px-3 py-2 text-[11px] uppercase tracking-[0.12em] text-neutral-700"
+      >
+        Help
+      </Link>
     </div>
   );
 }
@@ -423,7 +461,16 @@ export function useAdminMobileNav() {
   };
 }
 
+const helpPage: NavLink = {
+  href: "/admin/help",
+  label: "Help",
+  exact: true,
+  icon: IconHelp,
+  group: "Guide",
+};
+
 export function currentAdminPage(pathname: string) {
+  if (isActive(pathname, helpPage.href, true)) return helpPage;
   const exact = adminNavLinks.find((link) => link.href === pathname);
   if (exact) return exact;
   return adminNavLinks.find((link) => pathname.startsWith(`${link.href}/`));

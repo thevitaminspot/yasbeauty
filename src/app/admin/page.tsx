@@ -72,6 +72,7 @@ export default async function AdminTodayPage() {
       ) : null}
 
       <AdminQuickActions>
+        <AdminQuickAction href="/admin/help">Help & guide</AdminQuickAction>
         <AdminQuickAction href="/admin/orders">Review orders</AdminQuickAction>
         <AdminQuickAction href="/admin/customers">Customers</AdminQuickAction>
         <AdminQuickAction href="/admin/bookings">Manage bookings</AdminQuickAction>
