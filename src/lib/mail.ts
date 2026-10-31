@@ -16,11 +16,59 @@ export function isMailConfigured() {
   return Boolean(process.env.RESEND_API_KEY?.trim());
 }
 
-function fromAddress() {
+/** Free inboxes / unverified domains cannot be used as Resend `from`. */
+function isUnusableFromDomain(email: string) {
+  const host = email.split("@")[1]?.toLowerCase() ?? "";
   return (
-    process.env.RESEND_FROM?.trim() ||
-    `${site.name} <onboarding@resend.dev>`
+    !host ||
+    host === "gmail.com" ||
+    host === "googlemail.com" ||
+    host === "yahoo.com" ||
+    host === "yahoo.co.uk" ||
+    host === "outlook.com" ||
+    host === "hotmail.com" ||
+    host === "live.com" ||
+    host === "icloud.com" ||
+    host === "me.com" ||
+    host === "aol.com" ||
+    host === "proton.me" ||
+    host === "protonmail.com"
   );
+}
+
+function parseFrom(raw: string): { name?: string; email: string } | null {
+  const angled = raw.match(/^(.*)<([^>]+)>$/);
+  if (angled) {
+    return {
+      name: angled[1]!.trim().replace(/^"|"$/g, "") || undefined,
+      email: angled[2]!.trim(),
+    };
+  }
+  if (raw.includes("@")) return { email: raw.trim() };
+  return null;
+}
+
+function formatFrom(name: string | undefined, email: string) {
+  return name ? `${name} <${email}>` : email;
+}
+
+/**
+ * Prefer RESEND_FROM when it uses a custom/verified domain.
+ * Otherwise fall back to Resend's test sender (reply-to stays the studio email).
+ */
+function fromAddress() {
+  const configured = process.env.RESEND_FROM?.trim();
+  const fallback = formatFrom(site.name, "onboarding@resend.dev");
+  if (!configured) return fallback;
+
+  const parsed = parseFrom(configured);
+  if (!parsed || isUnusableFromDomain(parsed.email)) {
+    console.warn(
+      "[mail] RESEND_FROM is not a verified custom domain — using onboarding@resend.dev. Set RESEND_FROM to an address on your Resend-verified domain.",
+    );
+    return fallback;
+  }
+  return formatFrom(parsed.name ?? site.name, parsed.email);
 }
 
 function adminRecipients(): string[] {
@@ -59,9 +107,10 @@ async function sendMail(input: {
     return { ok: false as const, skipped: true as const };
   }
 
-  const { error } = await client.emails.send(
+  const from = fromAddress();
+  const { data, error } = await client.emails.send(
     {
-      from: fromAddress(),
+      from,
       to,
       replyTo: site.email,
       subject: input.subject,
@@ -74,10 +123,22 @@ async function sendMail(input: {
   );
 
   if (error) {
-    console.error("[mail] send failed:", error);
+    console.error("[mail] send failed:", {
+      subject: input.subject,
+      to,
+      from,
+      error,
+    });
     return { ok: false as const, error };
   }
-  return { ok: true as const };
+
+  console.info("[mail] sent:", {
+    subject: input.subject,
+    to,
+    from,
+    id: data?.id,
+  });
+  return { ok: true as const, id: data?.id };
 }
 
 function escapeHtml(value: string) {
@@ -124,6 +185,11 @@ function orderLines(order: StoredOrder) {
 }
 
 export async function sendOrderEmails(order: StoredOrder) {
+  if (!isMailConfigured()) {
+    console.warn("[mail] order emails skipped — RESEND_API_KEY not set");
+    return { customer: false, admin: false };
+  }
+
   const siteUrl = getSiteUrl();
   const total = formatNaira(order.amount / 100);
   const { items, delivery } = orderLines(order);
@@ -152,7 +218,7 @@ export async function sendOrderEmails(order: StoredOrder) {
     <p><a href="${escapeHtml(`${siteUrl}/admin/orders`)}" style="color:#111">Open admin orders</a></p>
   `;
 
-  await Promise.all([
+  const [customer, admin] = await Promise.all([
     sendMail({
       to: order.email,
       subject: `Order confirmed · ${order.reference}`,
@@ -168,9 +234,16 @@ export async function sendOrderEmails(order: StoredOrder) {
       idempotencyKey: `order-admin/${order.reference}`,
     }),
   ]);
+
+  return { customer: customer.ok, admin: admin.ok };
 }
 
 export async function sendBookingEmails(booking: BookingRequest) {
+  if (!isMailConfigured()) {
+    console.warn("[mail] booking emails skipped — RESEND_API_KEY not set");
+    return { customer: false, admin: false };
+  }
+
   const siteUrl = getSiteUrl();
   const deposit = formatNaira(booking.depositAmount / 100);
   const when = `${booking.preferredDate}${booking.preferredTime ? ` · ${booking.preferredTime}` : ""}`;
@@ -195,7 +268,7 @@ export async function sendBookingEmails(booking: BookingRequest) {
     <p><a href="${escapeHtml(`${siteUrl}/admin/bookings`)}" style="color:#111">Open admin bookings</a></p>
   `;
 
-  await Promise.all([
+  const [customer, admin] = await Promise.all([
     sendMail({
       to: booking.email,
       subject: `Booking deposit confirmed · ${booking.serviceName}`,
@@ -211,4 +284,6 @@ export async function sendBookingEmails(booking: BookingRequest) {
       idempotencyKey: `booking-admin/${booking.id}`,
     }),
   ]);
+
+  return { customer: customer.ok, admin: admin.ok };
 }
