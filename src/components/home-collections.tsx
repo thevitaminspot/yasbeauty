@@ -8,6 +8,20 @@ import { formatNaira } from "@/lib/format";
 import type { Product } from "@/lib/product-types";
 import { ui } from "@/lib/ui";
 
+function Chevron({ dir }: { dir: "left" | "right" }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d={dir === "left" ? "M14.5 6.5 9 12l5.5 5.5" : "M9.5 6.5 15 12l-5.5 5.5"}
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+      />
+    </svg>
+  );
+}
+
 export function HomeCollections({ products }: { products: Product[] }) {
   const scroller = useRef<HTMLDivElement>(null);
 
@@ -23,7 +37,7 @@ export function HomeCollections({ products }: { products: Product[] }) {
   return (
     <section className="border-b border-neutral-200 bg-white py-14 sm:py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8">
-        <Reveal className="flex flex-col gap-5 sm:gap-6 md:flex-row md:items-end md:justify-between">
+        <Reveal className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-10">
           <div className="max-w-2xl min-w-0">
             <p className={ui.eyebrow}>Shop</p>
             <h2 className={`${ui.sectionTitle} mt-3`}>
@@ -34,33 +48,38 @@ export function HomeCollections({ products }: { products: Product[] }) {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Link href="/shop" className={`${ui.btnGhost} w-fit`}>
-              View all →
-            </Link>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                aria-label="Previous products"
-                onClick={() => scrollBy(-1)}
-                className="icon-hit inline-flex border border-neutral-300 text-black transition hover:border-black"
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                aria-label="Next products"
-                onClick={() => scrollBy(1)}
-                className="icon-hit inline-flex border border-neutral-300 text-black transition hover:border-black"
-              >
-                →
-              </button>
-            </div>
-          </div>
+          <Link href="/shop" className={`${ui.btnGhost} w-fit shrink-0`}>
+            View all
+          </Link>
         </Reveal>
+
+        <div className="mt-8 flex items-center justify-end sm:mt-10">
+          <div
+            className="flex border border-neutral-300"
+            role="group"
+            aria-label="Browse products"
+          >
+            <button
+              type="button"
+              aria-label="Previous products"
+              onClick={() => scrollBy(-1)}
+              className="icon-hit text-black transition hover:bg-black hover:text-white"
+            >
+              <Chevron dir="left" />
+            </button>
+            <button
+              type="button"
+              aria-label="Next products"
+              onClick={() => scrollBy(1)}
+              className="icon-hit border-l border-neutral-300 text-black transition hover:bg-black hover:text-white"
+            >
+              <Chevron dir="right" />
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div className="mx-auto mt-10 max-w-7xl sm:mt-12">
+      <div className="mx-auto mt-5 max-w-7xl sm:mt-6">
         <div
           ref={scroller}
           className="overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"

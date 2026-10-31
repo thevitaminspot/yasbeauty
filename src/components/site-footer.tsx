@@ -119,7 +119,14 @@ export function SiteFooter() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-[11px] uppercase tracking-[0.18em] text-neutral-500 sm:flex-row sm:items-center sm:justify-between md:px-8">
           <p>© 2026 {site.name}</p>
-          <p>Abuja · Nigeria</p>
+          <a
+            href={site.developer.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition hover:text-neutral-300"
+          >
+            Built by {site.developer.name}
+          </a>
         </div>
       </div>
     </footer>

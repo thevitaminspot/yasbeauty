@@ -3,6 +3,7 @@
 import { Show, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { AccountIcon } from "@/components/account-icon";
+import { clerkAppearance } from "@/lib/clerk-appearance";
 
 function BagIcon() {
   return (
@@ -69,6 +70,16 @@ function AccountIconFallback({ inverse = false }: { inverse?: boolean }) {
   );
 }
 
+const userButtonAppearance = {
+  ...clerkAppearance,
+  elements: {
+    ...clerkAppearance.elements,
+    avatarBox: "size-[1.35rem] rounded-full ring-1 ring-white/25",
+    userButtonTrigger:
+      "rounded-full focus:shadow-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
+  },
+} as const;
+
 /** Clerk-standard account control: UserButton when signed in, sign-in link when out. */
 export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
   return (
@@ -80,12 +91,9 @@ export function AccountMenuClerk({ inverse = false }: { inverse?: boolean }) {
         <div className="nav-icon inline-flex">
           <UserButton
             fallback={<AccountIconFallback inverse={inverse} />}
-            appearance={{
-              elements: {
-                avatarBox: "size-[1.35rem] rounded-full ring-1 ring-white/25",
-                userButtonTrigger:
-                  "rounded-full focus:shadow-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
-              },
+            appearance={userButtonAppearance}
+            userProfileProps={{
+              appearance: clerkAppearance,
             }}
           >
             <UserButton.MenuItems>

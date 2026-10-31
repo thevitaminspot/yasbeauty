@@ -10,7 +10,14 @@ export const site = {
     label: "Abuja, Nigeria",
     full: "Abuja studio · Nigeria",
   },
-} as const;
+  developer: {
+    name: "Adesanoye",
+    url: (process.env.NEXT_PUBLIC_DEVELOPER_URL ?? "https://studio.adesanoye.online").replace(
+      /\/$/,
+      "",
+    ),
+  },
+};
 
 export function whatsappHref(message: string, phone = site.whatsapp) {
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
