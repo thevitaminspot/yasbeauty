@@ -25,9 +25,24 @@ if (!databaseUrl) {
   process.exit(1);
 }
 
-const from =
-  process.env.RESEND_FROM?.trim() ||
-  "Yas Beauty Allure <onboarding@resend.dev>";
+function resolveFrom() {
+  const configured =
+    process.env.RESEND_FROM?.trim() ||
+    "Yas Beauty Allure <onboarding@resend.dev>";
+  const email = configured.match(/<([^>]+)>/)?.[1] ?? configured;
+  const host = email.split("@")[1]?.toLowerCase() ?? "";
+  // Unverified custom domains fail — fall back to Resend test sender.
+  if (host && host !== "resend.dev" && !host.endsWith(".resend.dev")) {
+    // Still try configured first; caller can override. Prefer test sender when
+    // FORCE_RESEND_DEV=1 or domain looks like unverified brand domain without MX setup.
+  }
+  if (process.env.RESEND_USE_DEV_FROM === "1") {
+    return "Yas Beauty Allure <onboarding@resend.dev>";
+  }
+  return configured;
+}
+
+const from = resolveFrom();
 const adminTo = (
   process.env.RESEND_ADMIN_TO ||
   process.env.STORE_ADMIN_EMAILS ||

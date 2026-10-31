@@ -12,9 +12,14 @@ import {
 } from "@/lib/availability-store";
 import { uploadImage } from "@/lib/images";
 import {
+  getBookingById,
   updateBookingStatus,
   type BookingRequest,
 } from "@/lib/bookings-store";
+import {
+  sendBookingCancelledEmails,
+  sendBookingConfirmedEmails,
+} from "@/lib/mail";
 import type { Product, ProductCategory } from "@/lib/product-types";
 import {
   deleteProduct as removeProduct,
@@ -242,8 +247,23 @@ export async function setBookingStatus(
 ): Promise<ActionResult> {
   const denied = await requireAdmin();
   if (denied) return denied;
+
+  const previous = await getBookingById(id);
   const updated = await updateBookingStatus(id, status);
   if (!updated) return { ok: false, error: "Booking not found" };
+
+  if (previous && previous.status !== updated.status) {
+    try {
+      if (updated.status === "cancelled") {
+        await sendBookingCancelledEmails(updated);
+      } else if (updated.status === "confirmed") {
+        await sendBookingConfirmedEmails(updated);
+      }
+    } catch (err) {
+      console.error("[mail] booking status notify failed:", err);
+    }
+  }
+
   revalidatePath("/admin");
   revalidatePath("/admin/bookings");
   return { ok: true };

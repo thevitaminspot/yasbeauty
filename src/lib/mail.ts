@@ -87,6 +87,32 @@ function adminRecipients(): string[] {
   return [site.email];
 }
 
+async function sendOnce(
+  client: Resend,
+  input: {
+    from: string;
+    to: string[];
+    subject: string;
+    html: string;
+    text: string;
+    idempotencyKey?: string;
+  },
+) {
+  return client.emails.send(
+    {
+      from: input.from,
+      to: input.to,
+      replyTo: site.email,
+      subject: input.subject,
+      html: input.html,
+      text: input.text,
+    },
+    input.idempotencyKey
+      ? { idempotencyKey: input.idempotencyKey }
+      : undefined,
+  );
+}
+
 async function sendMail(input: {
   to: string | string[];
   subject: string;
@@ -107,20 +133,24 @@ async function sendMail(input: {
     return { ok: false as const, skipped: true as const };
   }
 
-  const from = fromAddress();
-  const { data, error } = await client.emails.send(
-    {
+  const preferredFrom = fromAddress();
+  const fallbackFrom = formatFrom(site.name, "onboarding@resend.dev");
+  let from = preferredFrom;
+  let { data, error } = await sendOnce(client, { ...input, from, to });
+
+  // Unverified custom domain → retry with Resend test sender.
+  if (error && from !== fallbackFrom) {
+    console.warn("[mail] preferred from failed, retrying with onboarding@resend.dev:", error);
+    from = fallbackFrom;
+    ({ data, error } = await sendOnce(client, {
+      ...input,
       from,
       to,
-      replyTo: site.email,
-      subject: input.subject,
-      html: input.html,
-      text: input.text,
-    },
-    input.idempotencyKey
-      ? { idempotencyKey: input.idempotencyKey }
-      : undefined,
-  );
+      idempotencyKey: input.idempotencyKey
+        ? `${input.idempotencyKey}/fallback`
+        : undefined,
+    }));
+  }
 
   if (error) {
     console.error("[mail] send failed:", {
@@ -282,6 +312,95 @@ export async function sendBookingEmails(booking: BookingRequest) {
       html: layout("Booking deposit paid", adminBody),
       text: `Booking ${booking.id} · ${booking.serviceName} · ${booking.email} · ${deposit}`,
       idempotencyKey: `booking-admin/${booking.id}`,
+    }),
+  ]);
+
+  return { customer: customer.ok, admin: admin.ok };
+}
+
+export async function sendBookingConfirmedEmails(booking: BookingRequest) {
+  if (!isMailConfigured()) {
+    console.warn("[mail] booking confirmed skipped — RESEND_API_KEY not set");
+    return { customer: false, admin: false };
+  }
+
+  const siteUrl = getSiteUrl();
+  const when = `${booking.preferredDate}${booking.preferredTime ? ` · ${booking.preferredTime}` : ""}`;
+
+  const customerBody = `
+    <p>Hi ${escapeHtml(booking.name)},</p>
+    <p>Your <strong>${escapeHtml(booking.serviceName)}</strong> appointment is confirmed.</p>
+    <p><strong>When:</strong> ${escapeHtml(when)}</p>
+    <p><a href="${escapeHtml(`${siteUrl}/account/bookings/${booking.id}`)}" style="color:#111">View booking</a></p>
+  `;
+
+  const adminBody = `
+    <p>Booking marked confirmed.</p>
+    <p><strong>${escapeHtml(booking.name)}</strong><br/>
+    ${escapeHtml(booking.email)} · ${escapeHtml(booking.phone)}</p>
+    <p><strong>Service:</strong> ${escapeHtml(booking.serviceName)}<br/>
+    <strong>When:</strong> ${escapeHtml(when)}</p>
+  `;
+
+  const [customer, admin] = await Promise.all([
+    sendMail({
+      to: booking.email,
+      subject: `Booking confirmed · ${booking.serviceName}`,
+      html: layout("Booking confirmed", customerBody),
+      text: `Hi ${booking.name},\n\nYour ${booking.serviceName} appointment is confirmed for ${when}.`,
+      idempotencyKey: `booking-confirmed/${booking.id}`,
+    }),
+    sendMail({
+      to: adminRecipients(),
+      subject: `Confirmed · ${booking.serviceName} · ${booking.name}`,
+      html: layout("Booking confirmed", adminBody),
+      text: `Confirmed ${booking.id} · ${booking.serviceName} · ${booking.email}`,
+      idempotencyKey: `booking-confirmed-admin/${booking.id}`,
+    }),
+  ]);
+
+  return { customer: customer.ok, admin: admin.ok };
+}
+
+export async function sendBookingCancelledEmails(booking: BookingRequest) {
+  if (!isMailConfigured()) {
+    console.warn("[mail] booking cancelled skipped — RESEND_API_KEY not set");
+    return { customer: false, admin: false };
+  }
+
+  const siteUrl = getSiteUrl();
+  const when = `${booking.preferredDate}${booking.preferredTime ? ` · ${booking.preferredTime}` : ""}`;
+
+  const customerBody = `
+    <p>Hi ${escapeHtml(booking.name)},</p>
+    <p>Your <strong>${escapeHtml(booking.serviceName)}</strong> booking has been cancelled.</p>
+    <p><strong>Was scheduled:</strong> ${escapeHtml(when)}</p>
+    <p>If this was unexpected, reply to this email or WhatsApp us on ${escapeHtml(site.phone)}.</p>
+    <p><a href="${escapeHtml(`${siteUrl}/book`)}" style="color:#111">Book again</a></p>
+  `;
+
+  const adminBody = `
+    <p>Booking cancelled.</p>
+    <p><strong>${escapeHtml(booking.name)}</strong><br/>
+    ${escapeHtml(booking.email)} · ${escapeHtml(booking.phone)}</p>
+    <p><strong>Service:</strong> ${escapeHtml(booking.serviceName)}<br/>
+    <strong>Was scheduled:</strong> ${escapeHtml(when)}</p>
+  `;
+
+  const [customer, admin] = await Promise.all([
+    sendMail({
+      to: booking.email,
+      subject: `Booking cancelled · ${booking.serviceName}`,
+      html: layout("Booking cancelled", customerBody),
+      text: `Hi ${booking.name},\n\nYour ${booking.serviceName} booking (${when}) has been cancelled.`,
+      idempotencyKey: `booking-cancelled/${booking.id}`,
+    }),
+    sendMail({
+      to: adminRecipients(),
+      subject: `Cancelled · ${booking.serviceName} · ${booking.name}`,
+      html: layout("Booking cancelled", adminBody),
+      text: `Cancelled ${booking.id} · ${booking.serviceName} · ${booking.email}`,
+      idempotencyKey: `booking-cancelled-admin/${booking.id}`,
     }),
   ]);
 
