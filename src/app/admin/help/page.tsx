@@ -16,7 +16,7 @@ const sections = [
     href: "/admin",
     linkLabel: "Open Today",
     steps: [
-      "Sign in with yasbeautyallure6@gmail.com — that account is the store admin.",
+      "Sign in with yasbeautyallure6@gmail.com or thevitaminspotltd@gmail.com — both accounts are store admins.",
       "Use the left menu for daily work (Orders, Bookings, Products) and Settings for studio setup.",
       "Today shows pending bookings, recent orders, and stock at a glance.",
     ],
@@ -99,7 +99,7 @@ const sections = [
       "New paid order → customer confirmation + admin alert.",
       "Order packed / sent / delivered → customer + admin update.",
       "Booking pending confirmation, confirmed, completed, or cancelled → customer + admin.",
-      "Admin alerts go to yasbeautyallure6@gmail.com. Check spam if something is missing.",
+      "Admin alerts go to both yasbeautyallure6@gmail.com and thevitaminspotltd@gmail.com. Check spam if something is missing.",
     ],
   },
 ] as const;
@@ -127,12 +127,15 @@ export default function AdminHelpPage() {
 
       <AdminPanel className="mb-8 px-5 py-4">
         <p className="text-sm leading-6 text-neutral-600">
-          Signed-in admin:{" "}
+          Store admins:{" "}
           <strong className="font-medium text-black">
             yasbeautyallure6@gmail.com
+          </strong>{" "}
+          and{" "}
+          <strong className="font-medium text-black">
+            thevitaminspotltd@gmail.com
           </strong>
-          . Only this email (and any others listed in store admin settings) can
-          open <code className="text-xs">/admin</code>.
+          . Only these emails can open <code className="text-xs">/admin</code>.
         </p>
       </AdminPanel>
 
