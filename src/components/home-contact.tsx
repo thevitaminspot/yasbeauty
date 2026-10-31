@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ContactIconRow } from "@/components/contact-icons";
 import { Reveal } from "@/components/ui/reveal";
 import { brandImages } from "@/lib/product-images";
 import { site, whatsappHref } from "@/lib/site";
@@ -52,44 +53,19 @@ export function HomeContact() {
             </Link>
           </div>
 
-          <dl className="mt-12 space-y-5 border-t border-neutral-200 pt-8">
-            <div>
-              <dt className="text-[10px] uppercase tracking-[0.28em] text-neutral-400">
-                Studio
-              </dt>
-              <dd className="mt-1.5 font-serif text-xl italic text-black">
-                {site.address.full}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-[10px] uppercase tracking-[0.28em] text-neutral-400">
-                Instagram
-              </dt>
-              <dd className="mt-1.5">
-                <a
-                  href={site.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-serif text-xl italic text-black underline-offset-4 transition hover:underline"
-                >
-                  {site.instagramHandle}
-                </a>
-              </dd>
-            </div>
-            <div>
-              <dt className="text-[10px] uppercase tracking-[0.28em] text-neutral-400">
-                Email
-              </dt>
-              <dd className="mt-1.5">
-                <a
-                  href={`mailto:${site.email}`}
-                  className="font-serif text-xl italic text-black underline-offset-4 transition hover:underline"
-                >
-                  {site.email}
-                </a>
-              </dd>
-            </div>
-          </dl>
+          <div className="mt-12 border-t border-neutral-200 pt-8">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-neutral-400">
+              Studio
+            </p>
+            <p className="mt-1.5 font-serif text-xl italic text-black">
+              {site.address.full}
+            </p>
+            <ContactIconRow
+              tone="onLight"
+              includeCall
+              className="mt-7"
+            />
+          </div>
         </Reveal>
       </div>
     </section>

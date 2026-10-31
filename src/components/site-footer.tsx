@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ContactIconRow } from "@/components/contact-icons";
 import { FooterAccountLinks } from "@/components/footer-account-links";
 import { Logo } from "@/components/logo";
 import { Reveal } from "@/components/ui/reveal";
@@ -62,27 +63,10 @@ export function SiteFooter() {
             <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-neutral-500">
               Studio
             </p>
-            <ul className="mt-5 space-y-3 text-sm text-neutral-300">
-              <li>{site.address.full}</li>
-              <li>
-                <a
-                  href={`https://wa.me/${site.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition hover:text-white"
-                >
-                  WhatsApp {site.phone}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`mailto:${site.email}`}
-                  className="transition hover:text-white"
-                >
-                  {site.email}
-                </a>
-              </li>
-            </ul>
+            <p className="mt-5 text-sm leading-relaxed text-neutral-300">
+              {site.address.full}
+            </p>
+            <ContactIconRow tone="onDark" className="mt-6" />
           </div>
 
           <div>
@@ -104,14 +88,6 @@ export function SiteFooter() {
             <p className="mt-8 text-xs leading-relaxed text-neutral-500">
               Pigments are for professional use only.
             </p>
-            <a
-              href={site.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-block text-sm text-neutral-300 transition hover:text-white"
-            >
-              Instagram {site.instagramHandle}
-            </a>
           </div>
         </div>
       </div>
