@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createBookingRequest, listPreferredSlots } from "@/actions/booking";
+import { DateField } from "@/components/ui/date-field";
 import { Spinner } from "@/components/ui/spinner";
 import {
   bookingDepositNaira,
@@ -440,12 +441,12 @@ export function BookingFlow({
           <div className="min-w-0 space-y-6">
             <label className={`${labelCls} min-w-0`}>
               Date
-              <input
-                type="date"
+              <DateField
                 value={date}
                 min={todayIso()}
                 onChange={(e) => void loadSlots(e.target.value)}
-                className={`${field} block`}
+                className="mt-2"
+                inputClassName={field}
                 required
               />
             </label>

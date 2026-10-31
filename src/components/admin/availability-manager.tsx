@@ -13,6 +13,7 @@ import {
   adminLabel,
   adminPrimaryBtn,
 } from "@/components/admin/form-styles";
+import { DateField } from "@/components/ui/date-field";
 import { PaginatedTableWrap } from "@/components/admin/paginated-table-wrap";
 import { AdminEmptyState, AdminPanel, AdminSection } from "@/components/admin/ui";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
@@ -193,10 +194,10 @@ export function AvailabilityManager({
           >
             <label className={adminLabel}>
               Date
-              <input
-                type="date"
+              <DateField
                 required
-                className={adminField}
+                className="mt-1.5"
+                inputClassName={adminField}
                 value={blockForm.date}
                 onChange={(e) =>
                   setBlockForm((prev) => ({ ...prev, date: e.target.value }))
