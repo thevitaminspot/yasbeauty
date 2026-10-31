@@ -76,9 +76,10 @@ export function SiteHeader() {
 
           <AccountMenu inverse />
 
+          {/* Bag lives in the drawer below lg; keep icon in the bar from desktop up. */}
           <Link
             href="/cart"
-            className="nav-icon relative text-white transition hover:opacity-60"
+            className="nav-icon relative hidden text-white transition hover:opacity-60 lg:inline-flex"
             aria-label={
               bagCount > 0 ? `Bag, ${bagCount} items` : "Bag"
             }
@@ -93,13 +94,22 @@ export function SiteHeader() {
 
           <button
             type="button"
-            className="nav-menu-toggle text-white transition hover:opacity-60 lg:hidden"
+            className="nav-menu-toggle relative text-white transition hover:opacity-60 lg:hidden"
             aria-expanded={open}
             aria-controls={menuId}
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={
+              open
+                ? "Close menu"
+                : bagCount > 0
+                  ? `Open menu, bag has ${bagCount} items`
+                  : "Open menu"
+            }
             onClick={() => setOpen((v) => !v)}
           >
             {open ? <CloseIcon /> : <MenuIcon />}
+            {!open && bagCount > 0 ? (
+              <span className="nav-bag-badge">{bagCount > 99 ? "99+" : bagCount}</span>
+            ) : null}
           </button>
         </div>
       </div>
