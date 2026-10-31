@@ -1,8 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { AccountIcon } from "@/components/account-icon";
+import { AccountMenuClerk } from "@/components/account-menu-clerk";
 import { isAuthEnabled } from "@/lib/auth-config";
 
 function AccountIconControl({
@@ -27,18 +28,23 @@ function AccountIconControl({
   );
 }
 
-const AccountMenuClerk = dynamic(
-  () =>
-    import("@/components/account-menu-clerk").then((m) => m.AccountMenuClerk),
-  {
-    ssr: false,
-    // Regular outline icon — never a pulse box or Clerk avatar while hydrating.
-    loading: () => <AccountIconControl inverse />,
-  },
-);
-
+/**
+ * Always paint the outline icon on the server + first client paint, then swap
+ * to the Clerk-aware menu. Avoids dynamic(ssr:false) Suspense hydration clashes
+ * with neighboring header icons.
+ */
 export function AccountMenu({ inverse = false }: { inverse?: boolean }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   if (!isAuthEnabled()) {
+    return <AccountIconControl inverse={inverse} />;
+  }
+
+  if (!mounted) {
     return <AccountIconControl inverse={inverse} />;
   }
 
