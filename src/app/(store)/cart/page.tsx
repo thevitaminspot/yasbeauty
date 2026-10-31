@@ -50,59 +50,59 @@ export default function CartPage() {
           {lines.map(({ product, quantity }) => (
             <li
               key={product.id}
-              className="grid grid-cols-[5rem_minmax(0,1fr)] gap-x-3.5 gap-y-0 py-5 first:pt-0 sm:grid-cols-[6.5rem_minmax(0,1fr)] sm:gap-x-5 sm:py-6"
+              className="flex flex-col gap-4 py-5 first:pt-0 sm:py-6"
             >
-              <Link
-                href={`/products/${product.slug}`}
-                className="relative row-span-2 aspect-[4/5] self-stretch bg-neutral-100"
-              >
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  sizes="104px"
-                />
-              </Link>
-
-              <div className="min-w-0 self-start">
+              <div className="flex gap-3.5 sm:gap-5">
                 <Link
                   href={`/products/${product.slug}`}
-                  className="block font-serif text-lg italic leading-tight text-black hover:underline sm:text-xl"
+                  className="relative h-28 w-[5.5rem] shrink-0 bg-neutral-100 sm:h-32 sm:w-24"
                 >
-                  {product.name}
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                    sizes="96px"
+                  />
                 </Link>
-                <p className="mt-1 text-xs leading-none text-neutral-500">
-                  {product.volume}
-                </p>
-                <p className="mt-2 text-sm font-medium tabular-nums text-black">
-                  {formatNaira(product.price * quantity)}
-                  {quantity > 1 ? (
-                    <span className="ml-1.5 font-normal text-neutral-400">
-                      ({formatNaira(product.price)} each)
-                    </span>
-                  ) : null}
-                </p>
+
+                <div className="min-w-0 flex-1 pt-0.5">
+                  <Link
+                    href={`/products/${product.slug}`}
+                    className="block font-serif text-xl italic leading-snug text-black hover:underline"
+                  >
+                    {product.name}
+                  </Link>
+                  <p className="mt-1.5 text-xs text-neutral-500">
+                    {product.volume}
+                  </p>
+                  <p className="mt-2.5 text-sm font-medium tabular-nums text-black">
+                    {formatNaira(product.price * quantity)}
+                    {quantity > 1 ? (
+                      <span className="mt-0.5 block font-normal text-neutral-400 sm:mt-0 sm:ml-1.5 sm:inline">
+                        ({formatNaira(product.price)} each)
+                      </span>
+                    ) : null}
+                  </p>
+                </div>
               </div>
 
-              <div className="col-start-2 mt-3 self-end">
-                <QuantityStepper
-                  value={quantity}
-                  onChange={(next) => setQuantity(product.id, next)}
-                  label=""
-                  compact
-                  max={Math.max(1, product.stock ?? 1)}
-                  endSlot={
-                    <button
-                      type="button"
-                      onClick={() => removeItem(product.id)}
-                      className="flex h-full items-center px-3.5 text-[10px] font-medium uppercase tracking-[0.16em] text-neutral-600 transition hover:bg-neutral-50 hover:text-black sm:px-4"
-                    >
-                      Remove
-                    </button>
-                  }
-                />
-              </div>
+              <QuantityStepper
+                value={quantity}
+                onChange={(next) => setQuantity(product.id, next)}
+                label=""
+                compact
+                max={Math.max(1, product.stock ?? 1)}
+                endSlot={
+                  <button
+                    type="button"
+                    onClick={() => removeItem(product.id)}
+                    className="flex h-full items-center px-3.5 text-[10px] font-medium uppercase tracking-[0.16em] text-neutral-600 transition hover:bg-neutral-50 hover:text-black sm:px-4"
+                  >
+                    Remove
+                  </button>
+                }
+              />
             </li>
           ))}
         </ul>

@@ -74,10 +74,10 @@ export function SiteHeader() {
         <div className="nav-actions shrink-0">
           <SiteSearch tone="dark" className="hidden w-48 xl:block xl:w-56" />
 
-          {/* Bag, then account. Bag is drawer-only below lg. */}
+          {/* Bag, then account. Bag is drawer-only below lg (.nav-bag-link). */}
           <Link
             href="/cart"
-            className="nav-icon relative hidden text-white transition hover:opacity-60 lg:inline-flex"
+            className="nav-icon nav-bag-link relative text-white transition hover:opacity-60"
             aria-label={
               bagCount > 0 ? `Bag, ${bagCount} items` : "Bag"
             }

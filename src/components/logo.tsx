@@ -40,10 +40,10 @@ export function Logo({
         quality={100}
       />
       <span
-        className={`min-w-0 truncate font-serif tracking-tight transition group-hover:opacity-80 ${mark} ${
+        className={`min-w-0 truncate font-serif font-medium tracking-tight transition group-hover:opacity-80 ${mark} ${
           isLarge
             ? "text-3xl md:text-4xl"
-            : "text-lg leading-none sm:text-xl md:text-[1.55rem]"
+            : "text-[1.2rem] leading-none sm:text-xl md:text-[1.6rem]"
         }`}
       >
         {site.name}

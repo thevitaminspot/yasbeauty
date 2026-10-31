@@ -534,10 +534,19 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 }
 
-/* Hamburger + mobile drawer: hide from lg up */
+/* Bag icon: drawer-only below lg (.nav-icon display must not override this) */
+.nav-bag-link {
+  display: none !important;
+}
+
+/* Hamburger + mobile drawer: hide from lg up; show bag in the bar */
 @media (min-width: 1024px) {
   .nav-menu-toggle,
   .nav-mobile-drawer {
     display: none !important;
+  }
+
+  .nav-bag-link {
+    display: inline-flex !important;
   }
 }
