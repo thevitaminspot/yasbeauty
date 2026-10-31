@@ -74,12 +74,7 @@ export function SiteHeader() {
         <div className="nav-actions shrink-0">
           <SiteSearch tone="dark" className="hidden w-48 xl:block xl:w-56" />
 
-          {/*
-            Industry-standard e-comm order: account, then bag (bag outermost).
-            On mobile the bag stays in the drawer only — profile + menu in the bar.
-          */}
-          <AccountMenu inverse />
-
+          {/* Bag, then account. Bag is drawer-only below lg. */}
           <Link
             href="/cart"
             className="nav-icon relative hidden text-white transition hover:opacity-60 lg:inline-flex"
@@ -94,6 +89,8 @@ export function SiteHeader() {
               </span>
             ) : null}
           </Link>
+
+          <AccountMenu inverse />
 
           <button
             type="button"
