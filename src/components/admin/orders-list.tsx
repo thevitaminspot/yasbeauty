@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useMemo, useState, useTransition } from "react";
-import { setOrderFulfillment } from "@/actions/admin";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { OrderFulfillmentControls } from "@/components/admin/order-fulfillment-controls";
 import { PaginatedTableWrap } from "@/components/admin/paginated-table-wrap";
 import { AdminEmptyState, AdminPanel } from "@/components/admin/ui";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
@@ -34,11 +34,8 @@ const tabs: { value: "all" | FulfillmentStatus; label: string }[] = [
 ];
 
 export function OrdersList({ orders }: { orders: StoredOrder[] }) {
-  const router = useRouter();
-  const [pending, start] = useTransition();
   const [query, setQuery] = useState("");
   const [tab, setTab] = useState<"all" | FulfillmentStatus>("all");
-  const [error, setError] = useState("");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -52,18 +49,6 @@ export function OrdersList({ orders }: { orders: StoredOrder[] }) {
   }, [orders, query, tab]);
 
   const pagination = usePaginatedList(filtered, `${query}:${tab}`);
-
-  function advance(order: StoredOrder, next: FulfillmentStatus) {
-    setError("");
-    start(async () => {
-      const result = await setOrderFulfillment(order.reference, next);
-      if (!result.ok) {
-        setError(result.error);
-        return;
-      }
-      router.refresh();
-    });
-  }
 
   return (
     <div className="space-y-4">
@@ -92,12 +77,6 @@ export function OrdersList({ orders }: { orders: StoredOrder[] }) {
         className="w-full max-w-sm border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-black"
       />
 
-      {error ? (
-        <p className="text-sm text-red-600" role="alert">
-          {error}
-        </p>
-      ) : null}
-
       {filtered.length === 0 ? (
         <AdminPanel>
           <AdminEmptyState>
@@ -110,85 +89,62 @@ export function OrdersList({ orders }: { orders: StoredOrder[] }) {
         <PaginatedTableWrap pagination={pagination.tablePaginationProps("orders")}>
           <ul className="divide-y divide-neutral-100">
             {pagination.visible.map((order) => {
-              const idx = fulfillmentStatuses.findIndex(
-                (s) => s.value === order.fulfillmentStatus,
-              );
-              const next =
-                idx >= 0 && idx < fulfillmentStatuses.length - 1
-                  ? fulfillmentStatuses[idx + 1]
-                  : null;
-
+              const href = `/admin/orders/${encodeURIComponent(order.reference)}`;
               return (
                 <li key={order.reference} className="px-5 py-5">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <p className="font-mono text-xs">{order.reference}</p>
+                    <Link
+                      href={href}
+                      className="font-mono text-xs text-black underline-offset-2 hover:underline"
+                    >
+                      {order.reference}
+                    </Link>
                     <p className="text-lg font-medium">
                       {formatNaira(order.amount / 100)}
                     </p>
                   </div>
-                  <p className="mt-2 text-sm text-neutral-700">
-                    {order.customer.name || "Guest"} · {order.email}
-                    {order.customer.phone ? ` · ${order.customer.phone}` : ""}
-                  </p>
-                  {(order.customer.address || order.customer.city) && (
-                    <p className="mt-1 text-sm text-neutral-500">
-                      {[order.customer.address, order.customer.city]
-                        .filter(Boolean)
-                        .join(", ")}
+                  <Link href={href} className="mt-2 block group">
+                    <p className="text-sm text-neutral-700 group-hover:text-black">
+                      {order.customer.name || "Guest"} · {order.email}
+                      {order.customer.phone ? ` · ${order.customer.phone}` : ""}
                     </p>
-                  )}
-                  {order.delivery ? (
-                    <p className="mt-1 text-sm text-neutral-500">
-                      Delivery: {order.delivery.areaName} ·{" "}
-                      {formatNaira(order.delivery.fee)}
-                    </p>
-                  ) : null}
-                  {order.notes?.trim() ? (
-                    <p className="mt-1 text-sm text-neutral-600">
-                      Notes: {order.notes.trim()}
-                    </p>
-                  ) : null}
-                  <ul className="mt-3 space-y-1 text-sm text-neutral-600">
-                    {order.items.map((item) => (
-                      <li key={`${order.reference}-${item.id}`}>
-                        {item.quantity}× {item.name} ·{" "}
-                        {formatNaira(item.unitPrice)}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">
-                      {fulfillmentLabel(order.fulfillmentStatus)} ·{" "}
-                      {when(order.createdAt)}
-                    </p>
-                    {next ? (
-                      <button
-                        type="button"
-                        disabled={pending}
-                        onClick={() => advance(order, next.value)}
-                        className="border border-black bg-black px-3 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-white transition hover:bg-neutral-800 disabled:opacity-50"
-                      >
-                        Mark {next.label.toLowerCase()}
-                      </button>
+                    {(order.customer.address || order.customer.city) && (
+                      <p className="mt-1 text-sm text-neutral-500">
+                        {[order.customer.address, order.customer.city]
+                          .filter(Boolean)
+                          .join(", ")}
+                      </p>
+                    )}
+                    {order.delivery ? (
+                      <p className="mt-1 text-sm text-neutral-500">
+                        Delivery: {order.delivery.areaName} ·{" "}
+                        {formatNaira(order.delivery.fee)}
+                      </p>
                     ) : null}
-                    <select
-                      className="border border-neutral-300 bg-white px-2 py-2 text-xs outline-none focus:border-black"
-                      value={order.fulfillmentStatus}
-                      disabled={pending}
-                      onChange={(e) =>
-                        advance(
-                          order,
-                          e.target.value as FulfillmentStatus,
-                        )
-                      }
-                    >
-                      {fulfillmentStatuses.map((status) => (
-                        <option key={status.value} value={status.value}>
-                          {status.label}
-                        </option>
+                    {order.notes?.trim() ? (
+                      <p className="mt-1 text-sm text-neutral-600">
+                        Notes: {order.notes.trim()}
+                      </p>
+                    ) : null}
+                    <ul className="mt-3 space-y-1 text-sm text-neutral-600">
+                      {order.items.map((item) => (
+                        <li key={`${order.reference}-${item.id}`}>
+                          {item.quantity}× {item.name} ·{" "}
+                          {formatNaira(item.unitPrice)}
+                        </li>
                       ))}
-                    </select>
+                    </ul>
+                    <p className="mt-3 text-[11px] uppercase tracking-[0.14em] text-neutral-400">
+                      {fulfillmentLabel(order.fulfillmentStatus)} ·{" "}
+                      {when(order.createdAt)} · View details →
+                    </p>
+                  </Link>
+
+                  <div className="mt-4">
+                    <OrderFulfillmentControls
+                      reference={order.reference}
+                      status={order.fulfillmentStatus}
+                    />
                   </div>
                 </li>
               );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { setBookingStatus } from "@/actions/admin";
 import { adminPrimaryBtn } from "@/components/admin/form-styles";
 import { PaginatedTableWrap } from "@/components/admin/paginated-table-wrap";
@@ -150,15 +150,32 @@ const tabs: { id: BookingQueue; label: string }[] = [
   { id: "all", label: "All" },
 ];
 
-export function BookingsList({ rows }: { rows: BookingRequest[] }) {
+export function BookingsList({
+  rows,
+  focusId,
+}: {
+  rows: BookingRequest[];
+  focusId?: string;
+}) {
   const [query, setQuery] = useState("");
   const [queue, setQueue] = useState<BookingQueue>(() => {
+    const focused = focusId
+      ? rows.find((row) => row.id === focusId)
+      : undefined;
+    if (focused) return bookingQueue(focused.status);
     if (rows.some((row) => row.status === "pending")) return "requests";
     if (rows.some((row) => bookingQueue(row.status) === "upcoming")) {
       return "upcoming";
     }
     return "all";
   });
+
+  useEffect(() => {
+    if (!focusId) return;
+    const el = document.getElementById(`booking-${focusId}`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [focusId, queue]);
 
   const counts = useMemo(() => {
     const next = {
@@ -240,7 +257,15 @@ export function BookingsList({ rows }: { rows: BookingRequest[] }) {
                 row.preferredTime,
               );
               return (
-                <li key={row.id} className="px-5 py-4">
+                <li
+                  key={row.id}
+                  id={`booking-${row.id}`}
+                  className={`px-5 py-4 ${
+                    focusId === row.id
+                      ? "bg-amber-50/80 ring-1 ring-inset ring-amber-200"
+                      : ""
+                  }`}
+                >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="font-medium text-black">{row.serviceName}</p>

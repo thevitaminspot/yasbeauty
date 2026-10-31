@@ -115,20 +115,27 @@ export default async function AdminTodayPage() {
           <AdminPanel>
             <ul className="divide-y divide-neutral-100">
               {recentOrders.map((order) => (
-                <li key={order.reference} className="px-5 py-4 text-sm">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <p className="font-mono text-xs">{order.reference}</p>
-                    <p className="font-medium">
-                      {formatNaira(order.amount / 100)}
+                <li key={order.reference}>
+                  <Link
+                    href={`/admin/orders/${encodeURIComponent(order.reference)}`}
+                    className="block px-5 py-4 text-sm transition hover:bg-neutral-50"
+                  >
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <p className="font-mono text-xs text-black">
+                        {order.reference}
+                      </p>
+                      <p className="font-medium">
+                        {formatNaira(order.amount / 100)}
+                      </p>
+                    </div>
+                    <p className="mt-1 text-neutral-600">
+                      {order.email || order.customer.name} · {order.status} ·{" "}
+                      {order.channel}
                     </p>
-                  </div>
-                  <p className="mt-1 text-neutral-600">
-                    {order.email || order.customer.name} · {order.status} ·{" "}
-                    {order.channel}
-                  </p>
-                  <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-neutral-400">
-                    {when(order.createdAt)}
-                  </p>
+                    <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-neutral-400">
+                      {when(order.createdAt)} · Open →
+                    </p>
+                  </Link>
                 </li>
               ))}
               {recentOrders.length === 0 ? (
@@ -142,14 +149,19 @@ export default async function AdminTodayPage() {
           <AdminPanel>
             <ul className="divide-y divide-neutral-100">
               {upcoming.map((row) => (
-                <li key={row.id} className="px-5 py-4">
-                  <p className="font-medium text-black">{row.serviceName}</p>
-                  <p className="mt-1 text-sm text-neutral-600">
-                    {row.name} · {row.preferredDate} · {row.preferredTime}
-                  </p>
-                  <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-neutral-400">
-                    {row.status}
-                  </p>
+                <li key={row.id}>
+                  <Link
+                    href={`/admin/bookings?focus=${encodeURIComponent(row.id)}`}
+                    className="block px-5 py-4 transition hover:bg-neutral-50"
+                  >
+                    <p className="font-medium text-black">{row.serviceName}</p>
+                    <p className="mt-1 text-sm text-neutral-600">
+                      {row.name} · {row.preferredDate} · {row.preferredTime}
+                    </p>
+                    <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-neutral-400">
+                      {row.status} · Open →
+                    </p>
+                  </Link>
                 </li>
               ))}
               {upcoming.length === 0 ? (

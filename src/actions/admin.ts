@@ -304,7 +304,9 @@ export async function setOrderFulfillment(
 
   revalidatePath("/admin");
   revalidatePath("/admin/orders");
+  revalidatePath(`/admin/orders/${encodeURIComponent(reference)}`);
   revalidatePath("/account/orders");
+  revalidatePath(`/account/orders/${encodeURIComponent(reference)}`);
   return { ok: true };
 }
 

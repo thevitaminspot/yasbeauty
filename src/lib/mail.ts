@@ -335,7 +335,7 @@ export async function sendOrderEmails(order: StoredOrder) {
     <strong>Total:</strong> ${escapeHtml(total)}</p>
     <p style="white-space:pre-line">${escapeHtml(items)}${delivery ? `\n${escapeHtml(delivery)}` : ""}</p>
     ${order.notes ? `<p><strong>Notes:</strong> ${escapeHtml(order.notes)}</p>` : ""}
-    <p><a href="${escapeHtml(`${siteUrl}/admin/orders`)}" style="color:#111">Open admin orders</a></p>
+    <p><a href="${escapeHtml(`${siteUrl}/admin/orders/${encodeURIComponent(order.reference)}`)}" style="color:#111">Open order</a></p>
   `;
 
   const [customer, admin] = await Promise.all([
@@ -396,7 +396,7 @@ export async function sendOrderFulfillmentEmails(
     ${escapeHtml(order.email)} · ${escapeHtml(order.customer.phone || "—")}</p>
     <p><strong>Status:</strong> ${escapeHtml(label)}<br/>
     <strong>Reference:</strong> ${escapeHtml(order.reference)}</p>
-    <p><a href="${escapeHtml(`${siteUrl}/admin/orders`)}" style="color:#111">Open admin orders</a></p>
+    <p><a href="${escapeHtml(`${siteUrl}/admin/orders/${encodeURIComponent(order.reference)}`)}" style="color:#111">Open order</a></p>
   `;
 
   const [customer, admin] = await Promise.all([

@@ -473,5 +473,8 @@ export function currentAdminPage(pathname: string) {
   if (isActive(pathname, helpPage.href, true)) return helpPage;
   const exact = adminNavLinks.find((link) => link.href === pathname);
   if (exact) return exact;
-  return adminNavLinks.find((link) => pathname.startsWith(`${link.href}/`));
+  // Keep breadcrumb on parent for nested routes like /admin/orders/[reference]
+  return adminNavLinks.find(
+    (link) => link.href !== "/admin" && pathname.startsWith(`${link.href}/`),
+  );
 }

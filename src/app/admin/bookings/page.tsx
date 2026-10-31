@@ -5,8 +5,13 @@ import { readBookings } from "@/lib/bookings-store";
 export const metadata = { title: "Bookings" };
 export const instant = false;
 
-export default async function AdminBookingsPage() {
+type PageProps = {
+  searchParams: Promise<{ focus?: string }>;
+};
+
+export default async function AdminBookingsPage({ searchParams }: PageProps) {
   const rows = await readBookings();
+  const { focus } = await searchParams;
 
   return (
     <div>
@@ -15,7 +20,7 @@ export default async function AdminBookingsPage() {
         title="Bookings"
         description="Confirm new requests, mark sessions done, or cancel. Done and cancelled bookings stay in their tabs."
       />
-      <BookingsList rows={rows} />
+      <BookingsList rows={rows} focusId={focus?.trim() || undefined} />
     </div>
   );
 }
