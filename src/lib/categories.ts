@@ -29,7 +29,15 @@ export const categories: {
     name: "Aftercare",
     headline: "Post-Procedure Care",
     description:
-      "Clinical aftercare formulated to support healing, hydration, and color vibrancy.",
+      "Calming Gel Red-Bye-Bye, cleansing gel, Bright Serum, and Advanced Centella micro-huile.",
     image: brandImages.aftercare,
+  },
+  {
+    slug: "kits",
+    name: "Brow & Lash Kits",
+    headline: "Lamination, Tint & Tools",
+    description:
+      "Lamination, tint shades, wax, mapping paste, practice tools, and PMU macro lighting — what we stock beside the pigments.",
+    image: "/products/kits/lamination-kit.jpg",
   },
 ];

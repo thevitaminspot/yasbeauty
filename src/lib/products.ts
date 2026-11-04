@@ -7,7 +7,7 @@ export type { Product, ProductCategory } from "@/lib/product-types";
 
 export const getProducts = unstable_cache(
   () => readProducts(),
-  ["yasbeauty-product-catalog-v4"],
+  ["yasbeauty-product-catalog-v6"],
   { tags: ["catalog-products"] },
 );
 

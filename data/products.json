@@ -6,6 +6,7 @@
     "category": "lip-pigments",
     "price": 18500,
     "volume": "10ml",
+    "stock": 23,
     "tagline": "Soft romantic lip blush",
     "description": "A balanced warm rose that heals true on melanin-rich lips. Built for natural lip blush and full lip procedures where softness matters.",
     "image": "/products/lips/amore-v2.jpg",
@@ -23,8 +24,7 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ],
-    "stock": 24
+    ]
   },
   {
     "id": "lip-bloody-mary",
@@ -33,6 +33,7 @@
     "category": "lip-pigments",
     "price": 18500,
     "volume": "10ml",
+    "stock": 20,
     "tagline": "Bold statement red",
     "description": "A saturated true red for clients who want unmistakable color. Works beautifully layered for ombre and full pigment saturation.",
     "image": "/products/lips/bloody-mary-v2.jpg",
@@ -50,8 +51,7 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ],
-    "stock": 24
+    ]
   },
   {
     "id": "lip-sweet-lips",
@@ -60,6 +60,7 @@
     "category": "lip-pigments",
     "price": 18500,
     "volume": "10ml",
+    "stock": 24,
     "tagline": "Youthful coral flush",
     "description": "A lively coral-pink that reads fresh on camera and in daylight. A studio favorite for everyday lip blush.",
     "image": "/products/lips/sweet-lips-v2.jpg",
@@ -76,8 +77,7 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ],
-    "stock": 24
+    ]
   },
   {
     "id": "lip-lapel",
@@ -86,6 +86,7 @@
     "category": "lip-pigments",
     "price": 18500,
     "volume": "10ml",
+    "stock": 23,
     "tagline": "Sun-kissed warmth",
     "description": "Warm orange undertones for correcting cool lips and building custom blends. Excellent for dark lip neutralization workflows.",
     "image": "/products/lips/lapel-v2.jpg",
@@ -101,8 +102,7 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ],
-    "stock": 24
+    ]
   },
   {
     "id": "lip-salamander",
@@ -111,6 +111,7 @@
     "category": "lip-pigments",
     "price": 18500,
     "volume": "10ml",
+    "stock": 24,
     "tagline": "High-impact warmth",
     "description": "A vivid orange-red for artists who push saturation. Mix with Amoré or Sweet Lips for bespoke healed results.",
     "image": "/products/lips/salamander-v2.jpg",
@@ -126,8 +127,7 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ],
-    "stock": 24
+    ]
   },
   {
     "id": "brow-smoky-black",
@@ -136,6 +136,7 @@
     "category": "brow-pigments",
     "price": 19500,
     "volume": "10ml",
+    "stock": 24,
     "tagline": "Diffused depth for hair strokes",
     "description": "A matte charcoal that avoids harsh blue shift on heal. Perfect for nano hair strokes and soft powder fill.",
     "image": "/products/brows/smoky-black-v2.jpg",
@@ -153,8 +154,7 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ],
-    "stock": 24
+    ]
   },
   {
     "id": "brow-black-brown",
@@ -163,6 +163,7 @@
     "category": "brow-pigments",
     "price": 19500,
     "volume": "10ml",
+    "stock": 22,
     "tagline": "Studio-neutral brown",
     "description": "Cool ash brown with controlled depth. Heals evenly for clients who want definition without a heavy block brow.",
     "image": "/products/brows/black-brown-v2.jpg",
@@ -179,8 +180,7 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ],
-    "stock": 24
+    ]
   },
   {
     "id": "brow-melanin-brown",
@@ -189,6 +189,7 @@
     "category": "brow-pigments",
     "price": 19500,
     "volume": "10ml",
+    "stock": 23,
     "tagline": "Made for deeper skin tones",
     "description": "Warm brown pigment that stays true on melanin-rich skin. Developed by Yas Beauty Allure for nano brow specialists.",
     "image": "/products/brows/melanin-brown-v2.jpg",
@@ -205,8 +206,7 @@
       "Use within 12 months of opening.",
       "Store in a cool, dry place away from direct sunlight.",
       "Keep out of reach of children."
-    ],
-    "stock": 24
+    ]
   },
   {
     "id": "aftercare-bright-serum",
@@ -215,6 +215,7 @@
     "category": "aftercare",
     "price": 24000,
     "volume": "30ml",
+    "stock": 24,
     "tagline": "Post-treatment lip brightening",
     "description": "Lip-Shine-Shine brightening serum for post lip procedures. Enhances color vibrancy while keeping lips hydrated through healing.",
     "image": "/products/aftercare/bright-serum-v2.jpg",
@@ -229,7 +230,441 @@
       "External use only.",
       "Discontinue if irritation occurs.",
       "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "aftercare-calming-gel",
+    "slug": "calming-gel-red-bye-bye",
+    "name": "Calming Gel",
+    "category": "aftercare",
+    "price": 12500,
+    "volume": "30ml",
+    "stock": 24,
+    "tagline": "Post-brow redness relief",
+    "description": "30ml Calming Gel Red-Bye-Bye for eyebrows after treatment. Soothes and cools irritated skin with Centella Asiatica extract and Mentha Piperita oil — built for post-lamination, tint, and PMU redness.",
+    "image": "/products/aftercare/calming-gel-hand-v3.jpg",
+    "images": [
+      "/products/aftercare/calming-gel-hand-v3.jpg",
+      "/products/aftercare/calming-gel-pack-v3.jpg",
+      "/products/aftercare/calming-gel-hero-v3.jpg",
+      "/products/aftercare/calming-gel-alt-v3.jpg",
+      "/products/aftercare/calming-gel-results-v3.jpg"
     ],
-    "stock": 24
+    "featured": true,
+    "bestseller": true,
+    "shade": "Red-Bye-Bye",
+    "ingredients": "Aqua, Centella Asiatica Extract, Mentha Piperita Oil, soothing botanicals.",
+    "usage": "Apply a thin layer to the brow area after treatment once skin is intact. Reapply as needed for cooling relief.",
+    "cautions": [
+      "External use only.",
+      "Avoid open wounds.",
+      "Discontinue if irritation occurs.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "aftercare-advanced-serum",
+    "slug": "la-micro-huile-advanced-serum",
+    "name": "Advanced Serum",
+    "category": "aftercare",
+    "price": 32000,
+    "volume": "5ml",
+    "stock": 24,
+    "tagline": "Micro-pearl Centella recovery oil",
+    "description": "YD La Micro Huile De Advanced Serum (5ml) — concentrated Centella micro-huile with suspended pearls for post-PMU recovery and barrier support. Salon retail size.",
+    "image": "/products/aftercare/advanced-serum.jpg",
+    "images": [
+      "/products/aftercare/advanced-serum.jpg"
+    ],
+    "featured": true,
+    "bestseller": true,
+    "shade": "La Micro Huile · Centella",
+    "ingredients": "Centella Asiatica actives, micro-pearl oil complex, skin-barrier lipids.",
+    "usage": "Press 1–2 drops onto clean skin after the approved healing window. Massage gently until absorbed.",
+    "cautions": [
+      "External use only.",
+      "Patch test before first use.",
+      "Discontinue if irritation occurs.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "aftercare-cleansing-gel",
+    "slug": "professional-pmu-cleansing-gel",
+    "name": "PMU Cleansing Gel",
+    "category": "aftercare",
+    "price": 12500,
+    "volume": "30ml",
+    "stock": 24,
+    "tagline": "Clean skin · cleaner work area",
+    "description": "Professional PMU cleansing gel (30ml) for lip blush, powder brows, microblading, eyeliner, SMP, scar camouflage, color correction, and training. Gentle touch for prep and mid-procedure wipe-downs.",
+    "image": "/products/aftercare/cleansing-gel.jpg",
+    "images": [
+      "/products/aftercare/cleansing-gel.jpg"
+    ],
+    "featured": true,
+    "shade": "Gentle cleanse",
+    "ingredients": "Gentle surfactant blend for professional PMU skin prep.",
+    "usage": "Apply to cotton pad or gloved fingertips; cleanse treatment area before and during procedures as needed.",
+    "cautions": [
+      "External use only.",
+      "Avoid eye contact.",
+      "Discontinue if irritation occurs.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "kit-lamination",
+    "slug": "deluxe-brow-lash-lamination-kit",
+    "name": "Deluxe Lamination Kit",
+    "category": "kits",
+    "price": 85000,
+    "volume": "Full kit",
+    "stock": 24,
+    "tagline": "Complete brow & lash lamination system",
+    "description": "Professional deluxe brow and lash lamination kit — lifting lotion, fixing lotion, adhesive, cleanser, keratin booster, and tools. Salon-ready for training and chair work.",
+    "image": "/products/kits/lamination-kit.jpg",
+    "images": [
+      "/products/kits/lamination-kit.jpg",
+      "/products/kits/lamination-kit-flat.jpg",
+      "/products/kits/lamination-contents.jpg",
+      "/products/kits/lamination-hero-alt.jpg",
+      "/products/kits/lamination-kit-alt.jpg"
+    ],
+    "featured": true,
+    "bestseller": true,
+    "shade": "Brow & lash",
+    "ingredients": "Lifting Lotion 1, Fixing Lotion 2, Adhesive, Oil-free Cleanser, Keratin Booster, Y-brushes, flocked wands, silicone shields, spoolies, lash pads, micro brushes.",
+    "usage": "For trained professionals. Follow the step sequence: cleanse → adhesive → lift → fix → cleanse → keratin boost. Times vary by hair type.",
+    "cautions": [
+      "For professional use only.",
+      "Patch test before full application.",
+      "Follow timing guidelines carefully.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "kit-brow-tint",
+    "slug": "rebrows-brow-tint-kit",
+    "name": "Brow Tint Kit",
+    "category": "kits",
+    "price": 45000,
+    "volume": "4 × 5ml",
+    "stock": 24,
+    "tagline": "No-mix professional brow tint",
+    "description": "ReBrows professional brow tint kit with four full-coverage shades (Light Brown, Brown, Dark Brown, Black), dual-ended brush, and mixing palette. Vacuum-fresh, no-mix formula — lasts 4–6 weeks.",
+    "image": "/products/kits/brow-tint-kit.jpg",
+    "images": [
+      "/products/kits/brow-tint-kit.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/brow-tint-anatomy.jpg",
+      "/products/kits/tint-compare.jpg",
+      "/products/kits/brow-tint-howto.jpg"
+    ],
+    "featured": true,
+    "bestseller": true,
+    "shade": "4 shades",
+    "ingredients": "Cream tint system (PPD-free, ammonia-free). Four shades + dual liner/spoolie tool + palette.",
+    "usage": "Clean brows, outline, apply tint from tail toward center, layer if needed, process 10–15 minutes, cleanse, optional set with clear gel.",
+    "cautions": [
+      "For professional use only.",
+      "Allergy patch test recommended.",
+      "Avoid eye contact.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "kit-tint-01",
+    "slug": "rebrows-brow-tint-01-light-brown",
+    "name": "Brow Tint 01",
+    "category": "kits",
+    "price": 12000,
+    "volume": "5ml",
+    "stock": 24,
+    "tagline": "No-mix vacuum tint · 5ml",
+    "description": "ReBrows Brow Tint shade 01 Light Brown (5ml). Airless pump, no-mix cream tint for soft blonde-to-light brown brows. Lasts 4–6 weeks.",
+    "image": "/products/kits/tint-01-light-brown.jpg",
+    "images": [
+      "/products/kits/tint-01-light-brown.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/tint-compare.jpg"
+    ],
+    "shade": "Light Brown",
+    "ingredients": "PPD-free, ammonia-free cream tint. Vacuum-fresh airless pump.",
+    "usage": "Clean brows, outline, apply from tail toward center, process 10–15 minutes, cleanse.",
+    "cautions": [
+      "For professional use only.",
+      "Allergy patch test recommended.",
+      "Avoid eye contact."
+    ]
+  },
+  {
+    "id": "kit-tint-02",
+    "slug": "rebrows-brow-tint-02-brown",
+    "name": "Brow Tint 02",
+    "category": "kits",
+    "price": 12000,
+    "volume": "5ml",
+    "stock": 24,
+    "tagline": "No-mix vacuum tint · 5ml",
+    "description": "ReBrows Brow Tint shade 02 Brown (5ml). Balanced medium brown for everyday brow color. Airless, no-mix formula.",
+    "image": "/products/kits/tint-02-brown.jpg",
+    "images": [
+      "/products/kits/tint-02-brown.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/tint-compare.jpg"
+    ],
+    "shade": "Brown",
+    "ingredients": "PPD-free, ammonia-free cream tint. Vacuum-fresh airless pump.",
+    "usage": "Clean brows, outline, apply from tail toward center, process 10–15 minutes, cleanse.",
+    "cautions": [
+      "For professional use only.",
+      "Allergy patch test recommended.",
+      "Avoid eye contact."
+    ]
+  },
+  {
+    "id": "kit-tint-03",
+    "slug": "rebrows-brow-tint-03-dark-brown",
+    "name": "Brow Tint 03",
+    "category": "kits",
+    "price": 12000,
+    "volume": "5ml",
+    "stock": 24,
+    "tagline": "No-mix vacuum tint · 5ml",
+    "description": "ReBrows Brow Tint shade 03 Dark Brown (5ml). Deep cool-leaning brown for richer definition. Airless, no-mix formula.",
+    "image": "/products/kits/tint-03-dark-brown.jpg",
+    "images": [
+      "/products/kits/tint-03-dark-brown.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/tint-compare.jpg"
+    ],
+    "shade": "Dark Brown",
+    "ingredients": "PPD-free, ammonia-free cream tint. Vacuum-fresh airless pump.",
+    "usage": "Clean brows, outline, apply from tail toward center, process 10–15 minutes, cleanse.",
+    "cautions": [
+      "For professional use only.",
+      "Allergy patch test recommended.",
+      "Avoid eye contact."
+    ]
+  },
+  {
+    "id": "kit-tint-04",
+    "slug": "rebrows-brow-tint-04-black",
+    "name": "Brow Tint 04",
+    "category": "kits",
+    "price": 12000,
+    "volume": "5ml",
+    "stock": 24,
+    "tagline": "No-mix vacuum tint · 5ml",
+    "description": "ReBrows Brow Tint shade 04 Black (5ml). Full-coverage black for bold, graphic brows. Airless, no-mix formula.",
+    "image": "/products/kits/tint-04-black.jpg",
+    "images": [
+      "/products/kits/tint-04-black.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/tint-compare.jpg"
+    ],
+    "shade": "Black",
+    "ingredients": "PPD-free, ammonia-free cream tint. Vacuum-fresh airless pump.",
+    "usage": "Clean brows, outline, apply from tail toward center, process 10–15 minutes, cleanse.",
+    "cautions": [
+      "For professional use only.",
+      "Allergy patch test recommended.",
+      "Avoid eye contact."
+    ]
+  },
+  {
+    "id": "kit-eyebrow-wax",
+    "slug": "rebrows-eyebrow-wax-pro",
+    "name": "Eyebrow Wax PRO",
+    "category": "kits",
+    "price": 18500,
+    "volume": "30ml",
+    "stock": 24,
+    "tagline": "Feathered brow set & hold",
+    "description": "ReBrows Eyebrow Wax PRO (30ml) — clear gel wax for sculpted, laminated-look brows. Brush up, set, and finish with lasting hold.",
+    "image": "/products/kits/eyebrow-wax.jpg",
+    "images": [
+      "/products/kits/eyebrow-wax.jpg"
+    ],
+    "featured": true,
+    "shade": "Clear hold",
+    "ingredients": "Clear styling wax gel for brows. Professional salon formula.",
+    "usage": "Warm a small amount on a spoolie, brush brows into place, and set. Use alone or after tint/lamination.",
+    "cautions": [
+      "External use only.",
+      "Discontinue if irritation occurs.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "kit-brow-brush",
+    "slug": "dual-precision-brow-brush",
+    "name": "Dual Brow Brush",
+    "category": "kits",
+    "price": 8500,
+    "volume": "1 tool",
+    "stock": 24,
+    "tagline": "Angled liner meets spoolie",
+    "description": "Professional dual-ended brow brush — ultra-thin angled liner tip for precise tint and mapping, spoolie for blending and grooming.",
+    "image": "/products/kits/brow-brush.jpg",
+    "images": [
+      "/products/kits/brow-brush.jpg",
+      "/products/kits/brow-brush-hands.jpg"
+    ],
+    "shade": "Liner + spoolie",
+    "ingredients": "Synthetic bristles, stainless ferrules, matte handle.",
+    "usage": "Use spoolie to groom; angled tip for tint, powder, or outlining.",
+    "cautions": [
+      "Clean after each client.",
+      "Replace when bristles fray."
+    ]
+  },
+  {
+    "id": "kit-brow-brush-set",
+    "slug": "essential-brow-brush-set",
+    "name": "Brow Brush Set",
+    "category": "kits",
+    "price": 15000,
+    "volume": "3 tools",
+    "stock": 24,
+    "tagline": "Angled · spoolie · flat definer",
+    "description": "Three-piece professional brow brush set — angled pomade brush, spoolie, and flat definer for carving and finishing.",
+    "image": "/products/kits/brow-brush-set.jpg",
+    "images": [
+      "/products/kits/brow-brush-set.jpg"
+    ],
+    "featured": true,
+    "shade": "3-piece",
+    "ingredients": "Synthetic bristles, stainless ferrules, matte black handles.",
+    "usage": "Use angled for fill, spoolie to blend, flat definer to carve edges with concealer.",
+    "cautions": [
+      "Clean after each client.",
+      "Replace when bristles fray."
+    ]
+  },
+  {
+    "id": "kit-brow-paste",
+    "slug": "microblading-brow-paste",
+    "name": "Brow Paste",
+    "category": "kits",
+    "price": 16500,
+    "volume": "2 pots",
+    "stock": 24,
+    "tagline": "Mapping paste for microblading",
+    "description": "YD microblading brow paste pots — white and peach mapping paste for outlining and transferring brow shapes before pigment.",
+    "image": "/products/kits/brow-paste.jpg",
+    "images": [
+      "/products/kits/brow-paste.jpg",
+      "/products/kits/brow-paste-alt.jpg"
+    ],
+    "featured": true,
+    "shade": "White + peach",
+    "ingredients": "Cosmetic mapping paste (white / peach).",
+    "usage": "Warm a small amount, map brow shape with a stick or brush, refine before pigment.",
+    "cautions": [
+      "For professional use only.",
+      "External use only.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "kit-skin-gel",
+    "slug": "skin-gel-liquid-latex-practice",
+    "name": "Skin Gel",
+    "category": "kits",
+    "price": 9500,
+    "volume": "15ml",
+    "stock": 24,
+    "tagline": "Practice film for real-skin drills",
+    "description": "YDPMU Skin Gel liquid latex practice gel (15ml) — apply wet, dry to a skin-like film for needle-depth drills without marking real skin.",
+    "image": "/products/kits/skin-gel.jpg",
+    "images": [
+      "/products/kits/skin-gel.jpg",
+      "/products/kits/skin-gel-pack.jpg"
+    ],
+    "featured": true,
+    "shade": "Liquid latex practice",
+    "ingredients": "Liquid latex practice gel for training.",
+    "usage": "Apply a thin layer to the practice area, wait ~15 minutes to dry into a film, then practice strokes. Peel when finished.",
+    "cautions": [
+      "Training product only — not for permanent pigment procedures.",
+      "Do not use on broken skin.",
+      "Keep out of reach of children."
+    ]
+  },
+  {
+    "id": "kit-practice-pencil",
+    "slug": "brow-stroke-practice-pencil",
+    "name": "Practice Pencil 0.3mm",
+    "category": "kits",
+    "price": 6500,
+    "volume": "Pencil + 12 leads",
+    "stock": 24,
+    "tagline": "Hair-stroke mapping practice",
+    "description": "0.3mm mechanical pencil with lead refills for brow stroke practice — train nano hair patterns before pigment hits skin.",
+    "image": "/products/kits/practice-pencil.jpg",
+    "images": [
+      "/products/kits/practice-pencil.jpg",
+      "/products/kits/practice-pencil-set.jpg",
+      "/products/kits/practice-pencil-pack.jpg",
+      "/products/kits/practice-pencil-use.jpg"
+    ],
+    "shade": "HB lead",
+    "ingredients": "0.3mm HB graphite leads, metal-barrel practice pencil.",
+    "usage": "Practice curved hair strokes on paper or latex pads. Ideal for training and mapping drills.",
+    "cautions": [
+      "Training tool only — not for skin pigment procedures."
+    ]
+  },
+  {
+    "id": "kit-lead-refills",
+    "slug": "practice-pencil-lead-refills",
+    "name": "Lead Refills 0.3mm",
+    "category": "kits",
+    "price": 3500,
+    "volume": "12 leads",
+    "stock": 24,
+    "tagline": "60mm leads for practice pencil",
+    "description": "0.3mm HB lead refills (60mm, 12 pcs) for the brow stroke practice pencil — keep training sessions stocked.",
+    "image": "/products/kits/lead-refills.jpg",
+    "images": [
+      "/products/kits/lead-refills.jpg"
+    ],
+    "shade": "HB · 12 pcs",
+    "ingredients": "0.3mm HB graphite, 60mm length.",
+    "usage": "Load into any 0.3mm mechanical practice pencil.",
+    "cautions": [
+      "Training accessory only."
+    ]
+  },
+  {
+    "id": "kit-macro-ring-light",
+    "slug": "pmu-macro-ring-light",
+    "name": "PMU Macro Ring Light",
+    "category": "kits",
+    "price": 55000,
+    "volume": "Full kit",
+    "stock": 24,
+    "tagline": "Phone-mount macro light for PMU docs",
+    "description": "Clip-on 100mm macro lens with LED ring light, tripod screw, travel case, and phone mount — capture true healed results and chair-side detail for lips, brows, and lashes.",
+    "image": "/products/kits/macro-ring-light.jpg",
+    "images": [
+      "/products/kits/macro-ring-light.jpg",
+      "/products/kits/macro-ring-light-front.jpg",
+      "/products/kits/macro-ring-light-parts.jpg",
+      "/products/kits/macro-ring-light-case.jpg",
+      "/products/kits/macro-ring-light-use.jpg",
+      "/products/kits/macro-ring-light-tripod.jpg",
+      "/products/kits/macro-ring-light-modes.jpg"
+    ],
+    "featured": true,
+    "shade": "100mm macro + LED",
+    "ingredients": "100mm macro lens, LED ring, phone clamp, 1/4\" tripod mount, hard case.",
+    "usage": "Clip to phone camera, align lens, adjust LED intensity, mount to tripod if needed. Ideal for before/after documentation.",
+    "cautions": [
+      "Do not look directly into high-intensity LED at close range.",
+      "Keep dry; wipe lens with microfiber only."
+    ]
   }
 ]

@@ -1,5 +1,5 @@
 import "server-only";
-import { asc, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { readFile, writeFile } from "fs/promises";
 import { catalogBase } from "@/lib/catalog-base";
 import { getDb, isDatabaseConfigured } from "@/db";
@@ -8,6 +8,20 @@ import { productsFilePath } from "@/lib/data-paths";
 import type { Product } from "@/lib/product-types";
 
 const DEFAULT_STOCK = 24;
+
+const catalogOrder = new Map(
+  catalogBase.map((item, index) => [item.id, index]),
+);
+
+/** Shop / catalog order: lips → brows → aftercare → kits (catalogBase sequence). */
+function sortByCatalogOrder(products: Product[]): Product[] {
+  return [...products].sort((a, b) => {
+    const ai = catalogOrder.get(a.id) ?? Number.MAX_SAFE_INTEGER;
+    const bi = catalogOrder.get(b.id) ?? Number.MAX_SAFE_INTEGER;
+    if (ai !== bi) return ai - bi;
+    return a.name.localeCompare(b.name, "en");
+  });
+}
 
 function seedProducts(): Product[] {
   return catalogBase.map((item) => ({
@@ -92,14 +106,55 @@ function productToRow(product: Product) {
 }
 async function ensureProductsSeeded(): Promise<Product[]> {
   const db = getDb();
-  const existing = await db
-    .select()
-    .from(productsTable)
-    .orderBy(asc(productsTable.name));
-  if (existing.length > 0) {
-    return existing.map(rowToProduct);
-  }
+  const existing = await db.select().from(productsTable);
   const seeded = seedProducts();
+  const seedById = new Map(seeded.map((product) => [product.id, product]));
+
+  if (existing.length > 0) {
+    const have = new Set(existing.map((row) => row.id));
+    const missing = seeded.filter((product) => !have.has(product.id));
+    if (missing.length > 0) {
+      await db.insert(productsTable).values(missing.map(productToRow));
+    }
+
+    // Refresh catalog imagery / copy for seed-owned SKUs without clobbering stock/price.
+    for (const row of existing) {
+      const seed = seedById.get(row.id);
+      if (!seed) continue;
+      const nextImages = seed.images.length ? seed.images : [seed.image];
+      const imagesChanged =
+        row.image !== seed.image ||
+        JSON.stringify(row.images ?? []) !== JSON.stringify(nextImages) ||
+        row.tagline !== seed.tagline ||
+        row.description !== seed.description ||
+        row.volume !== seed.volume ||
+        row.shade !== (seed.shade ?? null) ||
+        Boolean(row.featured) !== Boolean(seed.featured) ||
+        Boolean(row.bestseller) !== Boolean(seed.bestseller);
+      if (!imagesChanged) continue;
+      await db
+        .update(productsTable)
+        .set({
+          image: seed.image,
+          images: nextImages,
+          tagline: seed.tagline,
+          description: seed.description,
+          volume: seed.volume,
+          shade: seed.shade ?? null,
+          featured: Boolean(seed.featured),
+          bestseller: Boolean(seed.bestseller),
+          ingredients: seed.ingredients,
+          usage: seed.usage,
+          cautions: seed.cautions,
+          updatedAt: new Date(),
+        })
+        .where(eq(productsTable.id, row.id));
+    }
+
+    const refreshed = await db.select().from(productsTable);
+    return sortByCatalogOrder(refreshed.map(rowToProduct));
+  }
+
   await db.insert(productsTable).values(seeded.map(productToRow));
   return seeded;
 }
@@ -113,13 +168,44 @@ async function readProductsFile(): Promise<Product[]> {
       await writeProductsFile(seeded);
       return seeded;
     }
-    return parsed.map((product) =>
-      normalizeProduct({
+    const seeded = seedProducts();
+    const seedById = new Map(seeded.map((product) => [product.id, product]));
+    const normalized = parsed.map((product) => {
+      const seed = seedById.get(product.id);
+      const base = normalizeProduct({
         ...product,
         stock:
           typeof product.stock === "number" ? product.stock : DEFAULT_STOCK,
-      }),
-    );
+      });
+      if (!seed) return base;
+      return normalizeProduct({
+        ...base,
+        image: seed.image,
+        images: seed.images.length ? seed.images : [seed.image],
+        tagline: seed.tagline,
+        description: seed.description,
+        volume: seed.volume,
+        shade: seed.shade,
+        featured: seed.featured,
+        bestseller: seed.bestseller,
+        ingredients: seed.ingredients,
+        usage: seed.usage,
+        cautions: seed.cautions,
+        name: seed.name,
+        slug: seed.slug,
+        category: seed.category,
+      });
+    });
+    const have = new Set(normalized.map((product) => product.id));
+    const missing = seeded.filter((product) => !have.has(product.id));
+    if (missing.length > 0) {
+      const merged = sortByCatalogOrder([...normalized, ...missing]);
+      await writeProductsFile(merged);
+      return merged;
+    }
+    const ordered = sortByCatalogOrder(normalized);
+    await writeProductsFile(ordered);
+    return ordered;
   } catch {
     const seeded = seedProducts();
     await writeProductsFile(seeded);
@@ -137,9 +223,9 @@ async function writeProductsFile(products: Product[]): Promise<void> {
 
 export async function readProducts(): Promise<Product[]> {
   if (isDatabaseConfigured()) {
-    return ensureProductsSeeded();
+    return sortByCatalogOrder(await ensureProductsSeeded());
   }
-  return readProductsFile();
+  return sortByCatalogOrder(await readProductsFile());
 }
 
 export async function writeProducts(products: Product[]): Promise<void> {

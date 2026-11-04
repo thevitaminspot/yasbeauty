@@ -294,7 +294,10 @@ export function BookingFlow({
   }
 
   return (
-    <div ref={topRef} className={`${ui.panel} max-w-full scroll-mt-24`}>
+    <div
+      ref={topRef}
+      className="max-w-full scroll-mt-24 border border-neutral-200 bg-white p-4 sm:p-6"
+    >
       <form
         className="min-w-0 max-w-full"
         onSubmit={(e) => {
@@ -303,32 +306,41 @@ export function BookingFlow({
           else void confirm();
         }}
       >
-        <header className="mb-5 sm:mb-6">
-          {step > 0 ? (
-            <button
-              type="button"
-              onClick={back}
-              className="mb-4 min-h-11 text-xs font-medium uppercase tracking-[0.2em] text-neutral-500 hover:text-black"
-            >
-              ← Back
-            </button>
-          ) : null}
+        <header className="mb-5">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            {step > 0 ? (
+              <button
+                type="button"
+                onClick={back}
+                className="min-h-10 text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500 hover:text-black"
+              >
+                ← Back
+              </button>
+            ) : (
+              <span className={ui.eyebrow}>
+                Step {step + 1} of {steps.length}
+              </span>
+            )}
+            <span className={`${ui.eyebrow} tabular-nums`}>
+              {step + 1}/{steps.length}
+            </span>
+          </div>
           <ProgressBar step={step} total={steps.length} />
-          <h2 className="mt-5 font-serif text-[clamp(1.6rem,6vw,2.25rem)] font-medium tracking-[-0.02em]">
+          <h2 className="mt-4 font-serif text-[clamp(1.45rem,5vw,1.9rem)] font-medium tracking-[-0.02em]">
             {steps[step]}
           </h2>
           {service && step > 0 ? (
-            <p className="mt-2 break-words text-sm text-neutral-600">
+            <p className="mt-1.5 break-words text-sm text-neutral-600">
               <span className="font-medium text-black">{service.name}</span>
               {" · "}
-              {service.duration} · from {formatNairaLabel(service.fromPrice)}
+              from {formatNairaLabel(service.fromPrice)}
               {whenLabel ? ` · ${whenLabel}` : ""}
             </p>
           ) : null}
         </header>
 
         {step === 0 ? (
-          <ul className="space-y-3" role="listbox" aria-label="Services">
+          <ul className="divide-y divide-neutral-200 border border-neutral-200" role="listbox" aria-label="Services">
             {services.map((item) => {
               const active = item.slug === slug;
               return (
@@ -344,34 +356,27 @@ export function BookingFlow({
                       setCohortId("");
                       setError("");
                     }}
-                    className={`w-full min-w-0 border p-4 text-left transition ${
+                    className={`w-full min-w-0 px-4 py-3.5 text-left transition sm:px-5 sm:py-4 ${
                       active
-                        ? "border-black bg-black text-white"
-                        : "border-neutral-200 hover:border-black"
+                        ? "bg-black text-white"
+                        : "bg-white hover:bg-neutral-50"
                     }`}
                   >
                     <span className="flex flex-wrap items-baseline justify-between gap-2">
-                      <span className="min-w-0 font-serif text-xl italic">
+                      <span className="min-w-0 font-serif text-lg italic sm:text-xl">
                         {item.name}
                       </span>
-                      <span className="shrink-0 text-xs tracking-wide">
+                      <span className="shrink-0 text-xs tabular-nums tracking-wide">
                         from {formatNairaLabel(item.fromPrice)}
                       </span>
                     </span>
                     <span
-                      className={`mt-1 block text-[10px] uppercase tracking-[0.2em] ${
+                      className={`mt-1 block text-[10px] uppercase tracking-[0.18em] ${
                         active ? "text-neutral-400" : "text-neutral-500"
                       }`}
                     >
                       {item.duration} · deposit{" "}
                       {formatNairaLabel(bookingDepositNaira(item))}
-                    </span>
-                    <span
-                      className={`mt-2 block text-sm leading-snug ${
-                        active ? "text-neutral-300" : "text-neutral-600"
-                      }`}
-                    >
-                      {item.summary}
                     </span>
                   </button>
                 </li>
@@ -552,49 +557,40 @@ export function BookingFlow({
         ) : null}
 
         {step === 3 && service && scheduleReady ? (
-          <dl className="space-y-4 border border-neutral-200 bg-neutral-50 p-4 text-sm sm:p-5">
-            <div className="flex justify-between gap-4 border-b border-neutral-200 pb-3">
+          <dl className="space-y-3 border border-neutral-200 p-4 text-sm">
+            <div className="flex justify-between gap-4">
               <dt className="shrink-0 text-neutral-500">Service</dt>
               <dd className="min-w-0 text-right font-medium">{service.name}</dd>
             </div>
-            <div className="flex justify-between gap-4 border-b border-neutral-200 pb-3">
+            <div className="flex justify-between gap-4">
               <dt className="shrink-0 text-neutral-500">
                 {training ? "Cohort" : "When"}
               </dt>
               <dd className="min-w-0 text-right">{whenLabel}</dd>
             </div>
-            <div className="flex justify-between gap-4 border-b border-neutral-200 pb-3">
-              <dt className="shrink-0 text-neutral-500">From</dt>
-              <dd className="text-right">{formatNairaLabel(service.fromPrice)}</dd>
-            </div>
-            <div className="flex justify-between gap-4 border-b border-neutral-200 pb-3">
-              <dt className="shrink-0 text-neutral-500">
-                Deposit due
-                {training ? " (training)" : ""}
-              </dt>
+            <div className="flex justify-between gap-4 border-t border-neutral-200 pt-3">
+              <dt className="shrink-0 text-neutral-500">Deposit due</dt>
               <dd className="text-right font-medium">
                 {formatNairaLabel(depositNaira)}
               </dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="shrink-0 text-neutral-500">Contact</dt>
-              <dd className="min-w-0 text-right">
-                {details.name}
-                <br />
-                {details.phone}
+              <dd className="min-w-0 text-right text-neutral-700">
+                {details.name} · {details.phone}
               </dd>
             </div>
-            <p className="pt-2 text-xs leading-relaxed text-neutral-500">
+            <p className="pt-1 text-xs leading-relaxed text-neutral-500">
               {training
-                ? "Training requires a ₦250,000 deposit to hold your place. Exact dates follow after we confirm your cohort."
-                : "Procedures require a ₦15,000 deposit. Balance is due at the studio after we confirm."}{" "}
-              You’ll pay securely with Paystack next.
+                ? "Deposit holds your training place. Cohort dates confirmed by email."
+                : "Deposit holds your request. Balance due at the studio after confirmation."}{" "}
+              Paystack next.
             </p>
           </dl>
         ) : null}
 
         {error ? (
-          <p role="alert" className="mt-5 text-sm text-red-600">
+          <p role="alert" className="mt-4 text-sm text-red-600">
             {error}
           </p>
         ) : null}
@@ -602,7 +598,7 @@ export function BookingFlow({
         <button
           type="submit"
           disabled={pending || paying}
-          className={`${ui.btnPrimary} mt-8 w-full gap-3`}
+          className={`${ui.btnPrimary} mt-6 w-full gap-3`}
         >
           {pending || paying ? (
             <>

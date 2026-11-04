@@ -35,16 +35,17 @@ export function HomeCollections({ products }: { products: Product[] }) {
   }
 
   return (
-    <section className="border-b border-neutral-200 bg-white py-14 sm:py-16 md:py-24">
+    <section className="border-b border-line bg-paper py-14 sm:py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8">
         <Reveal className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-10">
           <div className="max-w-2xl min-w-0">
             <p className={ui.eyebrow}>Shop</p>
             <h2 className={`${ui.sectionTitle} mt-3`}>
-              Lip, brow &amp; aftercare
+              Pigments, kits &amp; care
             </h2>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-600 sm:mt-4">
-              The same nano pigments we use in-chair, ready for your kit.
+              Nano pigments plus lamination, tint, and aftercare — what we
+              use in the Abuja chair.
             </p>
           </div>
 
@@ -63,7 +64,7 @@ export function HomeCollections({ products }: { products: Product[] }) {
               type="button"
               aria-label="Previous products"
               onClick={() => scrollBy(-1)}
-              className="icon-hit text-black transition hover:bg-black hover:text-white"
+              className="icon-hit text-ink transition hover:bg-ink hover:text-paper"
             >
               <Chevron dir="left" />
             </button>
@@ -71,7 +72,7 @@ export function HomeCollections({ products }: { products: Product[] }) {
               type="button"
               aria-label="Next products"
               onClick={() => scrollBy(1)}
-              className="icon-hit border-l border-neutral-300 text-black transition hover:bg-black hover:text-white"
+              className="icon-hit border-l border-line text-ink transition hover:bg-ink hover:text-paper"
             >
               <Chevron dir="right" />
             </button>
@@ -96,7 +97,7 @@ export function HomeCollections({ products }: { products: Product[] }) {
               >
                 <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
                   {product.bestseller ? (
-                    <span className="absolute left-3 top-3 z-[1] bg-black px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white">
+                    <span className="absolute left-3 top-3 z-[1] bg-ink px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-paper">
                       Bestseller
                     </span>
                   ) : null}
@@ -108,8 +109,8 @@ export function HomeCollections({ products }: { products: Product[] }) {
                     sizes="280px"
                   />
                 </div>
-                <div className="border-t border-neutral-200 bg-white px-3 py-3 sm:px-4 sm:py-3.5">
-                  <p className="truncate font-serif text-base italic text-black sm:text-lg">
+                <div className="border-t border-line bg-surface px-3 py-3 sm:px-4 sm:py-3.5">
+                  <p className="truncate font-serif text-base italic text-ink sm:text-lg">
                     {product.name}
                   </p>
                   <div className="mt-1 flex items-center justify-between gap-2">

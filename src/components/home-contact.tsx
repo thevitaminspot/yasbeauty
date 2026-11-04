@@ -9,7 +9,7 @@ import { ui } from "@/lib/ui";
 /** Closing contact band — one visual plane, one ask */
 export function HomeContact() {
   return (
-    <section className="border-t border-neutral-200 bg-white">
+    <section className="border-t border-line bg-paper">
       <div className="mx-auto grid max-w-7xl lg:grid-cols-2">
         <Reveal className="relative min-h-[22rem] overflow-hidden bg-neutral-100 lg:min-h-[32rem]">
           <Image

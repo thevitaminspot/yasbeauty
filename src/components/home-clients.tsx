@@ -17,7 +17,7 @@ export function HomeClients() {
   return (
     <section
       id="clients"
-      className="border-b border-neutral-200 bg-neutral-50 py-14 sm:py-16 md:py-24"
+      className="border-b border-line bg-paper py-14 sm:py-16 md:py-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8">
         <Reveal className="flex flex-col gap-5 sm:gap-6 md:flex-row md:items-end md:justify-between">
@@ -48,15 +48,20 @@ export function HomeClients() {
           {visible.map((shot, index) => (
             <li key={shot.id}>
               <Reveal delay={Math.min(index, 7) * 45}>
-                <div className="relative aspect-[3/4] overflow-hidden bg-neutral-200">
-                  <Image
-                    src={shot.src}
-                    alt={shot.alt}
-                    fill
-                    className="object-cover object-[50%_18%]"
-                    sizes="(max-width:768px) 50vw, 25vw"
-                  />
-                </div>
+                <figure className="group">
+                  <div className="relative aspect-[3/4] overflow-hidden bg-neutral-200">
+                    <Image
+                      src={shot.src}
+                      alt={shot.alt}
+                      fill
+                      className="object-cover object-[50%_18%] transition duration-700 group-hover:scale-[1.03]"
+                      sizes="(max-width:768px) 50vw, 25vw"
+                    />
+                  </div>
+                  <figcaption className="mt-2.5 text-[10px] font-medium uppercase tracking-[0.18em] text-neutral-500">
+                    {shot.treatment}
+                  </figcaption>
+                </figure>
               </Reveal>
             </li>
           ))}

@@ -12,7 +12,7 @@ export const products = pgTable("products", {
   slug: text("slug").notNull().unique(),
   name: text("name").notNull(),
   category: text("category")
-    .$type<"lip-pigments" | "brow-pigments" | "aftercare">()
+    .$type<"lip-pigments" | "brow-pigments" | "aftercare" | "kits">()
     .notNull(),
   price: integer("price").notNull(),
   volume: text("volume").notNull(),

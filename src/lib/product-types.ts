@@ -1,4 +1,8 @@
-export type ProductCategory = "lip-pigments" | "brow-pigments" | "aftercare";
+export type ProductCategory =
+  | "lip-pigments"
+  | "brow-pigments"
+  | "aftercare"
+  | "kits";
 
 export type Product = {
   id: string;

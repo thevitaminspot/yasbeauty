@@ -23,6 +23,7 @@ const categories: { value: ProductCategory; label: string }[] = [
   { value: "lip-pigments", label: "Lip pigments" },
   { value: "brow-pigments", label: "Brow pigments" },
   { value: "aftercare", label: "Aftercare" },
+  { value: "kits", label: "Brow & lash kits" },
 ];
 
 type Draft = {

@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { ProductCard } from "@/components/product-card";
+import { ProductGallery } from "@/components/product-gallery";
 import { formatNaira } from "@/lib/format";
 import { ui } from "@/lib/ui";
 import {
@@ -54,16 +54,16 @@ async function ProductDetail({ params }: Props) {
       </nav>
 
       <div className="mt-6 grid gap-8 sm:mt-8 lg:grid-cols-2 lg:gap-14">
-        <div className="relative aspect-[4/5] bg-neutral-100">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width:1024px) 100vw, 50vw"
-          />
-        </div>
+        <ProductGallery
+          name={product.name}
+          images={
+            product.images?.length
+              ? product.images
+              : product.image
+                ? [product.image]
+                : []
+          }
+        />
 
         <div className="min-w-0 lg:flex lg:flex-col lg:justify-center">
           <p className={ui.eyebrow}>

@@ -1,6 +1,6 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { BookPanel } from "@/app/(store)/book/book-panel";
-import { PageHeader } from "@/components/page-header";
 import { site } from "@/lib/site";
 import { ui } from "@/lib/ui";
 
@@ -21,29 +21,48 @@ async function BookFormLoader({ searchParams }: Props) {
 
 export default function BookPage(props: Props) {
   return (
-    <div className={`${ui.pageShell} grid min-w-0 gap-8 overflow-x-hidden sm:gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16`}>
-      <div className="min-w-0">
-        <PageHeader
-          eyebrow="Studio"
-          title="Book a chair."
-          lede="Procedures use a preferred date and time. Training uses the next published cohort (month) — no calendar day. A deposit holds your request."
-        />
-        <ul className="mt-8 space-y-3 border-t border-neutral-200 pt-6 text-sm text-neutral-600 sm:mt-10 sm:pt-8">
-          <li>· Patch tests may be required before pigment procedures.</li>
-          <li>· Deposit: ₦15,000 for procedures · ₦250,000 for artist training.</li>
-          <li>· Training cohorts are by month; exact days confirmed after deposit.</li>
-          <li>· Reschedule with 48 hours notice when possible.</li>
-        </ul>
+    <div className={`${ui.pageShell} grid min-w-0 gap-10 overflow-x-hidden lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-14`}>
+      <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
+        <p className={ui.eyebrow}>Studio</p>
+        <h1 className={`${ui.pageTitle} max-w-[9ch]`}>Book.</h1>
+        <p className={`${ui.pageLede} max-w-sm`}>
+          Pick a service, choose a preferred time or cohort, then pay the
+          deposit to hold your request.
+        </p>
+
+        <dl className="mt-8 space-y-5 border-t border-neutral-200 pt-6 text-sm">
+          <div>
+            <dt className={ui.eyebrow}>Deposit</dt>
+            <dd className="mt-2 text-neutral-700">
+              ₦15,000 procedures · ₦250,000 training
+            </dd>
+          </div>
+          <div>
+            <dt className={ui.eyebrow}>Scheduling</dt>
+            <dd className="mt-2 text-neutral-700">
+              Procedures use a preferred date. Training books by cohort month.
+            </dd>
+          </div>
+          <div>
+            <dt className={ui.eyebrow}>Studio</dt>
+            <dd className="mt-2 text-neutral-700">{site.address.full}</dd>
+          </div>
+        </dl>
+
         <p className="mt-8 text-sm text-neutral-500">
-          Prefer email?{" "}
+          Prefer to browse first?{" "}
+          <Link href="/services" className="underline underline-offset-4 hover:text-black">
+            Services
+          </Link>
+          {" · "}
           <a
             href={`mailto:${site.email}`}
             className="underline underline-offset-4 hover:text-black"
           >
-            {site.email}
+            Email
           </a>
         </p>
-      </div>
+      </aside>
 
       <div className="min-w-0 max-w-full">
         <Suspense

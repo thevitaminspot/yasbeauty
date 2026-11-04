@@ -1,4 +1,5 @@
 import { HomeHeroAtelier } from "@/components/home-hero/atelier";
+import { HomeHeroChroma } from "@/components/home-hero/chroma";
 import { HomeHeroDefault } from "@/components/home-hero/default";
 import { HomeHeroInk } from "@/components/home-hero/ink";
 import { HomeHeroLumen } from "@/components/home-hero/lumen";
@@ -9,33 +10,30 @@ import { HomeHeroLumen } from "@/components/home-hero/lumen";
  * - `ink` — black-nav continuum, white type, dark pigment grade
  * - `atelier` — studio editorial, bottom lockup, hairline rule
  * - `lumen` — full-viewport under nav, stacked brand, edge caption
+ * - `chroma` — crossfading pigment fields, brand stack, shade rail
  */
 export const HERO_VARIANTS = {
   default: HomeHeroDefault,
   ink: HomeHeroInk,
   atelier: HomeHeroAtelier,
   lumen: HomeHeroLumen,
+  chroma: HomeHeroChroma,
 } as const;
 
 export type HeroVariant = keyof typeof HERO_VARIANTS;
 
-/**
- * Responsive heroes: lumen on small screens, default from `md` up.
- * ACTIVE_HERO is kept for single-variant overrides / docs.
- */
-export const ACTIVE_HERO: HeroVariant = "lumen";
+/** Active homepage hero — one composition across breakpoints. */
+export const ACTIVE_HERO: HeroVariant = "chroma";
 
 export function HomeHero() {
-  return (
-    <>
-      <div className="md:hidden">
-        <HomeHeroLumen />
-      </div>
-      <div className="hidden md:block">
-        <HomeHeroDefault />
-      </div>
-    </>
-  );
+  const Hero = HERO_VARIANTS[ACTIVE_HERO];
+  return <Hero />;
 }
 
-export { HomeHeroAtelier, HomeHeroDefault, HomeHeroInk, HomeHeroLumen };
+export {
+  HomeHeroAtelier,
+  HomeHeroChroma,
+  HomeHeroDefault,
+  HomeHeroInk,
+  HomeHeroLumen,
+};

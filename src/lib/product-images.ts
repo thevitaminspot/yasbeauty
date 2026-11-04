@@ -57,9 +57,168 @@ export const productImageManifest = {
     sourceAsset: "PHOTO-2026-10-25-20-00-10_6-ebb904fc-05c0-49a3-9a1d-bdcc1f1d2b9a.jpg",
     label: "Bright Serum",
   },
+  "aftercare-calming-gel": {
+    /** Hand packshot first — vertical CALMING GEL label reads clearly in 4:5 shop cards */
+    primary: "/products/aftercare/calming-gel-hand-v3.jpg",
+    gallery: [
+      "/products/aftercare/calming-gel-hand-v3.jpg",
+      "/products/aftercare/calming-gel-pack-v3.jpg",
+      "/products/aftercare/calming-gel-hero-v3.jpg",
+      "/products/aftercare/calming-gel-alt-v3.jpg",
+      "/products/aftercare/calming-gel-results-v3.jpg",
+    ],
+    sourceAsset: "WhatsApp Calming Gel Red-Bye-Bye",
+    label: "Calming Gel",
+  },
+  "aftercare-advanced-serum": {
+    primary: "/products/aftercare/advanced-serum.jpg",
+    gallery: ["/products/aftercare/advanced-serum.jpg"],
+    sourceAsset: "PHOTO-2026-10-25-20-00-11 Advanced Serum",
+    label: "Advanced Serum",
+  },
+  "aftercare-cleansing-gel": {
+    primary: "/products/aftercare/cleansing-gel.jpg",
+    gallery: ["/products/aftercare/cleansing-gel.jpg"],
+    sourceAsset: "WhatsApp PMU cleansing gel",
+    label: "PMU Cleansing Gel",
+  },
+  "kit-lamination": {
+    primary: "/products/kits/lamination-kit.jpg",
+    gallery: [
+      "/products/kits/lamination-kit.jpg",
+      "/products/kits/lamination-kit-flat.jpg",
+      "/products/kits/lamination-contents.jpg",
+      "/products/kits/lamination-hero-alt.jpg",
+      "/products/kits/lamination-kit-alt.jpg",
+    ],
+    sourceAsset: "WhatsApp lamination kit",
+    label: "Lamination Kit",
+  },
+  "kit-brow-tint": {
+    primary: "/products/kits/brow-tint-kit.jpg",
+    gallery: [
+      "/products/kits/brow-tint-kit.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/brow-tint-anatomy.jpg",
+      "/products/kits/tint-compare.jpg",
+      "/products/kits/brow-tint-howto.jpg",
+    ],
+    sourceAsset: "WhatsApp brow tint",
+    label: "Brow Tint Kit",
+  },
+  "kit-tint-01": {
+    primary: "/products/kits/tint-01-light-brown.jpg",
+    gallery: [
+      "/products/kits/tint-01-light-brown.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/tint-compare.jpg",
+    ],
+    sourceAsset: "WhatsApp tint 01",
+    label: "Brow Tint 01 Light Brown",
+  },
+  "kit-tint-02": {
+    primary: "/products/kits/tint-02-brown.jpg",
+    gallery: [
+      "/products/kits/tint-02-brown.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/tint-compare.jpg",
+    ],
+    sourceAsset: "WhatsApp tint 02",
+    label: "Brow Tint 02 Brown",
+  },
+  "kit-tint-03": {
+    primary: "/products/kits/tint-03-dark-brown.jpg",
+    gallery: [
+      "/products/kits/tint-03-dark-brown.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/tint-compare.jpg",
+    ],
+    sourceAsset: "WhatsApp tint 03",
+    label: "Brow Tint 03 Dark Brown",
+  },
+  "kit-tint-04": {
+    primary: "/products/kits/tint-04-black.jpg",
+    gallery: [
+      "/products/kits/tint-04-black.jpg",
+      "/products/kits/brow-tint-shades.jpg",
+      "/products/kits/tint-compare.jpg",
+    ],
+    sourceAsset: "WhatsApp tint 04",
+    label: "Brow Tint 04 Black",
+  },
+  "kit-eyebrow-wax": {
+    primary: "/products/kits/eyebrow-wax.jpg",
+    gallery: ["/products/kits/eyebrow-wax.jpg"],
+    sourceAsset: "WhatsApp eyebrow wax",
+    label: "Eyebrow Wax PRO",
+  },
+  "kit-brow-brush": {
+    primary: "/products/kits/brow-brush.jpg",
+    gallery: [
+      "/products/kits/brow-brush.jpg",
+      "/products/kits/brow-brush-hands.jpg",
+    ],
+    sourceAsset: "WhatsApp brow brush",
+    label: "Dual Brow Brush",
+  },
+  "kit-brow-brush-set": {
+    primary: "/products/kits/brow-brush-set.jpg",
+    gallery: ["/products/kits/brow-brush-set.jpg"],
+    sourceAsset: "WhatsApp 3-piece brow brush set",
+    label: "Brow Brush Set",
+  },
+  "kit-brow-paste": {
+    primary: "/products/kits/brow-paste.jpg",
+    gallery: [
+      "/products/kits/brow-paste.jpg",
+      "/products/kits/brow-paste-alt.jpg",
+    ],
+    sourceAsset: "WhatsApp microblading brow paste",
+    label: "Microblading Brow Paste",
+  },
+  "kit-skin-gel": {
+    primary: "/products/kits/skin-gel.jpg",
+    gallery: [
+      "/products/kits/skin-gel.jpg",
+      "/products/kits/skin-gel-pack.jpg",
+    ],
+    sourceAsset: "WhatsApp skin gel liquid latex",
+    label: "Skin Gel Practice",
+  },
+  "kit-practice-pencil": {
+    primary: "/products/kits/practice-pencil.jpg",
+    gallery: [
+      "/products/kits/practice-pencil.jpg",
+      "/products/kits/practice-pencil-set.jpg",
+      "/products/kits/practice-pencil-pack.jpg",
+      "/products/kits/practice-pencil-use.jpg",
+    ],
+    sourceAsset: "WhatsApp practice pencil",
+    label: "Practice Pencil",
+  },
+  "kit-lead-refills": {
+    primary: "/products/kits/lead-refills.jpg",
+    gallery: ["/products/kits/lead-refills.jpg"],
+    sourceAsset: "WhatsApp 0.3mm lead refills",
+    label: "Lead Refills 0.3mm",
+  },
+  "kit-macro-ring-light": {
+    primary: "/products/kits/macro-ring-light.jpg",
+    gallery: [
+      "/products/kits/macro-ring-light.jpg",
+      "/products/kits/macro-ring-light-front.jpg",
+      "/products/kits/macro-ring-light-parts.jpg",
+      "/products/kits/macro-ring-light-case.jpg",
+      "/products/kits/macro-ring-light-use.jpg",
+      "/products/kits/macro-ring-light-tripod.jpg",
+      "/products/kits/macro-ring-light-modes.jpg",
+    ],
+    sourceAsset: "WhatsApp PMU macro ring light",
+    label: "PMU Macro Ring Light",
+  },
 } as const;
 
-/** Shared lifestyle / category imagery (YAS only — no third-party kits) */
+/** Shared lifestyle / category imagery */
 export const brandImages = {
   lipsGroup: "/products/lips/group-v2.jpg",
   browsGroup: "/products/brows/group-v2.jpg",
@@ -70,6 +229,8 @@ export const brandImages = {
   hero: "/products/lips/amore-v2.jpg",
   /** Dark-blended Smoky Black for NOXE-style black heroes */
   heroDark: "/hero/noxe-smoky-v2.jpg",
-  /** Category / homepage art — lifestyle pigment shot (not the retail serum packshot) */
-  aftercare: "/hero/studio-v2.jpg",
+  /** Category / homepage art — lifestyle aftercare + kits */
+  aftercare: "/products/aftercare/calming-gel-hand-v3.jpg",
+  kits: "/products/kits/lamination-kit.jpg",
+  advancedSerum: "/products/aftercare/advanced-serum.jpg",
 } as const;

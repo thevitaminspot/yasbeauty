@@ -72,6 +72,7 @@ const categories: ProductCategory[] = [
   "lip-pigments",
   "brow-pigments",
   "aftercare",
+  "kits",
 ];
 
 export type ProductInput = {

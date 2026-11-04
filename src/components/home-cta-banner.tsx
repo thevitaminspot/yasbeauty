@@ -18,23 +18,29 @@ const lines = [
     image: brandImages.collectionBrows,
   },
   {
+    href: "/collections/kits",
+    label: "Brow & lash kits",
+    detail: "Lamination, tint & tools",
+    image: brandImages.kits,
+  },
+  {
     href: "/collections/aftercare",
     label: "Aftercare",
-    detail: "Post-procedure essentials",
-    image: brandImages.studio,
+    detail: "Calming gel & serums",
+    image: brandImages.aftercare,
   },
 ] as const;
 
 export function HomeCtaBanner() {
   return (
-    <section className="border-t border-neutral-200 bg-white py-16 md:py-20">
+    <section className="border-t border-line bg-paper py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className={`${ui.sectionTitle}`}>Shop by line</h2>
             <p className="mt-3 max-w-md text-sm text-neutral-600">
-              Browse lips, brows, and aftercare — the same stock we use in
-              studio.
+              Pigments, kits, and aftercare — everything we trust in the Abuja
+              chair.
             </p>
           </div>
           <Link href="/shop" className={`${ui.btnPrimary} w-fit`}>
@@ -42,7 +48,7 @@ export function HomeCtaBanner() {
           </Link>
         </Reveal>
 
-        <ul className="mt-10 grid gap-4 md:grid-cols-3 md:gap-5">
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-5">
           {lines.map((line, index) => (
             <li key={line.href}>
               <Reveal delay={index * 80}>
