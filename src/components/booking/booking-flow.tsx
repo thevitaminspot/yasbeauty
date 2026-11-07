@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createBookingRequest, listPreferredSlots } from "@/actions/booking";
 import { DateField } from "@/components/ui/date-field";
 import { Spinner } from "@/components/ui/spinner";
+import { hasSlashPrice } from "@/components/service-price";
 import {
   bookingDepositNaira,
   isTrainingService,
@@ -333,6 +334,11 @@ export function BookingFlow({
             <p className="mt-1.5 break-words text-sm text-neutral-600">
               <span className="font-medium text-black">{service.name}</span>
               {" · "}
+              {hasSlashPrice(service) ? (
+                <span className="mr-1 text-neutral-400 line-through">
+                  {formatNairaLabel(service.wasPrice!)}
+                </span>
+              ) : null}
               from {formatNairaLabel(service.fromPrice)}
               {whenLabel ? ` · ${whenLabel}` : ""}
             </p>
@@ -367,6 +373,15 @@ export function BookingFlow({
                         {item.name}
                       </span>
                       <span className="shrink-0 text-xs tabular-nums tracking-wide">
+                        {hasSlashPrice(item) ? (
+                          <span
+                            className={`mr-1.5 line-through ${
+                              active ? "text-neutral-500" : "text-neutral-400"
+                            }`}
+                          >
+                            {formatNairaLabel(item.wasPrice!)}
+                          </span>
+                        ) : null}
                         from {formatNairaLabel(item.fromPrice)}
                       </span>
                     </span>

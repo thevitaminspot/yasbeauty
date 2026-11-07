@@ -6,6 +6,10 @@ export type StudioService = {
   name: string;
   duration: string;
   fromPrice: number;
+  /** Compare-at / slash price (₦). Shown struck through when above fromPrice. */
+  wasPrice?: number;
+  /** Booking deposit (₦). Overrides default deposit rules when set. */
+  deposit?: number;
   summary: string;
   description: string;
   image: string;

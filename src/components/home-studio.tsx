@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/reveal";
-import { formatNaira } from "@/lib/format";
+import { ServicePrice } from "@/components/service-price";
 import type { StudioService } from "@/lib/services";
 import { ui } from "@/lib/ui";
 
@@ -46,7 +46,8 @@ export function HomeStudio({ services }: { services: StudioService[] }) {
                     {service.summary}
                   </p>
                   <p className="mt-3 text-xs uppercase tracking-[0.16em] text-neutral-500">
-                    {service.duration} · from {formatNaira(service.fromPrice)}
+                    {service.duration} ·{" "}
+                    <ServicePrice service={service} prefix="from " />
                   </p>
                 </div>
               </article>

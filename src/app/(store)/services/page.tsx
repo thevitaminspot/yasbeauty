@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ClientWorkStrip } from "@/components/client-work-strip";
-import { formatNaira } from "@/lib/format";
+import { ServicePrice } from "@/components/service-price";
 import { site } from "@/lib/site";
 import { getServices } from "@/lib/studio-services";
 import { ui } from "@/lib/ui";
@@ -114,7 +114,7 @@ export default async function ServicesPage() {
                 </div>
                 <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end sm:justify-center">
                   <p className="text-sm font-medium tabular-nums">
-                    From {formatNaira(service.fromPrice)}
+                    <ServicePrice service={service} />
                   </p>
                   <Link
                     href={`/book?service=${service.slug}`}

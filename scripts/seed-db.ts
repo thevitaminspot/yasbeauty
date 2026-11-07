@@ -64,6 +64,8 @@ async function main() {
     name: service.name,
     duration: service.duration,
     fromPrice: service.fromPrice,
+    wasPrice: service.wasPrice ?? null,
+    deposit: service.deposit ?? null,
     summary: service.summary,
     description: service.description,
     image: service.image,

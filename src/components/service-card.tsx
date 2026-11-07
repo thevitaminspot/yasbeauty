@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/reveal";
-import { formatNaira } from "@/lib/format";
+import { ServicePrice } from "@/components/service-price";
 import type { StudioService } from "@/lib/services";
 import { ui } from "@/lib/ui";
 
@@ -38,7 +38,7 @@ export function ServiceCard({
             {service.summary}
           </p>
           <p className="mt-4 text-sm font-medium">
-            From {formatNaira(service.fromPrice)}
+            <ServicePrice service={service} />
           </p>
           <Link
             href={`/book?service=${service.slug}`}

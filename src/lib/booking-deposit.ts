@@ -21,8 +21,18 @@ export function isTrainingService(
 
 /** Deposit due to hold the booking (₦). */
 export function bookingDepositNaira(
-  service: Pick<StudioService, "id" | "slug" | "name" | "fromPrice">,
+  service: Pick<
+    StudioService,
+    "id" | "slug" | "name" | "fromPrice" | "deposit"
+  >,
 ) {
+  if (
+    typeof service.deposit === "number" &&
+    Number.isFinite(service.deposit) &&
+    service.deposit >= 0
+  ) {
+    return Math.round(service.deposit);
+  }
   if (isTrainingService(service)) {
     return TRAINING_DEPOSIT_NAIRA;
   }

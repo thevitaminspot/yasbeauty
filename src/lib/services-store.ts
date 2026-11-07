@@ -16,6 +16,8 @@ function rowToService(row: typeof servicesTable.$inferSelect): StudioService {
     name: row.name,
     duration: row.duration,
     fromPrice: row.fromPrice,
+    wasPrice: row.wasPrice ?? undefined,
+    deposit: row.deposit ?? undefined,
     summary: row.summary,
     description: row.description,
     image: row.image,
@@ -30,6 +32,8 @@ function serviceToRow(service: StudioService) {
     name: service.name,
     duration: service.duration,
     fromPrice: service.fromPrice,
+    wasPrice: service.wasPrice ?? null,
+    deposit: service.deposit ?? null,
     summary: service.summary,
     description: service.description,
     image: service.image,
@@ -57,7 +61,7 @@ async function ensureServicesSeeded(): Promise<StudioService[]> {
     for (const service of missing) byId.set(service.id, service);
   }
 
-  // Keep seed images/copy in sync when defaults change (e.g. client photos).
+  // Keep seed copy/media in sync — never overwrite admin pricing fields.
   const stale = defaultStudioServices.filter((s) => {
     const current = byId.get(s.id);
     return (
@@ -67,19 +71,25 @@ async function ensureServicesSeeded(): Promise<StudioService[]> {
         current.description !== s.description ||
         current.name !== s.name ||
         current.duration !== s.duration ||
-        current.fromPrice !== s.fromPrice ||
         Boolean(current.featured) !== Boolean(s.featured))
     );
   });
   for (const service of stale) {
+    const current = byId.get(service.id)!;
+    const merged: StudioService = {
+      ...service,
+      fromPrice: current.fromPrice,
+      wasPrice: current.wasPrice,
+      deposit: current.deposit,
+    };
     await db
       .insert(servicesTable)
-      .values(serviceToRow(service))
+      .values(serviceToRow(merged))
       .onConflictDoUpdate({
         target: servicesTable.id,
-        set: serviceToRow(service),
+        set: serviceToRow(merged),
       });
-    byId.set(service.id, service);
+    byId.set(service.id, merged);
   }
 
   return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name, "en"));
@@ -109,10 +119,14 @@ async function readServicesFile(): Promise<StudioService[]> {
         current.summary !== service.summary ||
         current.description !== service.description ||
         current.duration !== service.duration ||
-        current.fromPrice !== service.fromPrice ||
         Boolean(current.featured) !== Boolean(service.featured)
       ) {
-        byId.set(service.id, { ...current, ...service });
+        byId.set(service.id, {
+          ...service,
+          fromPrice: current.fromPrice,
+          wasPrice: current.wasPrice,
+          deposit: current.deposit,
+        });
         changed = true;
       }
     }

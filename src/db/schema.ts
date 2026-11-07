@@ -38,6 +38,10 @@ export const services = pgTable("services", {
   name: text("name").notNull(),
   duration: text("duration").notNull(),
   fromPrice: integer("from_price").notNull(),
+  /** Optional compare-at / slash price (₦). Shown struck through when above fromPrice. */
+  wasPrice: integer("was_price"),
+  /** Booking deposit in ₦. When null, falls back to booking-deposit defaults. */
+  deposit: integer("deposit"),
   summary: text("summary").notNull(),
   description: text("description").notNull(),
   image: text("image").notNull(),

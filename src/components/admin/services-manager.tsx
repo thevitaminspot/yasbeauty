@@ -13,9 +13,11 @@ import {
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { PaginatedTableWrap } from "@/components/admin/paginated-table-wrap";
 import { AdminEmptyState, AdminPanel } from "@/components/admin/ui";
+import { ServicePrice } from "@/components/service-price";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Modal } from "@/components/ui/modal";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
+import { bookingDepositNaira } from "@/lib/booking-deposit";
 import { formatNaira } from "@/lib/format";
 import type { StudioService } from "@/lib/services";
 
@@ -25,6 +27,8 @@ type Draft = {
   slug: string;
   duration: string;
   fromPrice: string;
+  wasPrice: string;
+  deposit: string;
   summary: string;
   description: string;
   image: string;
@@ -37,6 +41,8 @@ function emptyDraft(): Draft {
     slug: "",
     duration: "2–3 hrs",
     fromPrice: "85000",
+    wasPrice: "",
+    deposit: "15000",
     summary: "",
     description: "",
     image: "",
@@ -51,6 +57,12 @@ function fromService(service: StudioService): Draft {
     slug: service.slug,
     duration: service.duration,
     fromPrice: String(service.fromPrice),
+    wasPrice:
+      typeof service.wasPrice === "number" ? String(service.wasPrice) : "",
+    deposit:
+      typeof service.deposit === "number"
+        ? String(service.deposit)
+        : String(bookingDepositNaira(service)),
     summary: service.summary,
     description: service.description,
     image: service.image,
@@ -110,6 +122,8 @@ export function ServicesManager({ services }: { services: StudioService[] }) {
         slug: draft.slug,
         duration: draft.duration,
         fromPrice: Number(draft.fromPrice),
+        wasPrice: draft.wasPrice.trim() === "" ? null : Number(draft.wasPrice),
+        deposit: draft.deposit.trim() === "" ? null : Number(draft.deposit),
         summary: draft.summary,
         description: draft.description,
         image: draft.image,
@@ -230,6 +244,40 @@ export function ServicesManager({ services }: { services: StudioService[] }) {
                 }
               />
             </label>
+            <label className={adminLabel}>
+              Slash price (₦)
+              <input
+                type="number"
+                min={0}
+                step={500}
+                className={adminField}
+                value={draft.wasPrice}
+                placeholder="Optional was-price"
+                onChange={(e) =>
+                  setDraft({ ...draft, wasPrice: e.target.value })
+                }
+              />
+              <span className="mt-1 block text-[11px] font-normal normal-case tracking-normal text-neutral-500">
+                Shown struck through when higher than from price.
+              </span>
+            </label>
+            <label className={adminLabel}>
+              Deposit (₦)
+              <input
+                type="number"
+                min={0}
+                step={500}
+                className={adminField}
+                value={draft.deposit}
+                placeholder="Booking deposit"
+                onChange={(e) =>
+                  setDraft({ ...draft, deposit: e.target.value })
+                }
+              />
+              <span className="mt-1 block text-[11px] font-normal normal-case tracking-normal text-neutral-500">
+                Charged to hold the booking. Leave blank for defaults.
+              </span>
+            </label>
             <label className={`${adminLabel} md:col-span-2`}>
               Summary
               <input
@@ -292,7 +340,9 @@ export function ServicesManager({ services }: { services: StudioService[] }) {
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">{service.name}</p>
                   <p className="mt-0.5 text-sm text-neutral-500">
-                    {service.duration} · from {formatNaira(service.fromPrice)}
+                    {service.duration} ·{" "}
+                    <ServicePrice service={service} prefix="from " /> · deposit{" "}
+                    {formatNaira(bookingDepositNaira(service))}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -338,8 +388,8 @@ export function ServicesManager({ services }: { services: StudioService[] }) {
             <>
               <p className="font-medium text-black">{deleteTarget.name}</p>
               <p className="mt-1 text-neutral-500">
-                {deleteTarget.duration} · from{" "}
-                {formatNaira(deleteTarget.fromPrice)}
+                {deleteTarget.duration} ·{" "}
+                <ServicePrice service={deleteTarget} prefix="from " />
               </p>
             </>
           ) : null

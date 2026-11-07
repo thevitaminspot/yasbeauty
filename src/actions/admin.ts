@@ -100,6 +100,8 @@ export type ServiceInput = {
   slug?: string;
   duration: string;
   fromPrice: number;
+  wasPrice?: number | null;
+  deposit?: number | null;
   summary: string;
   description: string;
   image: string;
@@ -205,6 +207,30 @@ export async function saveService(
     return { ok: false, error: "Enter a valid from-price." };
   }
 
+  const wasRaw =
+    input.wasPrice === null ||
+    input.wasPrice === undefined ||
+    String(input.wasPrice).trim() === ""
+      ? null
+      : Number(input.wasPrice);
+  if (wasRaw !== null && (!Number.isFinite(wasRaw) || wasRaw < 0)) {
+    return { ok: false, error: "Enter a valid slash price, or leave it blank." };
+  }
+  const wasPrice =
+    wasRaw !== null && wasRaw > fromPrice ? Math.round(wasRaw) : undefined;
+
+  const depositRaw =
+    input.deposit === null ||
+    input.deposit === undefined ||
+    String(input.deposit).trim() === ""
+      ? null
+      : Number(input.deposit);
+  if (depositRaw !== null && (!Number.isFinite(depositRaw) || depositRaw < 0)) {
+    return { ok: false, error: "Enter a valid deposit, or leave it blank." };
+  }
+  const deposit =
+    depositRaw !== null ? Math.round(depositRaw) : undefined;
+
   const slug = slugify(input.slug?.trim() || name);
   if (!slug) return { ok: false, error: "Enter a valid slug." };
 
@@ -226,6 +252,8 @@ export async function saveService(
     name,
     duration: input.duration?.trim() || "1 hr",
     fromPrice: Math.round(fromPrice),
+    wasPrice,
+    deposit,
     summary: input.summary?.trim() || "",
     description: input.description?.trim() || "",
     image,
