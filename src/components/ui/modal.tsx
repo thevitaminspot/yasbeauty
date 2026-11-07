@@ -27,6 +27,8 @@ export function Modal({
 }) {
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!open) return;
@@ -34,23 +36,28 @@ export function Modal({
     document.body.style.overflow = "hidden";
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") onCloseRef.current();
     }
 
     window.addEventListener("keydown", onKeyDown);
 
-    // Prefer the first editable field so typing works immediately.
+    // Autofocus once when the dialog opens — never again on parent re-renders,
+    // or every keystroke would steal focus back to the first field.
     const panel = panelRef.current;
     const firstField = panel?.querySelector<HTMLElement>(
       'input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([disabled]), textarea:not([disabled]), select:not([disabled])',
     );
-    (firstField ?? panel)?.focus();
+    const target = firstField ?? panel;
+    const frame = window.requestAnimationFrame(() => {
+      target?.focus({ preventScroll: true });
+    });
 
     return () => {
+      window.cancelAnimationFrame(frame);
       document.body.style.overflow = previous;
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open || typeof document === "undefined") return null;
 
