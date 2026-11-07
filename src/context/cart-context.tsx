@@ -183,6 +183,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         const quantity = Math.min(line.quantity, stock);
         if (
           latest.price !== line.product.price ||
+          latest.wasPrice !== line.product.wasPrice ||
           latest.stock !== line.product.stock ||
           quantity !== line.quantity
         ) {

@@ -81,6 +81,7 @@ export type ProductInput = {
   slug?: string;
   category: ProductCategory;
   price: number;
+  wasPrice?: number | null;
   volume: string;
   stock: number;
   tagline: string;
@@ -134,6 +135,18 @@ export async function saveProduct(
     return { ok: false, error: "Price must be at least ₦100." };
   }
 
+  const wasRaw =
+    input.wasPrice === null ||
+    input.wasPrice === undefined ||
+    String(input.wasPrice).trim() === ""
+      ? null
+      : Number(input.wasPrice);
+  if (wasRaw !== null && (!Number.isFinite(wasRaw) || wasRaw < 0)) {
+    return { ok: false, error: "Enter a valid slash price, or leave it blank." };
+  }
+  const wasPrice =
+    wasRaw !== null && wasRaw > price ? Math.round(wasRaw) : undefined;
+
   const stock = Math.max(0, Math.round(Number(input.stock)));
   if (!Number.isFinite(stock)) {
     return { ok: false, error: "Enter how many units remain in stock." };
@@ -160,6 +173,7 @@ export async function saveProduct(
     name,
     category,
     price: Math.round(price),
+    wasPrice,
     volume: input.volume?.trim() || "10ml",
     stock,
     tagline: input.tagline?.trim() || "",

@@ -10,6 +10,8 @@ export type Product = {
   name: string;
   category: ProductCategory;
   price: number;
+  /** Compare-at / slash price (₦). Shown struck through when above price. */
+  wasPrice?: number;
   volume: string;
   /** Units left in stock for admin inventory. */
   stock: number;

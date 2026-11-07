@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { QuantityStepper } from "@/components/quantity-stepper";
+import { ProductPrice } from "@/components/service-price";
 import { formatNaira } from "@/lib/format";
 import { useCart } from "@/context/cart-context";
 import { ui } from "@/lib/ui";
@@ -78,11 +79,11 @@ export default function CartPage() {
                   </p>
                   <p className="mt-2.5 text-sm font-medium tabular-nums text-black">
                     {formatNaira(product.price * quantity)}
-                    {quantity > 1 ? (
-                      <span className="mt-0.5 block font-normal text-neutral-400 sm:mt-0 sm:ml-1.5 sm:inline">
-                        ({formatNaira(product.price)} each)
-                      </span>
-                    ) : null}
+                    <span className="mt-0.5 block font-normal text-neutral-400 sm:mt-0 sm:ml-1.5 sm:inline">
+                      (
+                      <ProductPrice product={product} />
+                      {quantity > 1 ? " each" : ""})
+                    </span>
                   </p>
                 </div>
               </div>

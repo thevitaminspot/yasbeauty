@@ -15,6 +15,8 @@ export const products = pgTable("products", {
     .$type<"lip-pigments" | "brow-pigments" | "aftercare" | "kits">()
     .notNull(),
   price: integer("price").notNull(),
+  /** Optional compare-at / slash price (₦). Shown struck through when above price. */
+  wasPrice: integer("was_price"),
   volume: text("volume").notNull(),
   stock: integer("stock").notNull().default(0),
   tagline: text("tagline").notNull(),

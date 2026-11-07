@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
+import { ProductPrice } from "@/components/service-price";
 import { Reveal } from "@/components/ui/reveal";
-import { formatNaira } from "@/lib/format";
 import type { Product } from "@/lib/product-types";
 import { ui } from "@/lib/ui";
 
@@ -115,7 +115,7 @@ export function HomeCollections({ products }: { products: Product[] }) {
                   </p>
                   <div className="mt-1 flex items-center justify-between gap-2">
                     <p className="text-sm font-medium tabular-nums text-neutral-800">
-                      {formatNaira(product.price)}
+                      <ProductPrice product={product} />
                     </p>
                     <span className="text-xs text-neutral-400 transition group-hover:text-black">
                       →

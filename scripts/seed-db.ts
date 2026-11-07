@@ -43,6 +43,7 @@ async function main() {
     name: item.name,
     category: item.category,
     price: item.defaultPrice,
+    wasPrice: null as number | null,
     volume: item.volume,
     stock: 24,
     tagline: item.tagline,

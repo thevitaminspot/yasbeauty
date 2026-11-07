@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ProductPrice } from "@/components/service-price";
 import { Reveal } from "@/components/ui/reveal";
-import { formatNaira } from "@/lib/format";
 import type { Product } from "@/lib/product-types";
 
 export function ProductCard({
@@ -81,7 +81,7 @@ export function ProductCard({
           </Link>
           <div className="mt-auto flex items-baseline justify-between gap-2 pt-2">
             <p className="text-sm font-medium tabular-nums tracking-wide">
-              {formatNaira(product.price)}
+              <ProductPrice product={product} />
             </p>
             {product.shade ? (
               <p className="truncate text-[10px] uppercase tracking-[0.12em] text-neutral-400">

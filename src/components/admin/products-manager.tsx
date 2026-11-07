@@ -16,8 +16,8 @@ import { AdminEmptyState, AdminPanel } from "@/components/admin/ui";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Modal } from "@/components/ui/modal";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
+import { ProductPrice } from "@/components/service-price";
 import { digitsOnly } from "@/lib/digits-input";
-import { formatNaira } from "@/lib/format";
 import type { Product, ProductCategory } from "@/lib/product-types";
 
 const categories: { value: ProductCategory; label: string }[] = [
@@ -33,6 +33,7 @@ type Draft = {
   slug: string;
   category: ProductCategory;
   price: string;
+  wasPrice: string;
   volume: string;
   stock: string;
   tagline: string;
@@ -52,6 +53,7 @@ function emptyDraft(): Draft {
     slug: "",
     category: "lip-pigments",
     price: "18500",
+    wasPrice: "",
     volume: "10ml",
     stock: "24",
     tagline: "",
@@ -73,6 +75,8 @@ function fromProduct(product: Product): Draft {
     slug: product.slug,
     category: product.category,
     price: String(product.price),
+    wasPrice:
+      typeof product.wasPrice === "number" ? String(product.wasPrice) : "",
     volume: product.volume,
     stock: String(product.stock ?? 0),
     tagline: product.tagline,
@@ -145,6 +149,7 @@ export function ProductsManager({ products }: { products: Product[] }) {
         slug: draft.slug,
         category: draft.category,
         price: Number(draft.price),
+        wasPrice: draft.wasPrice.trim() === "" ? null : Number(draft.wasPrice),
         volume: draft.volume,
         stock: Number(draft.stock),
         tagline: draft.tagline,
@@ -285,6 +290,23 @@ export function ProductsManager({ products }: { products: Product[] }) {
               />
             </label>
             <label className={adminLabel}>
+              Slash price (₦)
+              <input
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                className={`${adminField} tabular-nums`}
+                value={draft.wasPrice}
+                placeholder="Optional was-price"
+                onChange={(e) =>
+                  setDraft({ ...draft, wasPrice: digitsOnly(e.target.value) })
+                }
+              />
+              <span className="mt-1 block text-[11px] font-normal normal-case tracking-normal text-neutral-500">
+                Shown struck through when higher than price.
+              </span>
+            </label>
+            <label className={adminLabel}>
               Volume
               <input
                 className={adminField}
@@ -416,7 +438,7 @@ export function ProductsManager({ products }: { products: Product[] }) {
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">{product.name}</p>
                   <p className="mt-0.5 text-sm text-neutral-500">
-                    {product.category} · {formatNaira(product.price)}
+                    {product.category} · <ProductPrice product={product} />
                   </p>
                 </div>
                 <p
@@ -473,7 +495,8 @@ export function ProductsManager({ products }: { products: Product[] }) {
             <>
               <p className="font-medium text-black">{deleteTarget.name}</p>
               <p className="mt-1 text-neutral-500">
-                {formatNaira(deleteTarget.price)} · {deleteTarget.category}
+                <ProductPrice product={deleteTarget} /> ·{" "}
+                {deleteTarget.category}
               </p>
             </>
           ) : null

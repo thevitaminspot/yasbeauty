@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
-import { formatNaira } from "@/lib/format";
+import { ProductPrice } from "@/components/service-price";
 import { ui } from "@/lib/ui";
 import {
   getAllProductSlugs,
@@ -77,7 +77,7 @@ async function ProductDetail({ params }: Props) {
             {product.tagline}
           </p>
           <p className="mt-5 text-xl font-medium tabular-nums sm:text-2xl">
-            {formatNaira(product.price)}
+            <ProductPrice product={product} />
           </p>
           <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-neutral-400">
             Professional use only
