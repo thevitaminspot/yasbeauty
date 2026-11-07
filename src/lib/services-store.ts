@@ -26,14 +26,24 @@ function rowToService(row: typeof servicesTable.$inferSelect): StudioService {
 }
 
 function serviceToRow(service: StudioService) {
+  const wasPrice =
+    typeof service.wasPrice === "number" &&
+    Number.isFinite(service.wasPrice) &&
+    service.wasPrice > service.fromPrice
+      ? Math.round(service.wasPrice)
+      : null;
+  const deposit =
+    typeof service.deposit === "number" && Number.isFinite(service.deposit)
+      ? Math.round(service.deposit)
+      : null;
   return {
     id: service.id,
     slug: service.slug,
     name: service.name,
     duration: service.duration,
     fromPrice: service.fromPrice,
-    wasPrice: service.wasPrice ?? null,
-    deposit: service.deposit ?? null,
+    wasPrice,
+    deposit,
     summary: service.summary,
     description: service.description,
     image: service.image,
@@ -172,22 +182,38 @@ export async function upsertService(
 ): Promise<StudioService> {
   if (isDatabaseConfigured()) {
     const db = getDb();
+    const row = serviceToRow(service);
+    const { id: _id, ...update } = row;
     await db
       .insert(servicesTable)
-      .values(serviceToRow(service))
+      .values(row)
       .onConflictDoUpdate({
         target: servicesTable.id,
-        set: serviceToRow(service),
+        set: update,
       });
-    return service;
+    return {
+      ...service,
+      wasPrice: row.wasPrice ?? undefined,
+      deposit: row.deposit ?? undefined,
+    };
   }
 
   const services = await readServicesFile();
   const index = services.findIndex((s) => s.id === service.id);
-  if (index >= 0) services[index] = service;
-  else services.unshift(service);
+  const next: StudioService = {
+    ...service,
+    wasPrice:
+      typeof service.wasPrice === "number" &&
+      service.wasPrice > service.fromPrice
+        ? service.wasPrice
+        : undefined,
+    deposit:
+      typeof service.deposit === "number" ? service.deposit : undefined,
+  };
+  if (index >= 0) services[index] = next;
+  else services.unshift(next);
   await writeServicesFile(services);
-  return service;
+  return next;
 }
 
 export async function deleteService(id: string): Promise<boolean> {

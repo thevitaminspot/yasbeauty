@@ -249,20 +249,20 @@ export function ServicesManager({ services }: { services: StudioService[] }) {
               />
             </label>
             <label className={adminLabel}>
-              Slash price (₦)
+              Slash / was price (₦)
               <input
                 type="text"
                 inputMode="numeric"
                 autoComplete="off"
                 className={`${adminField} tabular-nums`}
                 value={draft.wasPrice}
-                placeholder="Optional was-price"
+                placeholder="e.g. 120000"
                 onChange={(e) =>
                   setDraft({ ...draft, wasPrice: digitsOnly(e.target.value) })
                 }
               />
               <span className="mt-1 block text-[11px] font-normal normal-case tracking-normal text-neutral-500">
-                Shown struck through when higher than from price.
+                Old price shown struck through. Must be higher than From price.
               </span>
             </label>
             <label className={adminLabel}>

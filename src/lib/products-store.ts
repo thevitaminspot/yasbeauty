@@ -84,13 +84,19 @@ function rowToProduct(row: typeof productsTable.$inferSelect): Product {
 
 function productToRow(product: Product) {
   const normalized = normalizeProduct(product);
+  const wasPrice =
+    typeof normalized.wasPrice === "number" &&
+    Number.isFinite(normalized.wasPrice) &&
+    normalized.wasPrice > normalized.price
+      ? Math.round(normalized.wasPrice)
+      : null;
   return {
     id: normalized.id,
     slug: normalized.slug,
     name: normalized.name,
     category: normalized.category,
     price: normalized.price,
-    wasPrice: normalized.wasPrice ?? null,
+    wasPrice,
     volume: normalized.volume,
     stock: normalized.stock,
     tagline: normalized.tagline,
@@ -245,22 +251,35 @@ export async function writeProducts(products: Product[]): Promise<void> {
 export async function upsertProduct(product: Product): Promise<Product> {
   if (isDatabaseConfigured()) {
     const db = getDb();
+    const row = productToRow(product);
+    const { id: _id, ...update } = row;
     await db
       .insert(productsTable)
-      .values(productToRow(product))
+      .values(row)
       .onConflictDoUpdate({
         target: productsTable.id,
-        set: productToRow(product),
+        set: update,
       });
-    return product;
+    return {
+      ...product,
+      wasPrice: row.wasPrice ?? undefined,
+    };
   }
 
   const products = await readProductsFile();
   const index = products.findIndex((p) => p.id === product.id);
-  if (index >= 0) products[index] = product;
-  else products.unshift(product);
+  const next = {
+    ...product,
+    wasPrice:
+      typeof product.wasPrice === "number" &&
+      product.wasPrice > product.price
+        ? product.wasPrice
+        : undefined,
+  };
+  if (index >= 0) products[index] = next;
+  else products.unshift(next);
   await writeProductsFile(products);
-  return product;
+  return next;
 }
 
 export async function deleteProduct(id: string): Promise<boolean> {

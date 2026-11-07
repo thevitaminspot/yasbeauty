@@ -290,20 +290,20 @@ export function ProductsManager({ products }: { products: Product[] }) {
               />
             </label>
             <label className={adminLabel}>
-              Slash price (₦)
+              Slash / was price (₦)
               <input
                 type="text"
                 inputMode="numeric"
                 autoComplete="off"
                 className={`${adminField} tabular-nums`}
                 value={draft.wasPrice}
-                placeholder="Optional was-price"
+                placeholder="e.g. 45000"
                 onChange={(e) =>
                   setDraft({ ...draft, wasPrice: digitsOnly(e.target.value) })
                 }
               />
               <span className="mt-1 block text-[11px] font-normal normal-case tracking-normal text-neutral-500">
-                Shown struck through when higher than price.
+                Old price shown struck through. Must be higher than Price.
               </span>
             </label>
             <label className={adminLabel}>

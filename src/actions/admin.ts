@@ -144,8 +144,13 @@ export async function saveProduct(
   if (wasRaw !== null && (!Number.isFinite(wasRaw) || wasRaw < 0)) {
     return { ok: false, error: "Enter a valid slash price, or leave it blank." };
   }
-  const wasPrice =
-    wasRaw !== null && wasRaw > price ? Math.round(wasRaw) : undefined;
+  if (wasRaw !== null && wasRaw <= price) {
+    return {
+      ok: false,
+      error: "Slash / was-price must be higher than the selling price.",
+    };
+  }
+  const wasPrice = wasRaw !== null ? Math.round(wasRaw) : null;
 
   const stock = Math.max(0, Math.round(Number(input.stock)));
   if (!Number.isFinite(stock)) {
@@ -173,7 +178,7 @@ export async function saveProduct(
     name,
     category,
     price: Math.round(price),
-    wasPrice,
+    wasPrice: wasPrice ?? undefined,
     volume: input.volume?.trim() || "10ml",
     stock,
     tagline: input.tagline?.trim() || "",
@@ -230,8 +235,13 @@ export async function saveService(
   if (wasRaw !== null && (!Number.isFinite(wasRaw) || wasRaw < 0)) {
     return { ok: false, error: "Enter a valid slash price, or leave it blank." };
   }
-  const wasPrice =
-    wasRaw !== null && wasRaw > fromPrice ? Math.round(wasRaw) : undefined;
+  if (wasRaw !== null && wasRaw <= fromPrice) {
+    return {
+      ok: false,
+      error: "Slash / was-price must be higher than the from-price.",
+    };
+  }
+  const wasPrice = wasRaw !== null ? Math.round(wasRaw) : null;
 
   const depositRaw =
     input.deposit === null ||
@@ -243,7 +253,7 @@ export async function saveService(
     return { ok: false, error: "Enter a valid deposit, or leave it blank." };
   }
   const deposit =
-    depositRaw !== null ? Math.round(depositRaw) : undefined;
+    depositRaw !== null ? Math.round(depositRaw) : null;
 
   const slug = slugify(input.slug?.trim() || name);
   if (!slug) return { ok: false, error: "Enter a valid slug." };
@@ -266,8 +276,8 @@ export async function saveService(
     name,
     duration: input.duration?.trim() || "1 hr",
     fromPrice: Math.round(fromPrice),
-    wasPrice,
-    deposit,
+    wasPrice: wasPrice ?? undefined,
+    deposit: deposit ?? undefined,
     summary: input.summary?.trim() || "",
     description: input.description?.trim() || "",
     image,
