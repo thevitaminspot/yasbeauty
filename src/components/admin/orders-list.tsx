@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { adminField } from "@/components/admin/form-styles";
 import { OrderFulfillmentControls } from "@/components/admin/order-fulfillment-controls";
 import { PaginatedTableWrap } from "@/components/admin/paginated-table-wrap";
 import { AdminEmptyState, AdminPanel } from "@/components/admin/ui";
@@ -74,7 +75,7 @@ export function OrdersList({ orders }: { orders: StoredOrder[] }) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search orders…"
-        className="w-full max-w-sm border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-black"
+        className={`${adminField} mt-0 w-full max-w-sm`}
       />
 
       {filtered.length === 0 ? (

@@ -10,6 +10,7 @@ import {
   adminPrimaryBtn,
 } from "@/components/admin/form-styles";
 import { AdminPanel } from "@/components/admin/ui";
+import { digitsOnly } from "@/lib/digits-input";
 import {
   cohortLabel,
   monthLabel,
@@ -27,8 +28,13 @@ export function TrainingManager({ initial }: { initial: TrainingSettings }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [draftMonth, setDraftMonth] = useState(12);
-  const [draftYear, setDraftYear] = useState(
-    () => new Date().getFullYear(),
+  const [draftYear, setDraftYear] = useState(() =>
+    String(new Date().getFullYear()),
+  );
+  const [yearDrafts, setYearDrafts] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      initial.cohorts.map((c) => [c.id, String(c.year)]),
+    ),
   );
 
   function setMode(mode: TrainingSettings["mode"]) {
@@ -40,7 +46,8 @@ export function TrainingManager({ initial }: { initial: TrainingSettings }) {
   function addCohort() {
     setError("");
     setMessage("");
-    const next = newTrainingCohort(draftMonth, draftYear);
+    const year = Number(draftYear) || new Date().getFullYear();
+    const next = newTrainingCohort(draftMonth, year);
     const duplicate = settings.cohorts.some(
       (c) => c.month === next.month && c.year === next.year,
     );
@@ -54,6 +61,7 @@ export function TrainingManager({ initial }: { initial: TrainingSettings }) {
         (a, b) => a.year - b.year || a.month - b.month,
       ),
     }));
+    setYearDrafts((prev) => ({ ...prev, [next.id]: String(next.year) }));
   }
 
   function removeCohort(id: string) {
@@ -63,6 +71,11 @@ export function TrainingManager({ initial }: { initial: TrainingSettings }) {
       ...prev,
       cohorts: prev.cohorts.filter((c) => c.id !== id),
     }));
+    setYearDrafts((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
   }
 
   function updateCohort(
@@ -77,6 +90,20 @@ export function TrainingManager({ initial }: { initial: TrainingSettings }) {
         .map((c) => (c.id === id ? { ...c, ...patch } : c))
         .sort((a, b) => a.year - b.year || a.month - b.month),
     }));
+  }
+
+  function commitYear(id: string, raw: string) {
+    const year = Number(raw);
+    if (!Number.isFinite(year) || year < 2024 || year > 2100) {
+      const current = settings.cohorts.find((c) => c.id === id);
+      setYearDrafts((prev) => ({
+        ...prev,
+        [id]: String(current?.year ?? new Date().getFullYear()),
+      }));
+      return;
+    }
+    updateCohort(id, { year: Math.round(year) });
+    setYearDrafts((prev) => ({ ...prev, [id]: String(Math.round(year)) }));
   }
 
   function save() {
@@ -184,16 +211,19 @@ export function TrainingManager({ initial }: { initial: TrainingSettings }) {
                   <label className="w-full sm:w-28">
                     <span className={adminLabel}>Year</span>
                     <input
-                      type="number"
-                      min={2024}
-                      max={2100}
-                      value={cohort.year}
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="off"
+                      maxLength={4}
+                      value={yearDrafts[cohort.id] ?? String(cohort.year)}
                       onChange={(e) =>
-                        updateCohort(cohort.id, {
-                          year: Number(e.target.value) || cohort.year,
-                        })
+                        setYearDrafts((prev) => ({
+                          ...prev,
+                          [cohort.id]: digitsOnly(e.target.value).slice(0, 4),
+                        }))
                       }
-                      className={adminField}
+                      onBlur={(e) => commitYear(cohort.id, e.target.value)}
+                      className={`${adminField} tabular-nums`}
                     />
                   </label>
                   <button
@@ -228,14 +258,15 @@ export function TrainingManager({ initial }: { initial: TrainingSettings }) {
               <label className="w-full sm:w-28">
                 <span className="sr-only">Year</span>
                 <input
-                  type="number"
-                  min={2024}
-                  max={2100}
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  maxLength={4}
                   value={draftYear}
                   onChange={(e) =>
-                    setDraftYear(Number(e.target.value) || draftYear)
+                    setDraftYear(digitsOnly(e.target.value).slice(0, 4))
                   }
-                  className={adminField}
+                  className={`${adminField} tabular-nums`}
                 />
               </label>
               <button

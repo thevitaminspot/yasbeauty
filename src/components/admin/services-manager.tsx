@@ -18,6 +18,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Modal } from "@/components/ui/modal";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { bookingDepositNaira } from "@/lib/booking-deposit";
+import { digitsOnly } from "@/lib/digits-input";
 import { formatNaira } from "@/lib/format";
 import type { StudioService } from "@/lib/services";
 
@@ -163,7 +164,7 @@ export function ServicesManager({ services }: { services: StudioService[] }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search services…"
-          className="w-full max-w-sm border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-black"
+          className={`${adminField} mt-0 w-full max-w-sm`}
         />
         <button type="button" onClick={openCreate} className={adminPrimaryBtn}>
           Add service
@@ -218,6 +219,9 @@ export function ServicesManager({ services }: { services: StudioService[] }) {
                 className={adminField}
                 value={draft.slug}
                 placeholder="auto from name"
+                spellCheck={false}
+                autoCapitalize="off"
+                autoCorrect="off"
                 onChange={(e) => setDraft({ ...draft, slug: e.target.value })}
               />
             </label>
@@ -234,27 +238,27 @@ export function ServicesManager({ services }: { services: StudioService[] }) {
             <label className={adminLabel}>
               From price (₦)
               <input
-                type="number"
-                min={0}
-                step={500}
-                className={adminField}
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                className={`${adminField} tabular-nums`}
                 value={draft.fromPrice}
                 onChange={(e) =>
-                  setDraft({ ...draft, fromPrice: e.target.value })
+                  setDraft({ ...draft, fromPrice: digitsOnly(e.target.value) })
                 }
               />
             </label>
             <label className={adminLabel}>
               Slash price (₦)
               <input
-                type="number"
-                min={0}
-                step={500}
-                className={adminField}
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                className={`${adminField} tabular-nums`}
                 value={draft.wasPrice}
                 placeholder="Optional was-price"
                 onChange={(e) =>
-                  setDraft({ ...draft, wasPrice: e.target.value })
+                  setDraft({ ...draft, wasPrice: digitsOnly(e.target.value) })
                 }
               />
               <span className="mt-1 block text-[11px] font-normal normal-case tracking-normal text-neutral-500">
@@ -264,14 +268,14 @@ export function ServicesManager({ services }: { services: StudioService[] }) {
             <label className={adminLabel}>
               Deposit (₦)
               <input
-                type="number"
-                min={0}
-                step={500}
-                className={adminField}
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                className={`${adminField} tabular-nums`}
                 value={draft.deposit}
                 placeholder="Booking deposit"
                 onChange={(e) =>
-                  setDraft({ ...draft, deposit: e.target.value })
+                  setDraft({ ...draft, deposit: digitsOnly(e.target.value) })
                 }
               />
               <span className="mt-1 block text-[11px] font-normal normal-case tracking-normal text-neutral-500">

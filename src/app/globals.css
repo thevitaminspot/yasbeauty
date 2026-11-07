@@ -528,6 +528,31 @@ textarea {
   cursor: text;
 }
 
+/*
+ * Labels often use uppercase + wide tracking; those inherit onto nested
+ * controls and make typing feel broken. Reset on form fields.
+ */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not(
+    [type="button"]
+  ):not([type="reset"]),
+textarea,
+select {
+  text-transform: none;
+  letter-spacing: normal;
+  font-variant-numeric: normal;
+}
+
+/* Avoid scroll-wheel accidental changes on focused number fields */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 :focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 2px;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { adminField } from "@/components/admin/form-styles";
 import { PaginatedTableWrap } from "@/components/admin/paginated-table-wrap";
 import { AdminEmptyState, AdminPanel } from "@/components/admin/ui";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
@@ -42,7 +43,7 @@ export function MessagesList({ rows }: { rows: ContactMessage[] }) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search messages…"
-        className="w-full max-w-sm border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-black"
+        className={`${adminField} mt-0 w-full max-w-sm`}
       />
 
       {filtered.length === 0 ? (

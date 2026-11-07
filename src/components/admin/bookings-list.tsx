@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { setBookingStatus } from "@/actions/admin";
-import { adminPrimaryBtn } from "@/components/admin/form-styles";
+import { adminField, adminPrimaryBtn } from "@/components/admin/form-styles";
 import { PaginatedTableWrap } from "@/components/admin/paginated-table-wrap";
 import { AdminEmptyState, AdminPanel } from "@/components/admin/ui";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -212,7 +212,7 @@ export function BookingsList({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search guest, email, or service…"
-        className="w-full max-w-sm border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-black"
+        className={`${adminField} mt-0 w-full max-w-sm`}
       />
 
       <div className="flex flex-wrap gap-2 border-b border-neutral-200 pb-3">

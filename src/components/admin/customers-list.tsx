@@ -2,7 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { PaginatedTableWrap } from "@/components/admin/paginated-table-wrap";
-import { adminGhostBtn, adminPrimaryBtn } from "@/components/admin/form-styles";
+import {
+  adminField,
+  adminGhostBtn,
+  adminPrimaryBtn,
+} from "@/components/admin/form-styles";
 import { AdminEmptyState, AdminPanel } from "@/components/admin/ui";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import type { CustomerRow } from "@/lib/customers";
@@ -61,7 +65,7 @@ export function CustomersList({ rows }: { rows: CustomerRow[] }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search customers…"
-          className="w-full max-w-sm border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-black"
+          className={`${adminField} mt-0 w-full max-w-sm`}
         />
         <div className="flex flex-wrap items-center gap-2">
           <p className="text-xs text-neutral-500">

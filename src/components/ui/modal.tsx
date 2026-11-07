@@ -38,7 +38,13 @@ export function Modal({
     }
 
     window.addEventListener("keydown", onKeyDown);
-    panelRef.current?.focus();
+
+    // Prefer the first editable field so typing works immediately.
+    const panel = panelRef.current;
+    const firstField = panel?.querySelector<HTMLElement>(
+      'input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([disabled]), textarea:not([disabled]), select:not([disabled])',
+    );
+    (firstField ?? panel)?.focus();
 
     return () => {
       document.body.style.overflow = previous;

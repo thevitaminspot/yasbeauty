@@ -60,7 +60,7 @@ export function OrderFulfillmentControls({
           </button>
         ) : null}
         <select
-          className="border border-neutral-300 bg-white px-2 py-2 text-xs outline-none focus:border-black"
+          className="border border-neutral-300 bg-white px-2 py-2 text-base font-normal normal-case tracking-normal text-black outline-none focus:border-black sm:text-xs"
           value={status}
           disabled={pending}
           onChange={(e) => advance(e.target.value as FulfillmentStatus)}

@@ -16,6 +16,7 @@ import { AdminEmptyState, AdminPanel } from "@/components/admin/ui";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Modal } from "@/components/ui/modal";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
+import { digitsOnly } from "@/lib/digits-input";
 import { formatNaira } from "@/lib/format";
 import type { Product, ProductCategory } from "@/lib/product-types";
 
@@ -190,7 +191,7 @@ export function ProductsManager({ products }: { products: Product[] }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search products…"
-          className="w-full max-w-sm border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-black"
+          className={`${adminField} mt-0 w-full max-w-sm`}
         />
         <button type="button" onClick={openCreate} className={adminPrimaryBtn}>
           Add product
@@ -245,6 +246,9 @@ export function ProductsManager({ products }: { products: Product[] }) {
                 className={adminField}
                 value={draft.slug}
                 placeholder="auto from name"
+                spellCheck={false}
+                autoCapitalize="off"
+                autoCorrect="off"
                 onChange={(e) => setDraft({ ...draft, slug: e.target.value })}
               />
             </label>
@@ -270,12 +274,14 @@ export function ProductsManager({ products }: { products: Product[] }) {
             <label className={adminLabel}>
               Price (₦)
               <input
-                type="number"
-                min={100}
-                step={100}
-                className={adminField}
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                className={`${adminField} tabular-nums`}
                 value={draft.price}
-                onChange={(e) => setDraft({ ...draft, price: e.target.value })}
+                onChange={(e) =>
+                  setDraft({ ...draft, price: digitsOnly(e.target.value) })
+                }
               />
             </label>
             <label className={adminLabel}>
@@ -289,12 +295,14 @@ export function ProductsManager({ products }: { products: Product[] }) {
             <label className={adminLabel}>
               Units remaining
               <input
-                type="number"
-                min={0}
-                step={1}
-                className={adminField}
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                className={`${adminField} tabular-nums`}
                 value={draft.stock}
-                onChange={(e) => setDraft({ ...draft, stock: e.target.value })}
+                onChange={(e) =>
+                  setDraft({ ...draft, stock: digitsOnly(e.target.value) })
+                }
               />
             </label>
             <label className={adminLabel}>

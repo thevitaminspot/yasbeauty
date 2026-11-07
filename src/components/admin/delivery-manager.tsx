@@ -13,6 +13,7 @@ import { PaginatedTableWrap } from "@/components/admin/paginated-table-wrap";
 import { AdminEmptyState, AdminPanel } from "@/components/admin/ui";
 import { Modal } from "@/components/ui/modal";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
+import { digitsOnly } from "@/lib/digits-input";
 import { formatNaira } from "@/lib/format";
 import {
   mergeMajorAbujaAreas,
@@ -43,6 +44,12 @@ export function DeliveryManager({
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [newArea, setNewArea] = useState({ name: "", price: "3000" });
+  const [outOfAbujaDraft, setOutOfAbujaDraft] = useState(
+    String(initial.outOfAbujaPrice),
+  );
+  const [internationalDraft, setInternationalDraft] = useState(
+    String(initial.internationalPrice),
+  );
   const [editDraft, setEditDraft] = useState<{
     id: string;
     name: string;
@@ -152,8 +159,17 @@ export function DeliveryManager({
   function save() {
     setMessage("");
     setError("");
+    const next: DeliverySettings = {
+      ...settings,
+      outOfAbujaPrice: Math.max(0, Math.round(Number(outOfAbujaDraft) || 0)),
+      internationalPrice: Math.max(
+        0,
+        Math.round(Number(internationalDraft) || 0),
+      ),
+    };
+    setSettings(next);
     start(async () => {
-      const result = await saveDeliverySettingsAction(settings);
+      const result = await saveDeliverySettingsAction(next);
       if (!result.ok) {
         setError(result.error);
         return;
@@ -178,7 +194,7 @@ export function DeliveryManager({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search Abuja areas…"
-          className="w-full max-w-sm border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-black"
+          className={`${adminField} mt-0 w-full max-w-sm`}
           aria-label="Search Abuja areas"
         />
         <div className="flex flex-wrap gap-2">
@@ -219,13 +235,16 @@ export function DeliveryManager({
           <label className={`${adminLabel} w-36`}>
             Fee (₦)
             <input
-              type="number"
-              min={0}
-              step={100}
-              className={adminField}
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              className={`${adminField} tabular-nums`}
               value={newArea.price}
               onChange={(e) =>
-                setNewArea((c) => ({ ...c, price: e.target.value }))
+                setNewArea((c) => ({
+                  ...c,
+                  price: digitsOnly(e.target.value),
+                }))
               }
             />
           </label>
@@ -330,14 +349,14 @@ export function DeliveryManager({
             <label className={adminLabel}>
               Fee (₦)
               <input
-                type="number"
-                min={0}
-                step={100}
-                className={adminField}
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                className={`${adminField} tabular-nums`}
                 value={editDraft.price}
                 onChange={(e) =>
                   setEditDraft((d) =>
-                    d ? { ...d, price: e.target.value } : d,
+                    d ? { ...d, price: digitsOnly(e.target.value) } : d,
                   )
                 }
               />
@@ -352,39 +371,35 @@ export function DeliveryManager({
           <label className={adminLabel}>
             Outside Abuja (Nigeria)
             <input
-              type="number"
-              min={0}
-              step={100}
-              className={adminField}
-              value={settings.outOfAbujaPrice}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  outOfAbujaPrice: Number(e.target.value) || 0,
-                }))
-              }
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              className={`${adminField} tabular-nums`}
+              value={outOfAbujaDraft}
+              onChange={(e) => setOutOfAbujaDraft(digitsOnly(e.target.value))}
             />
             <span className="mt-1 block text-xs font-normal normal-case tracking-normal text-neutral-500">
-              Currently {formatNaira(settings.outOfAbujaPrice)}
+              Currently{" "}
+              {formatNaira(Math.max(0, Math.round(Number(outOfAbujaDraft) || 0)))}
             </span>
           </label>
           <label className={adminLabel}>
             International
             <input
-              type="number"
-              min={0}
-              step={100}
-              className={adminField}
-              value={settings.internationalPrice}
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              className={`${adminField} tabular-nums`}
+              value={internationalDraft}
               onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  internationalPrice: Number(e.target.value) || 0,
-                }))
+                setInternationalDraft(digitsOnly(e.target.value))
               }
             />
             <span className="mt-1 block text-xs font-normal normal-case tracking-normal text-neutral-500">
-              Currently {formatNaira(settings.internationalPrice)}
+              Currently{" "}
+              {formatNaira(
+                Math.max(0, Math.round(Number(internationalDraft) || 0)),
+              )}
             </span>
           </label>
         </div>

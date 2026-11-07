@@ -113,7 +113,7 @@ export function ShopCatalog({ products, category }: Props) {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={placeholder}
                 autoComplete="off"
-                className="w-full border-0 border-b border-neutral-300 bg-transparent py-2.5 pl-7 pr-2 text-sm outline-none placeholder:text-neutral-400 focus:border-black [&::-webkit-search-cancel-button]:appearance-none"
+                className="w-full border-0 border-b border-neutral-300 bg-transparent py-2.5 pl-7 pr-2 text-base font-normal normal-case tracking-normal text-black outline-none placeholder:text-neutral-400 focus:border-black sm:text-sm [&::-webkit-search-cancel-button]:appearance-none"
               />
             </label>
 
@@ -126,7 +126,7 @@ export function ShopCatalog({ products, category }: Props) {
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value as SortKey)}
-                  className="min-h-10 border border-neutral-300 bg-white px-3 py-2 text-[11px] uppercase tracking-[0.14em] text-black outline-none focus:border-black"
+                  className="min-h-10 border border-neutral-300 bg-white px-3 py-2 text-base font-normal normal-case tracking-normal text-black outline-none focus:border-black sm:text-sm"
                 >
                   <option value="featured">Featured</option>
                   <option value="name">Name</option>
