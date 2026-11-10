@@ -8,6 +8,13 @@ import { Reveal } from "@/components/ui/reveal";
 import type { Product } from "@/lib/product-types";
 import { ui } from "@/lib/ui";
 
+const lines = [
+  { href: "/collections/lip-pigments", label: "Lips" },
+  { href: "/collections/brow-pigments", label: "Brows" },
+  { href: "/collections/kits", label: "Kits" },
+  { href: "/collections/aftercare", label: "Aftercare" },
+] as const;
+
 function Chevron({ dir }: { dir: "left" | "right" }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -47,10 +54,24 @@ export function HomeCollections({ products }: { products: Product[] }) {
               Nano pigments plus lamination, tint, and aftercare — what we
               use in the Abuja chair.
             </p>
+            <nav
+              className="mt-5 flex flex-wrap gap-x-5 gap-y-2"
+              aria-label="Shop by line"
+            >
+              {lines.map((line) => (
+                <Link
+                  key={line.href}
+                  href={line.href}
+                  className="text-[11px] font-medium uppercase tracking-[0.18em] text-neutral-500 underline-offset-4 transition hover:text-ink hover:underline"
+                >
+                  {line.label}
+                </Link>
+              ))}
+            </nav>
           </div>
 
           <Link href="/shop" className={`${ui.btnGhost} w-fit shrink-0`}>
-            View all
+            View all →
           </Link>
         </Reveal>
 
@@ -105,7 +126,7 @@ export function HomeCollections({ products }: { products: Product[] }) {
                     src={product.image}
                     alt={product.name}
                     fill
-                    className="object-cover transition duration-700 group-hover:scale-[1.03]"
+                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
                     sizes="280px"
                   />
                 </div>
@@ -113,8 +134,8 @@ export function HomeCollections({ products }: { products: Product[] }) {
                   <p className="truncate font-serif text-base italic text-ink sm:text-lg">
                     {product.name}
                   </p>
-                  <div className="mt-1 flex items-center justify-between gap-2">
-                    <p className="text-sm font-medium tabular-nums text-neutral-800">
+                  <div className="mt-1.5 flex items-center justify-between gap-2">
+                    <p className={ui.price}>
                       <ProductPrice product={product} />
                     </p>
                     <span className="text-xs text-neutral-400 transition group-hover:text-black">

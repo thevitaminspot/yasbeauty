@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ProductPrice } from "@/components/service-price";
 import { Reveal } from "@/components/ui/reveal";
 import type { Product } from "@/lib/product-types";
+import { ui } from "@/lib/ui";
 
 export function ProductCard({
   product,
@@ -80,7 +81,7 @@ export function ProductCard({
             {product.name}
           </Link>
           <div className="mt-auto flex items-baseline justify-between gap-2 pt-2">
-            <p className="text-sm font-medium tabular-nums tracking-wide">
+            <p className={ui.price}>
               <ProductPrice product={product} />
             </p>
             {product.shade ? (

@@ -4,6 +4,7 @@ import { FooterAccountLinks } from "@/components/footer-account-links";
 import { Logo } from "@/components/logo";
 import { Reveal } from "@/components/ui/reveal";
 import { site } from "@/lib/site";
+import { ui } from "@/lib/ui";
 
 const explore = [
   { href: "/shop", label: "Shop" },
@@ -31,10 +32,7 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <Link
-            href="/book"
-            className="inline-flex w-fit border border-white/70 px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.2em] transition hover:bg-white hover:text-black"
-          >
+          <Link href="/book" className={`${ui.btnSecondaryOnInk} w-fit`}>
             Book a chair
           </Link>
         </Reveal>

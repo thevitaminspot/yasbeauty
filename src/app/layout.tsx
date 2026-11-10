@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Cormorant_Garamond,
-  DM_Sans,
-  Syncopate,
-} from "next/font/google";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { isAuthEnabled } from "@/lib/auth-config";
 import { ClerkRootProvider } from "@/components/clerk-root-provider";
 import "./globals.css";
@@ -19,12 +15,6 @@ const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
-});
-
-const syncopate = Syncopate({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "700"],
 });
 
 const siteUrl =
@@ -71,7 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${cormorant.variable} ${syncopate.variable} h-full`}
+      className={`${dmSans.variable} ${cormorant.variable} h-full`}
     >
       <body className="flex min-h-full flex-col antialiased">
         {authOn ? (

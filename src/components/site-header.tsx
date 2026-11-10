@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { Logo } from "@/components/logo";
 import { useCart } from "@/context/cart-context";
+import { ui } from "@/lib/ui";
 
 const links = [
   { href: "/shop", label: "Shop" },
@@ -49,7 +50,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-3.5 sm:h-[4.25rem] sm:gap-4 sm:px-5 md:h-[4.5rem] md:gap-6 md:px-8">
+      <div className="mx-auto flex h-[var(--header-h)] max-w-7xl items-center gap-3 px-3.5 sm:gap-4 sm:px-5 md:gap-6 md:px-8">
         <Logo className="min-w-0 flex-1 pr-1" variant="inverse" />
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
@@ -113,7 +114,7 @@ export function SiteHeader() {
           aria-modal="true"
           aria-label="Menu"
         >
-          <div className="flex h-16 shrink-0 items-center justify-between gap-3 border-b border-white/10 px-3.5 sm:h-[4.25rem] sm:px-5">
+          <div className="flex h-[var(--header-h)] shrink-0 items-center justify-between gap-3 border-b border-white/10 px-3.5 sm:px-5">
             <Logo className="min-w-0 flex-1 pr-2" variant="inverse" />
             <button
               ref={closeRef}
@@ -189,7 +190,7 @@ export function SiteHeader() {
             <Link
               href="/book"
               onClick={closeMenu}
-              className="flex min-h-11 w-full items-center justify-center border border-white bg-white px-6 text-[11px] font-medium uppercase tracking-[0.2em] text-black transition hover:bg-neutral-200"
+              className={`${ui.btnPrimaryOnInk} w-full`}
             >
               Book studio
             </Link>

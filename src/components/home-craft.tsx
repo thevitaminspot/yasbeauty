@@ -80,16 +80,10 @@ export function HomeCraft() {
           </ol>
 
           <div className="mt-10 flex flex-wrap gap-3">
-            <Link
-              href="/shop"
-              className="inline-flex min-h-12 items-center justify-center border border-white bg-white px-6 py-3.5 text-[11px] font-medium uppercase tracking-[0.2em] text-black transition hover:bg-neutral-200 sm:px-7"
-            >
+            <Link href="/shop" className={ui.btnPrimaryOnInk}>
               Shop pigments
             </Link>
-            <Link
-              href="/book"
-              className={`${ui.btnGhost} text-neutral-300 hover:text-white`}
-            >
+            <Link href="/book" className={ui.btnGhostOnInk}>
               Book the studio →
             </Link>
           </div>

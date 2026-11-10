@@ -3,7 +3,6 @@ import { HomeClients } from "@/components/home-clients";
 import { HomeCollections } from "@/components/home-collections";
 import { HomeContact } from "@/components/home-contact";
 import { HomeCraft } from "@/components/home-craft";
-import { HomeCtaBanner } from "@/components/home-cta-banner";
 import { HomeHero } from "@/components/home-hero";
 import { HomeShadeStudio } from "@/components/home-shade-studio";
 import { HomeStudio } from "@/components/home-studio";
@@ -53,13 +52,12 @@ export default async function HomePage() {
       <HomeHero />
       <HomeCollections products={carousel} />
       <HomeStudioLine products={studioLine} />
-      <HomeTintEdge price={tintKit?.price ?? 45000} />
       <HomeShadeStudio />
+      <HomeTintEdge price={tintKit?.price ?? 45000} />
       <HomeCraft />
       <HomeStudio services={studio} />
       <HomeClients />
       <HomeArtists />
-      <HomeCtaBanner />
       <HomeContact />
     </>
   );

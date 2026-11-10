@@ -79,7 +79,7 @@ export function ShopCatalog({ products, category }: Props) {
 
   return (
     <>
-      <div className="sticky top-16 z-20 -mx-4 mt-8 border-b border-line bg-paper/95 px-4 backdrop-blur-md sm:top-[4.25rem] sm:-mx-5 sm:mt-10 sm:px-5 md:top-[4.5rem] md:-mx-8 md:px-8">
+      <div className="sticky top-[var(--header-h)] z-20 -mx-4 mt-8 border-b border-line bg-paper/95 px-4 backdrop-blur-md sm:-mx-5 sm:mt-10 sm:px-5 md:-mx-8 md:px-8">
         <div className="flex flex-col gap-4 py-4 sm:gap-5 sm:py-5">
           <nav className="flex flex-wrap gap-2" aria-label="Filter by category">
             <Link
