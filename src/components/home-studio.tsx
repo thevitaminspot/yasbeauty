@@ -6,7 +6,7 @@ import type { StudioService } from "@/lib/services";
 import { ui } from "@/lib/ui";
 
 export function HomeStudio({ services }: { services: StudioService[] }) {
-  const [lead, ...rest] = services;
+  const lead = services[0];
   if (!lead) return null;
 
   return (
